@@ -6,27 +6,39 @@
     <title>Our Story - Naath Connect</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/images/animation.json">
 </head>
 <body>
     <header>
+        <div class="logo-container">
+            <img src="assets/images/official-logo.png" alt="Naath Connect Logo" class="official-logo">
+        </div>
         <div class="avatar-container">
             <div class="floating-avatar">
                 <img src="assets/images/avatar.svg" alt="Naath Connect Avatar">
             </div>
         </div>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html" class="active">About</a>
-            <a href="services.html">Services</a>
-            <a href="contact.html">Contact</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="services.html">Services</a>
+                <a href="contact.html">Contact</a>
+                <a href="about.html" class="active">About</a>
+            </div>
         </nav>
     </header>
 
     <main class="page-transition">
-        <section class="hero about-hero">
-            <h1>Our Story</h1>
-            <p>Built by Family, for Family</p>
-        </section>
+        <div class="container">
+            <div class="animation-section">
+                <div id="welcome-animation"></div>
+            </div>
+
+            <section class="about-hero">
+                <h1>Our Story</h1>
+                <p>Built by Family, for Family</p>
+            </section>
+        </div>
 
         <section class="purpose-section">
             <div class="container">
@@ -110,12 +122,39 @@
         </section>
     </main>
 
-    <footer class="footer">
+    <footer>
         <div class="footer-content">
-            <p>Naath Connect - Building Bridges Through Financial Innovation</p>
-            <p>Empowering Our Community, One Transaction at a Time</p>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="/index.html">Home</a>
+                <a href="/services.html">Services</a>
+                <a href="/contact.html">Contact</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: ttew@naathconnect.com</p>
+                <p>Phone: +14055196057</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Naath Connect. All Rights Reserved.</p>
         </div>
     </footer>
+    <!-- At the bottom of the file, before </body> -->
     <script src="assets/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
+    <script>
+        // Initialize the welcome section animation
+        lottie.loadAnimation({
+            container: document.getElementById('welcome-animation'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: 'assets/images/animation.json',
+            rendererSettings: {
+                preserveAspectRatio: 'xMidYMid meet' // This helps maintain aspect ratio while filling the container
+            }
+        });
+    </script>
 </body>
 </html>

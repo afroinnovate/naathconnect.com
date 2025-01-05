@@ -6,47 +6,65 @@
     <title>Services - Naath Connect</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="assets/images/animation.json">
 </head>
 <body>
     <header>
+        <div class="logo-container">
+            <img src="assets/images/official-logo.png" alt="Naath Connect Logo" class="official-logo">
+        </div>
         <div class="avatar-container">
             <div class="floating-avatar">
                 <img src="assets/images/avatar.svg" alt="Naath Connect Avatar">
             </div>
         </div>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="services.html" class="active">Services</a>
-            <a href="contact.html" >Contact</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="services.html" class="active">Services</a>
+                <a href="contact.html">Contact</a>
+                <a href="about.html">About</a>
+            </div>
         </nav>
     </header>
 
     <main class="container page-transition">
-        <!-- Rest of the content remains the same -->
-        <div class="hero-section">
-            <div class="lottie-container">
-                <div id="services-animation"></div>
-            </div>
-            <h1>Our Services</h1>
-            <p class="subtitle">Empowering connections through innovative solutions</p>
+        <div class="animation-section">
+            <div id="services-animation" style="width: auto; height: 300px;"></div>
         </div>
+        <section class="services-grid">
+            <div class="service-card">
+                <h3>Money Transfer</h3>
+                <p>Send money to family and friends with competitive rates and fast delivery.</p>
+                <a href="/contact.html" class="btn primary">Start Transfer</a>
+            </div>
 
-        <!-- Rest of the service cards section remains unchanged -->
+            <div class="service-card">
+                <h3>Mobile Money</h3>
+                <p>Direct transfers to mobile money accounts across East Africa.</p>
+                <a href="/contact.html" class="btn primary">Learn More</a>
+            </div>
+
+            <div class="service-card">
+                <h3>Business Solutions</h3>
+                <p>Custom solutions for businesses and organizations.</p>
+                <a href="/contact.html" class="btn primary">Contact Us</a>
+            </div>
+        </section>
     </main>
 
     <footer>
         <div class="footer-content">
             <div class="footer-section">
                 <h4>Quick Links</h4>
-                <a href="about.html">About Us</a>
-                <a href="services.html">Services</a>
+                <a href="index.html">Home</a>
                 <a href="contact.html">Contact</a>
+                <a href="about.html">About</a>
             </div>
             <div class="footer-section">
                 <h4>Contact Us</h4>
-                <p>Email: info@naathconnect.com</p>
-                <p>Phone: [Your Phone Number]</p>
+                <p>Email: ttew@naathconnect.com</p>
+                <p>Phone: +14055196057</p>
             </div>
         </div>
         <div class="footer-bottom">
