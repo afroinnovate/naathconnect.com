@@ -18,3 +18,6 @@ jobs:
         with:
           branch: gh-pages    # Deploys TO gh-pages branch
           folder: .           # Deploys content from root folder
+        secrets:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      
