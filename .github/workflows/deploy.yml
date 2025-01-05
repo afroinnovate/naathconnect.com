@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]  # Triggers when you push to main branch
   pull_request:
     branches: [ main ]
 
@@ -16,5 +16,5 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          branch: gh-pages
-          folder: .
+          branch: gh-pages    # Deploys TO gh-pages branch
+          folder: .           # Deploys content from root folder
