@@ -8,31 +8,44 @@
     <link rel="canonical" href="https://naathconnect.com/" />
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/animation.json">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
 </head>
 <body>
     <header>
+        <div class="logo-container">
+            <img src="assets/images/official-logo.png" alt="Naath Connect Logo" class="official-logo">
+        </div>
         <div class="avatar-container">
             <div class="floating-avatar">
-                <img src="/assets/images/avatar.svg" alt="Naath Connect Avatar">
+                <img src="assets/images/avatar.svg" alt="Naath Connect Avatar">
             </div>
         </div>
         <nav>
-            <a href="/" class="active">Home</a>
-            <a href="/about.html">About</a>
-            <a href="/services.html">Services</a>
-            <a href="/contact.html">Contact</a>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="about.html">About</a>
+                <a href="services.html">Services</a>
+                <a href="contact.html">Contact</a>
+            </div>
         </nav>
     </header>
 
     <main class="page-transition">
-        <section class="hero">
-            <h1>Welcome to Naath Connect</h1>
-            <p class="animate-text">Bridging Communities Through Secure Money Transfers</p>
-            <div class="cta-buttons">
-                <a href="/services.html" class="btn primary">Our Services</a>
-                <a href="/contact.html" class="btn secondary">Get Started</a>
+        <div class="container">
+            <div class="animation-section">
+                <div id="welcome-animation"></div>
             </div>
-        </section>
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Welcome to Naath Connect</h1>
+                    <p class="animate-text">Bridging Communities Through Secure Money Transfers</p>
+                    <div class="cta-buttons">
+                        <a href="services.html" class="btn primary">Our Services</a>
+                        <a href="contact.html" class="btn secondary">Get Started</a>
+                    </div>
+                </div>
+            </section>
+        </div>
 
         <section class="features">
             <h2>Why Choose Naath Connect?</h2>
@@ -79,5 +92,21 @@
             <p>&copy; 2024 Naath Connect. All Rights Reserved.</p>
         </div>
     </footer>
+    <!-- At the bottom of the file, before </body> -->
+    <script src="assets/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
+    <script>
+        // Initialize the welcome section animation
+        lottie.loadAnimation({
+            container: document.getElementById('welcome-animation'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: 'assets/images/animation.json',
+            rendererSettings: {
+                preserveAspectRatio: 'xMidYMid meet' // This helps maintain aspect ratio while filling the container
+            }
+        });
+    </script>
 </body>
 </html>
