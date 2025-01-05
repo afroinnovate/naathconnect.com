@@ -24,7 +24,6 @@ body {
 /* Header styles */
 header {
     background: #f5f5f5;
-    /* background: lightgreen; */
     padding: 1rem 0;
     position: relative;
     display: flex;
