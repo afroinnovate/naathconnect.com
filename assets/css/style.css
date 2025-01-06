@@ -791,7 +791,7 @@ h3 {
     padding: 1rem;
     /* Start the text from the right side of the container */
     position: relative;
-    animation: scrollText 20s linear infinite;
+    animation: scrollText 25s linear infinite;
 }
 
 .text-scroll span {
@@ -806,4 +806,564 @@ h3 {
     to {
         transform: translateX(-100%); /* Move to left edge */
     }
+}
+
+/* Market Opportunity Section Styles */
+.market-opportunity {
+    padding: 4rem 2rem;
+    background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+    margin: 3rem 0;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.stat-card {
+    background: white;
+    padding: 2.5rem 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+    color: #2563eb; /* Modern blue */
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.stat-card p {
+    color: #4b5563;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.source {
+    font-size: 0.85rem;
+    color: #6b7280;
+    display: block;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+/* Market Details */
+.market-details {
+    margin: 4rem 0;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.insight-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.insight-card h4 {
+    color: #1f2937;
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.insight-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.insight-card li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    color: #4b5563;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.insight-card li:last-child {
+    border-bottom: none;
+}
+
+/* Opportunity Highlight */
+.opportunity-highlight {
+    margin: 4rem 0;
+    padding: 3rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.revenue-projection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+    margin-top: 2rem;
+}
+
+.projection-card {
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+}
+
+.projection-card h4 {
+    color: #1f2937;
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.projection-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.projection-card li {
+    padding: 0.5rem 0;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+}
+
+.projection-card li:before {
+    content: "•";
+    color: #2563eb;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+/* CTA Section */
+.market-cta {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 3rem;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border-radius: 15px;
+    color: white;
+}
+
+.market-cta h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.market-cta p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: rgba(255,255,255,0.9);
+}
+
+.market-cta .btn {
+    background: white;
+    color: #2563eb;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+}
+
+.market-cta .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .market-opportunity {
+        padding: 3rem 1rem;
+    }
+    
+    .stat-card h3 {
+        font-size: 2.5rem;
+    }
+    
+    .opportunity-highlight {
+        padding: 2rem;
+    }
+    
+    .market-cta {
+        padding: 2rem;
+    }
+}
+
+/* Partner Page Specific Styles */
+.partner-hero {
+    text-align: center;
+    padding: 4rem 0;
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+.partner-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #26E07F; /* Green accent color */
+}
+
+.partner-hero p {
+    font-size: 1.25rem;
+    color: #ffffff;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.benefit-card {
+    background: #2a2a2a;
+    padding: 2rem;
+    border-radius: 12px;
+    color: #ffffff;
+    transition: transform 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+}
+
+.benefit-card h3 {
+    color: #26E07F;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.benefit-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.benefit-card ul li {
+    padding: 0.75rem 0;
+    color: #ffffff;
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.benefit-card ul li:last-child {
+    border-bottom: none;
+}
+
+.partner-cta {
+    background: #2a2a2a;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.partner-cta h2 {
+    color: #26E07F;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.partner-cta p {
+    color: #ffffff;
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.cta-buttons .btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .partner-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .benefit-card {
+        padding: 1.5rem;
+    }
+}
+
+/* Market Opportunity Cards */
+.market-opportunity {
+    padding: 4rem 0;
+    background: #1a1a1a;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    background: #2a2a2a;
+    padding: 2rem;
+    border-radius: 12px;
+    color: #ffffff;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card h3 {
+    color: #26E07F;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.stat-card p {
+    color: #ffffff;
+}
+
+.source {
+    color: #888888;
+    font-size: 0.85rem;
+}
+
+/* Benefits and Compliance Cards */
+.partnership-benefits,
+.compliance-commitment {
+    padding: 4rem 0;
+    background: #1a1a1a;
+}
+
+.benefits-grid,
+.compliance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.benefit-card,
+.compliance-card {
+    background: #2a2a2a;
+    padding: 2rem;
+    border-radius: 12px;
+    color: #ffffff;
+    transition: transform 0.3s ease;
+}
+
+.benefit-card:hover,
+.compliance-card:hover {
+    transform: translateY(-5px);
+}
+
+.benefit-card h3,
+.compliance-card h3 {
+    color: #26E07F;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.benefit-card ul,
+.compliance-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.benefit-card ul li,
+.compliance-card ul li {
+    padding: 0.75rem 0;
+    color: #ffffff;
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.benefit-card ul li:last-child,
+.compliance-card ul li:last-child {
+    border-bottom: none;
+}
+
+/* CTA Section */
+.partner-cta {
+    background: #2a2a2a;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.partner-cta h2 {
+    color: #26E07F;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.partner-cta p {
+    color: #ffffff;
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+/* Buttons */
+.btn.primary {
+    background: #26E07F;
+    color: #1a1a1a;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn.secondary {
+    background: transparent;
+    color: #26E07F;
+    border: 2px solid #26E07F;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn.primary:hover {
+    background: #1fc16c;
+    transform: translateY(-2px);
+}
+
+.btn.secondary:hover {
+    background: #26E07F;
+    color: #1a1a1a;
+    transform: translateY(-2px);
+}
+
+/* Section Headers */
+.market-opportunity h2,
+.partnership-benefits h2,
+.compliance-commitment h2 {
+    color: #26E07F;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Regional Insights Section */
+.regional-insights {
+    padding: 4rem 0;
+    background: #1a1a1a;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.regional-insights h2 {
+    color: #26E07F;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.insight-card {
+    background: #2a2a2a;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(38, 224, 127, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.insight-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(38, 224, 127, 0.3);
+    box-shadow: 0 8px 30px rgba(38, 224, 127, 0.1);
+}
+
+.insight-card h3 {
+    color: #26E07F;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(38, 224, 127, 0.3);
+    padding-bottom: 0.5rem;
+}
+
+.insight-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.insight-card ul li {
+    color: #ffffff;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.insight-card ul li:last-child {
+    border-bottom: none;
+}
+
+.metric {
+    color: #26E07F;
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+/* Optional: Add a subtle glow effect on hover */
+.insight-card:hover {
+    box-shadow: 0 8px 32px rgba(38, 224, 127, 0.15);
+}
+
+/* Remove any animations temporarily */
+.slide-up {
+    opacity: 1 !important;
+    transform: none !important;
 }

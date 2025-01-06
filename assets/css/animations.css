@@ -24,10 +24,61 @@
 }
 
 .page-transition {
-    animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.8s ease-out;
 }
 
 .animate-text {
     opacity: 0;
     animation: fadeIn 1s ease-in forwards;
+}
+
+.section-border {
+    position: relative;
+}
+
+.section-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        transparent 25%,
+        #26E07F 50%,
+        transparent 75%,
+        transparent
+    );
+    animation: borderSlide 3s linear infinite;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes borderSlide {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+.slide-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.slide-up.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
