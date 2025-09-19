@@ -53,7 +53,7 @@
                             <i class="icon whatsapp"></i>
                             <h3>WhatsApp</h3>
                             <p>Chat with us directly in your preferred language</p>
-                            <a href="https://wa.me/+14055196057" class="btn whatsapp-btn">Start Chat</a>
+                            <a href="https://wa.me/14055196057?text=Hi%20Naath%20Connect%2C%20I%27d%20like%20to%20get%20in%20touch%20about%20your%20money%20transfer%20services." class="btn whatsapp-btn" target="_blank">Start Chat</a>
                         </div>
 
                         <div class="contact-method phone">
@@ -102,7 +102,8 @@
                             <textarea id="message" name="message" rows="5" required></textarea>
                         </div>
                         
-                        <button type="submit" class="btn primary">Send Message</button>
+                        <button type="submit" class="btn primary">Send via WhatsApp</button>
+                        <button type="button" id="emailSubmit" class="btn secondary" style="margin-top: 10px;">Send via Email</button>
                     </form>
                 </div>
             </div>
@@ -120,6 +121,12 @@
             </div>
             <div class="footer-section">
                 <h4>Contact Us</h4>
+                <p style="margin-bottom: 10px;">
+                    <a href="https://wa.me/14055196057?text=Hi%20Naath%20Connect%2C%20I%20have%20a%20question%20about%20your%20services." target="_blank" 
+                       style="color: #25D366; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: bold;">
+                        <span>💬</span> WhatsApp: +1 (405) 519-6057
+                    </a>
+                </p>
                 <p>Email: ttew@naathconnect.com</p>
                 <p>Phone: +14055196057</p>
             </div>
@@ -143,6 +150,118 @@
                 preserveAspectRatio: 'xMidYMid meet' // This helps maintain aspect ratio while filling the container
             }
         });
+
+        // Contact form functionality
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendToWhatsApp();
+        });
+
+        document.getElementById('emailSubmit').addEventListener('click', function() {
+            sendToEmail();
+        });
+
+        function sendToWhatsApp() {
+            const form = document.getElementById('contactForm');
+            const formData = new FormData(form);
+            
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const language = formData.get('language');
+            const message = formData.get('message');
+
+            // Create WhatsApp message
+            const whatsappMessage = `New Contact Form Submission from Naath Connect Website:
+
+👤 Name: ${name}
+📧 Email: ${email}
+🌍 Preferred Language: ${language}
+💬 Message: ${message}
+
+Please respond to this customer inquiry.`;
+
+            // URL encode the message
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            
+            // Open WhatsApp
+            const whatsappURL = `https://wa.me/14055196057?text=${encodedMessage}`;
+            window.open(whatsappURL, '_blank');
+            
+            // Show success message
+            showSuccessMessage('Your message has been sent to WhatsApp! We\'ll respond shortly.');
+        }
+
+        function sendToEmail() {
+            const form = document.getElementById('contactForm');
+            const formData = new FormData(form);
+            
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const language = formData.get('language');
+            const message = formData.get('message');
+
+            // Create email subject and body
+            const subject = `New Contact Form Submission from ${name} - Naath Connect`;
+            const body = `New Contact Form Submission from Naath Connect Website:
+
+Name: ${name}
+Email: ${email}
+Preferred Language: ${language}
+
+Message:
+${message}
+
+---
+This message was sent from the Naath Connect contact form.
+Please respond to the customer's email address: ${email}`;
+
+            // Create mailto link
+            const mailtoLink = `mailto:ttew@naathconnect.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Open default email client
+            window.location.href = mailtoLink;
+            
+            // Show success message
+            showSuccessMessage('Your default email client will open with the message ready to send.');
+        }
+
+        function showSuccessMessage(message) {
+            // Create success message element
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #25D366;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-weight: bold;
+                max-width: 300px;
+                animation: slideIn 0.3s ease;
+            `;
+            successDiv.textContent = message;
+            
+            // Add slide in animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(successDiv);
+            
+            // Remove message after 5 seconds
+            setTimeout(() => {
+                successDiv.remove();
+                style.remove();
+            }, 5000);
+        }
     </script>
 </body>
 </html>
