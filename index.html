@@ -13,6 +13,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
 </head>
 <body>
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
     <header>
         <div class="logo-container">
             <img src="assets/images/official-logo.png" alt="Naath Connect Logo" class="official-logo">
@@ -117,6 +120,60 @@
             </div>
         </section>
 
+        <!-- Statistics Section with Animated Counters -->
+        <section class="stats-section" style="background: linear-gradient(135deg, #26E07F, #2DD284); padding: 60px 0; margin: 40px 0; text-align: center; color: white; position: relative; overflow: hidden;">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2;">
+                <h2 style="font-size: 2.2rem; margin-bottom: 20px; color: white;" data-typing data-speed="100">Building Trust Through Numbers</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 50px; opacity: 0.9;">Real impact for real families across East Africa</p>
+                
+                <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin: 40px 0;">
+                    <div class="stat-item morphing-card" style="background: rgba(255,255,255,0.15); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);" data-tooltip="Countries served across East Africa">
+                        <h3 style="font-size: 3rem; font-weight: bold; margin-bottom: 10px; color: white;" data-counter="8">0</h3>
+                        <p style="font-size: 1.1rem; color: rgba(255,255,255,0.9); margin: 0;">Countries Served</p>
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 5px;">🌍 East Africa Coverage</p>
+                    </div>
+                    
+                    <div class="stat-item morphing-card" style="background: rgba(255,255,255,0.15); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);" data-tooltip="Years of combined experience with Dahabshiil partnership">
+                        <h3 style="font-size: 3rem; font-weight: bold; margin-bottom: 10px; color: white;" data-counter="50">0</h3>
+                        <p style="font-size: 1.1rem; color: rgba(255,255,255,0.9); margin: 0;">Years Experience</p>
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 5px;">🤝 Dahabshiil Partnership</p>
+                    </div>
+                    
+                    <div class="stat-item morphing-card" style="background: rgba(255,255,255,0.15); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);" data-tooltip="24/7 customer support availability">
+                        <h3 style="font-size: 3rem; font-weight: bold; margin-bottom: 10px; color: white;" data-counter="24">0</h3>
+                        <p style="font-size: 1.1rem; color: rgba(255,255,255,0.9); margin: 0;">Hour Support</p>
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 5px;">💬 WhatsApp Available</p>
+                    </div>
+                    
+                    <div class="stat-item morphing-card" style="background: rgba(255,255,255,0.15); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);" data-tooltip="Compliance rate - fully regulated and secure">
+                        <h3 style="font-size: 3rem; font-weight: bold; margin-bottom: 10px; color: white;" data-counter="100">0</h3>
+                        <p style="font-size: 1.1rem; color: rgba(255,255,255,0.9); margin: 0;">% Compliant</p>
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 5px;">🛡️ Fully Regulated</p>
+                    </div>
+                </div>
+                
+                <div class="trust-indicators" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 30px; margin-top: 50px; padding: 20px;">
+                    <div class="trust-badge glow-effect" style="background: rgba(255,255,255,0.2); padding: 15px 25px; border-radius: 50px; display: flex; align-items: center; gap: 10px; backdrop-filter: blur(10px);">
+                        <span style="font-size: 1.2em;">🏛️</span>
+                        <span style="color: white; font-weight: 600;">FCA Regulated</span>
+                    </div>
+                    <div class="trust-badge glow-effect" style="background: rgba(255,255,255,0.2); padding: 15px 25px; border-radius: 50px; display: flex; align-items: center; gap: 10px; backdrop-filter: blur(10px);">
+                        <span style="font-size: 1.2em;">🔒</span>
+                        <span style="color: white; font-weight: 600;">AML Compliant</span>
+                    </div>
+                    <div class="trust-badge glow-effect" style="background: rgba(255,255,255,0.2); padding: 15px 25px; border-radius: 50px; display: flex; align-items: center; gap: 10px; backdrop-filter: blur(10px);">
+                        <span style="font-size: 1.2em;">⚡</span>
+                        <span style="color: white; font-weight: 600;">Instant Transfers</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Animated Background -->
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; overflow: hidden;">
+                <div class="animated-gradient" style="width: 200%; height: 200%; position: absolute; top: -50%; left: -50%; border-radius: 50%;"></div>
+            </div>
+        </section>
+
         <section class="compliance-commitment" style="background: #f8f9fa; padding: 60px 0; margin: 40px 0;">
             <div class="container" style="text-align: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
                 <h2 style="color: #1e3c72; margin-bottom: 30px; font-size: 2.2rem;">Our Commitment to Security & Trust</h2>
@@ -210,6 +267,126 @@
             rendererSettings: {
                 preserveAspectRatio: 'xMidYMid meet' // This helps maintain aspect ratio while filling the container
             }
+        });
+
+        // Scroll Progress Indicator
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const documentHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / documentHeight) * 100;
+            document.getElementById('scrollIndicator').style.width = scrollPercent + '%';
+        });
+
+        // Enhanced WhatsApp Button Interactions
+        document.querySelectorAll('a[href*="wa.me"]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Add success feedback
+                const originalText = this.textContent;
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+                
+                // Show connection message
+                const toast = document.createElement('div');
+                toast.textContent = '📱 Opening WhatsApp...';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: #25D366;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 25px;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+                    z-index: 1000;
+                    animation: slideInUp 0.3s ease;
+                `;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'slideInUp 0.3s ease reverse';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+            });
+        });
+
+        // Add floating hearts animation on partnership badge hover
+        document.querySelector('.partnership-badge').addEventListener('mouseenter', function() {
+            for (let i = 0; i < 5; i++) {
+                const heart = document.createElement('div');
+                heart.textContent = '💙';
+                heart.style.cssText = `
+                    position: absolute;
+                    font-size: 1.5rem;
+                    pointer-events: none;
+                    animation: floatUp 2s ease-out forwards;
+                    left: ${Math.random() * 100}%;
+                    z-index: 1000;
+                `;
+                this.appendChild(heart);
+                setTimeout(() => heart.remove(), 2000);
+            }
+        });
+
+        // Dynamic background particles for statistics section
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.textContent = ['💰', '🌍', '⚡', '🛡️'][Math.floor(Math.random() * 4)];
+            particle.style.cssText = `
+                position: absolute;
+                font-size: 1.2rem;
+                opacity: 0.3;
+                pointer-events: none;
+                animation: floatAcross 8s linear infinite;
+                top: ${Math.random() * 100}%;
+                left: -50px;
+                z-index: 1;
+            `;
+            document.querySelector('.stats-section').appendChild(particle);
+            setTimeout(() => particle.remove(), 8000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 3000);
+
+        // Add dynamic styles for new animations
+        const dynamicStyle = document.createElement('style');
+        dynamicStyle.textContent = `
+            @keyframes floatUp {
+                0% { transform: translateY(0) scale(1); opacity: 1; }
+                100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+            }
+            
+            @keyframes floatAcross {
+                0% { transform: translateX(-50px) rotate(0deg); opacity: 0.3; }
+                50% { opacity: 0.6; }
+                100% { transform: translateX(calc(100vw + 50px)) rotate(360deg); opacity: 0; }
+            }
+            
+            @keyframes slideInUp {
+                from { transform: translateY(100%); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(dynamicStyle);
+
+        // Add smooth page transitions
+        document.querySelectorAll('a[href$=".html"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.hostname === window.location.hostname) {
+                    e.preventDefault();
+                    document.body.style.opacity = '0';
+                    document.body.style.transform = 'scale(0.98)';
+                    document.body.style.transition = 'all 0.3s ease';
+                    
+                    setTimeout(() => {
+                        window.location.href = this.href;
+                    }, 300);
+                }
+            });
         });
     </script>
 </body>
