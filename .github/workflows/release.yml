@@ -1,0 +1,119 @@
+name: Create Release
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+
+      - name: Generate CalVer Release Tag 📅
+        id: calver
+        run: |
+          # Get current year and month
+          YEAR=$(date +%Y)
+          MONTH=$(date +%-m)  # Remove leading zero
+          
+          # Get existing tags for current month
+          CURRENT_MONTH_PATTERN="${YEAR}.${MONTH}."
+          
+          # Get the highest iteration for current month
+          HIGHEST_ITERATION=$(git tag -l "${CURRENT_MONTH_PATTERN}*" | \
+            sed "s/${CURRENT_MONTH_PATTERN}//g" | \
+            sort -n | \
+            tail -1)
+          
+          # If no tags exist for this month, start with 1
+          if [ -z "$HIGHEST_ITERATION" ]; then
+            ITERATION=1
+          else
+            ITERATION=$((HIGHEST_ITERATION + 1))
+          fi
+          
+          # Create the new version tag
+          NEW_VERSION="${YEAR}.${MONTH}.${ITERATION}"
+          
+          echo "version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+          echo "year=${YEAR}" >> $GITHUB_OUTPUT
+          echo "month=${MONTH}" >> $GITHUB_OUTPUT
+          echo "iteration=${ITERATION}" >> $GITHUB_OUTPUT
+          
+          echo "Generated version: ${NEW_VERSION}"
+
+      - name: Get Commit Messages for Release Notes 📝
+        id: release_notes
+        run: |
+          # Get the last release tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          
+          if [ -z "$LAST_TAG" ]; then
+            # If no previous tags, get last 5 commits
+            COMMITS=$(git log --pretty=format:"- %s (%h)" -5)
+          else
+            # Get commits since last tag
+            COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"- %s (%h)")
+          fi
+          
+          # If no commits since last tag, get the current commit
+          if [ -z "$COMMITS" ]; then
+            COMMITS=$(git log --pretty=format:"- %s (%h)" -1)
+          fi
+          
+          # Create multiline output
+          {
+            echo 'notes<<EOF'
+            echo "## Naath Connect Release ${{ steps.calver.outputs.version }}"
+            echo ""
+            echo "### 🚀 What's New in this Release"
+            echo ""
+            echo "$COMMITS"
+            echo ""
+            echo "### 📅 Release Information"
+            echo "- **Release Date**: $(date '+%B %d, %Y')"
+            echo "- **Version**: ${{ steps.calver.outputs.version }}"
+            echo "- **Month**: ${{ steps.calver.outputs.month }} (${{ steps.calver.outputs.year }})"
+            echo "- **Iteration**: ${{ steps.calver.outputs.iteration }}"
+            echo ""
+            echo "### 🌟 Naath Connect Features"
+            echo "- Secure money transfers to East Africa"
+            echo "- Dahabshiil partnership for compliance"
+            echo "- WhatsApp-based customer service"
+            echo "- Support for 8 East African countries"
+            echo ""
+            echo "*This release follows Calendar Versioning (CalVer) format: YYYY.M.ITERATION*"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+      - name: Create Git Tag 🏷️
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a "v${{ steps.calver.outputs.version }}" -m "Release v${{ steps.calver.outputs.version }}"
+          git push origin "v${{ steps.calver.outputs.version }}"
+
+      - name: Create GitHub Release 🎉
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.calver.outputs.version }}
+          release_name: "Naath Connect v${{ steps.calver.outputs.version }}"
+          body: ${{ steps.release_notes.outputs.notes }}
+          draft: false
+          prerelease: false
+
+      - name: Update Release Summary 📊
+        run: |
+          echo "## 🎉 Release Created Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version**: v${{ steps.calver.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Release Date**: $(date '+%B %d, %Y')" >> $GITHUB_STEP_SUMMARY
+          echo "**Month Iteration**: ${{ steps.calver.outputs.iteration }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [View Full Release](https://github.com/${{ github.repository }}/releases/tag/v${{ steps.calver.outputs.version }})" >> $GITHUB_STEP_SUMMARY
