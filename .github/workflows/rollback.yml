@@ -7,10 +7,6 @@ on:
         description: 'Version/Tag to rollback to (e.g., v2025.9.1)'
         required: true
         type: string
-      confirm:
-        description: 'Type "CONFIRM" to proceed with rollback'
-        required: true
-        type: string
 
 permissions:
   contents: write
@@ -21,13 +17,6 @@ jobs:
   validate-and-rollback:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate Confirmation 🔐
-        if: github.event.inputs.confirm != 'CONFIRM'
-        run: |
-          echo "❌ Rollback cancelled: Confirmation not provided"
-          echo "Please type 'CONFIRM' in the confirm field to proceed with rollback"
-          exit 1
-
       - name: Checkout Repository 🛎️
         uses: actions/checkout@v4
         with:
