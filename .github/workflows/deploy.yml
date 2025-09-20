@@ -2,11 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]  # Triggers when you push to main branch
-  pull_request:
-    branches: [ main ]
+    branches: [ main ]  # ONLY triggers on main branch pushes
 
-# Add permissions for GitHub Token
 permissions:
   contents: read
   pages: write
@@ -19,20 +16,17 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Pages �
+      - name: Setup Pages
         uses: actions/configure-pages@v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
-      - name: Upload Pages Artifact 📦
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           path: .
 
-      - name: Deploy to GitHub Pages 🚀
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
