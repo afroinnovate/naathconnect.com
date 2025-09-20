@@ -29,9 +29,11 @@ jobs:
           # Get existing tags for current month
           CURRENT_MONTH_PATTERN="${YEAR}.${MONTH}."
           
-          # Get the highest iteration for current month
+          # Get the highest iteration for current month, including remote tags
+          git fetch --tags
           HIGHEST_ITERATION=$(git tag -l "${CURRENT_MONTH_PATTERN}*" | \
             sed "s/${CURRENT_MONTH_PATTERN}//g" | \
+            grep -E '^[0-9]+$' | \
             sort -n | \
             tail -1)
           
@@ -44,6 +46,13 @@ jobs:
           
           # Create the new version tag
           NEW_VERSION="${YEAR}.${MONTH}.${ITERATION}"
+          
+          # Check if this tag already exists (safety check)
+          if git rev-parse "v${NEW_VERSION}" >/dev/null 2>&1; then
+            echo "Tag v${NEW_VERSION} already exists, incrementing..."
+            ITERATION=$((ITERATION + 1))
+            NEW_VERSION="${YEAR}.${MONTH}.${ITERATION}"
+          fi
           
           echo "version=${NEW_VERSION}" >> $GITHUB_OUTPUT
           echo "year=${YEAR}" >> $GITHUB_OUTPUT
