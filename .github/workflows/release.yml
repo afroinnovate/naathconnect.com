@@ -26,33 +26,41 @@ jobs:
           YEAR=$(date +%Y)
           MONTH=$(date +%-m)  # Remove leading zero
           
-          # Get existing tags for current month
+          # Get existing tags for current month, including remote tags
+          git fetch --tags
           CURRENT_MONTH_PATTERN="${YEAR}.${MONTH}."
           
-          # Get the highest iteration for current month, including remote tags
-          git fetch --tags
-          HIGHEST_ITERATION=$(git tag -l "${CURRENT_MONTH_PATTERN}*" | \
-            sed "s/${CURRENT_MONTH_PATTERN}//g" | \
+          # Get all existing tags for current month and extract iterations
+          EXISTING_ITERATIONS=$(git tag -l "v${CURRENT_MONTH_PATTERN}*" | \
+            sed "s/v${CURRENT_MONTH_PATTERN}//g" | \
             grep -E '^[0-9]+$' | \
-            sort -n | \
-            tail -1)
+            sort -n)
           
-          # If no tags exist for this month, start with 1
-          if [ -z "$HIGHEST_ITERATION" ]; then
-            ITERATION=1
-          else
-            ITERATION=$((HIGHEST_ITERATION + 1))
-          fi
+          echo "Found existing iterations for ${YEAR}.${MONTH}: $EXISTING_ITERATIONS"
           
-          # Create the new version tag
+          # Find the next available iteration
+          ITERATION=1
+          while true; do
+            TEST_VERSION="${YEAR}.${MONTH}.${ITERATION}"
+            TEST_TAG="v${TEST_VERSION}"
+            
+            # Check if this tag already exists
+            if git tag -l "$TEST_TAG" | grep -q "$TEST_TAG"; then
+              echo "Tag $TEST_TAG already exists, trying next iteration..."
+              ITERATION=$((ITERATION + 1))
+            else
+              echo "Found available version: $TEST_VERSION"
+              break
+            fi
+            
+            # Safety check to prevent infinite loop
+            if [ $ITERATION -gt 100 ]; then
+              echo "Error: Too many iterations for this month"
+              exit 1
+            fi
+          done
+          
           NEW_VERSION="${YEAR}.${MONTH}.${ITERATION}"
-          
-          # Check if this tag already exists (safety check)
-          if git rev-parse "v${NEW_VERSION}" >/dev/null 2>&1; then
-            echo "Tag v${NEW_VERSION} already exists, incrementing..."
-            ITERATION=$((ITERATION + 1))
-            NEW_VERSION="${YEAR}.${MONTH}.${ITERATION}"
-          fi
           
           echo "version=${NEW_VERSION}" >> $GITHUB_OUTPUT
           echo "year=${YEAR}" >> $GITHUB_OUTPUT
@@ -60,6 +68,7 @@ jobs:
           echo "iteration=${ITERATION}" >> $GITHUB_OUTPUT
           
           echo "Generated version: ${NEW_VERSION}"
+          echo "Final tag will be: v${NEW_VERSION}"
 
       - name: Get Commit Messages for Release Notes 📝
         id: release_notes
@@ -109,10 +118,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          TAG_NAME="v${{ steps.calver.outputs.version }}"
+          
+          # Final safety check before creating tag
+          if git tag -l "$TAG_NAME" | grep -q "$TAG_NAME"; then
+            echo "❌ Error: Tag $TAG_NAME still exists after collision check!"
+            echo "This should not happen. Please check the workflow logic."
+            exit 1
+          fi
+          
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git tag -a "v${{ steps.calver.outputs.version }}" -m "Release v${{ steps.calver.outputs.version }}"
-          git push origin "v${{ steps.calver.outputs.version }}"
+          
+          echo "Creating tag: $TAG_NAME"
+          git tag -a "$TAG_NAME" -m "Release $TAG_NAME"
+          git push origin "$TAG_NAME"
+          
+          echo "✅ Successfully created and pushed tag: $TAG_NAME"
 
       - name: Create GitHub Release 🎉
         uses: softprops/action-gh-release@v1
