@@ -34,9 +34,7 @@ Bridging communities across borders through reliable, affordable, and compliant 
 | **Ethiopia** | 🇪🇹 | Addis Ababa |
 | **Kenya** | 🇰🇪 | Nairobi |
 | **Uganda** | 🇺🇬 | Kampala |
-| **Tanzania** | 🇹🇿 | Dodoma |
 | **Rwanda** | 🇷🇼 | Kigali |
-| **Burundi** | 🇧🇮 | Gitega |
 | **Djibouti** | 🇩🇯 | Djibouti City |
 
 ---
