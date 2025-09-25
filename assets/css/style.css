@@ -102,16 +102,64 @@ nav a.active {
     }
 
     nav {
-        padding: 0.5rem;
+        padding: 0.5rem 0;
     }
 
     .nav-links {
+        gap: 0.5rem;
         flex-wrap: wrap;
-        justify-content: center;
     }
 
     nav a {
-        margin: 0.25rem;
+        padding: 0.3rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    /* Service Provider Contact Cards Mobile */
+    .service-providers-contact .providers-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .service-providers-contact .provider-card {
+        padding: 20px !important;
+    }
+
+    .service-providers-contact .provider-card h3 {
+        font-size: 1.2rem !important;
+    }
+
+    .service-providers-contact .provider-card p {
+        font-size: 0.9rem !important;
+    }
+
+    .service-providers-contact .provider-card .btn {
+        padding: 10px 16px !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* Index Page Service Cards Mobile */
+    .services-overview [style*="display: grid"] {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .services-commitment .services-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+
+    .services-commitment .service-card {
+        padding: 20px !important;
+    }
+
+    .services-commitment .service-card h3 {
+        font-size: 1.2rem !important;
+    }
+
+    .services-commitment .service-card p,
+    .services-commitment .service-card li {
+        font-size: 0.9rem !important;
     }
 }
 
@@ -313,6 +361,45 @@ nav a:hover, nav a.active {
 .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+}
+
+/* Service Provider Contact Cards */
+.service-providers-contact .provider-card .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    min-height: 48px;
+}
+
+.service-providers-contact .provider-card .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.service-providers-contact .provider-card .btn:first-child {
+    background: #25D366;
+    color: white;
+}
+
+.service-providers-contact .provider-card .btn:first-child:hover {
+    background: #1ea952;
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+}
+
+.service-providers-contact .provider-card .btn:last-child {
+    background: #1e3c72;
+    color: white;
+}
+
+.service-providers-contact .provider-card .btn:last-child:hover {
+    background: #163056;
+    box-shadow: 0 8px 20px rgba(30, 60, 114, 0.4);
 }
 
 /* Footer */
