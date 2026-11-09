@@ -14,7 +14,7 @@ This file describes that flow. It does not turn on branch protection, Amplify pr
 6. Merge to `main`. Amplify’s build of `main` is the production deploy.
 7. Delete the branch. Amplify deletes the preview when the pull request closes.
 
-The Amplify app is `naathconnect` (`d3r9dhrzrtpx2p`, `us-east-2`). Right now the only connected branch is `cursor/site-diagnosis-revamp-bb61`, at `https://cursor-site-diagnosis-revamp-bb61.d3r9dhrzrtpx2p.amplifyapp.com`. Production on `main` starts after `main` is connected in Amplify and pull request #10 has merged. This CI pull request is stacked on #10 and should be retargeted to `main` after that merge.
+The Amplify app is `naathconnect` (`d3r9dhrzrtpx2p`, `us-east-2`). Pull request #10 merged the first preview into `main` before the redesign. This pull request carries the redesign, the unindexed launch, and these CI checks, and it targets `main`. Production updates when Amplify is connected to `main` and this pull request merges. Connecting that branch is done in the Amplify console, not in this repository.
 
 GitHub Pages is not part of this flow. `.github/workflows/deploy.yml` is removed, and `.github/workflows/rollback.yml` refuses to run, so neither can publish `gh-pages`. The release workflow is manual and does not deploy the site.
 
@@ -32,7 +32,7 @@ Workflow: `.github/workflows/ci.yml`, name `CI`. It runs on pull requests to `ma
 
 Unit tests are already in `tests/`. They cover approvals, view dedupe, reactions, the service headlines, the consultation placeholders, gallery paths, event times, and the rule that Amplify does not fall through to SQLite.
 
-This stacked pull request targets `cursor/site-diagnosis-revamp-bb61`, not `main`, so this workflow does not run on it. The checks appear after the pull request is retargeted to `main`, or after the workflow file is on `main`.
+The workflow runs on pull requests into `main` and on pushes to `main`. It does not run while a pull request targets another branch.
 
 ## Amplify pull request previews
 
@@ -48,6 +48,10 @@ Tango turns this on in the Amplify console. Nothing in this repository calls Amp
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project `tzjuxxoeoeiawszomylj` → Project Settings → Data API → Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Same page → `anon` `public` key. Not the `service_role` key |
 | `VIEW_SIGNING_SECRET` | The same string stored in `naath_private.secrets` where `name` is `view_hmac` |
+| `NEXT_PUBLIC_SITE_URL` | Optional. Public origin for `metadataBase`. On Amplify `main`, empty defaults to `https://naathconnect.com`. `www.naathconnect.com` redirects to the apex |
+| `ALLOW_INDEXING` | Leave unset. `robots.txt`, the robots meta tag, and `X-Robots-Tag` stay `noindex` until this is the exact string `true` |
+
+Do not set `DEMO_SESSION_SECRET`, `DEMO_ADMIN_EMAIL`, `DEMO_ADMIN_PASSWORD`, or `DEMO_PROFESSIONAL_PASSWORD` on Amplify. `AWS_APP_ID` or `AWS_BRANCH` turns demo mode off.
 
 `NEXT_PUBLIC_*` values are baked in at build time. Changing them means a new Amplify build.
 
