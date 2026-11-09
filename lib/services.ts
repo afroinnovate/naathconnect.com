@@ -11,6 +11,18 @@ export type ServiceOffer = {
   hood: string;
 };
 
+/** Generic icon names for each service slideshow. No photos of people. */
+export const serviceSlideIcons: Record<string, readonly string[]> = {
+  "solution-engineering": ["compass", "layers", "puzzle", "bulb"],
+  "forward-deployed": ["rocket", "code", "wrench", "check"],
+  "ai-assistants": ["cpu", "chat", "bolt", "bell"],
+  websites: ["globe", "layout", "monitor", "search"],
+  "reliable-systems": ["server", "shield", "pulse", "cloud"],
+  payments: ["card", "lock", "key", "shield"],
+  receipts: ["file", "folder", "calendar", "archive"],
+  "software-consulting": ["terminal", "branch", "book", "chat"],
+};
+
 export const serviceOffers: ServiceOffer[] = [
   {
     id: "solution-engineering",
