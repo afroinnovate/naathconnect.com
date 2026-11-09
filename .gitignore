@@ -3,8 +3,11 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
-yarn.lock
+
+# Next.js build and the local demo database
+.next/
+data/
+tsconfig.tsbuildinfo
 
 # Development
 .vscode/

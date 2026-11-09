@@ -1,4 +1,10 @@
-# 🚀 Deployment & Rollback Guide
+# Deployment guide — frozen
+
+**Do not deploy from these instructions.** As of 2026-11-09 the production domain does not resolve, and this branch replaces the static site with a Next.js app. Pushing to `main` or running the old Pages workflow would publish the wrong files to the live `gh-pages` branch. Production deploy is refused until Tango Tew explicitly approves hosting. Read `docs/DIAGNOSIS.md` before changing DNS, GitHub Pages, or a host account.
+
+The steps below describe the **previous** static-site workflow. They are kept so the old process is on record. They are not safe to run for this revamp.
+
+# Previous static-site deployment & rollback
 
 ## 📋 **Features**
 

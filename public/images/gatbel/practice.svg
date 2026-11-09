@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="practiceTitle practiceDesc">
+  <title id="practiceTitle">Placeholder practice photo</title>
+  <desc id="practiceDesc">Not a photograph of a clinic. A labeled slot for a photo Dr. Gatbel ChamJock approves.</desc>
+  <rect width="800" height="1000" fill="#eef3f6"/>
+  <rect x="36" y="36" width="728" height="928" fill="none" stroke="#0e6b66" stroke-width="3"/>
+  <path d="M180 640h440v120H180z" fill="#f7fffe" stroke="#0c3f3c" stroke-width="8"/>
+  <path d="M230 640V470h340v170" fill="#f7fffe" stroke="#0c3f3c" stroke-width="8"/>
+  <path d="M210 470l190-110 190 110" fill="none" stroke="#0e6b66" stroke-width="8" stroke-linejoin="round"/>
+  <rect x="370" y="560" width="60" height="80" fill="#e7f3f1" stroke="#0c3f3c" stroke-width="6"/>
+  <path d="M300 520h40M460 520h40" stroke="#9a4f2c" stroke-width="8" stroke-linecap="round"/>
+  <text x="400" y="820" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#0c3f3c">PLACEHOLDER</text>
+  <text x="400" y="880" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#1c2421">At the practice</text>
+  <text x="400" y="930" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5c6763">Not a photo of a real clinic</text>
+</svg>

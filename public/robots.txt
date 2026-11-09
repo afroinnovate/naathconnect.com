@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /
+
+# This preview is not the live site. Allow indexing only after Tango
+# approves a production launch and placeholder profiles are removed.

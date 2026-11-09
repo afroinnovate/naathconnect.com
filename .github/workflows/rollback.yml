@@ -1,10 +1,16 @@
 name: Rollback Deployment
 
+# Republishes the gh-pages branch, which is the live GitHub Pages site.
+# Do not run until Tango Tew approves a production hosting change.
 on:
   workflow_dispatch:
     inputs:
       version:
         description: 'Version/Tag to rollback to (e.g., v2025.9.1)'
+        required: true
+        type: string
+      approval:
+        description: 'Type TANGO-APPROVED to republish GitHub Pages'
         required: true
         type: string
 
@@ -17,6 +23,13 @@ jobs:
   validate-and-rollback:
     runs-on: ubuntu-latest
     steps:
+      - name: Require explicit approval
+        run: |
+          if [ "${{ github.event.inputs.approval }}" != "TANGO-APPROVED" ]; then
+            echo "Rollback refused. gh-pages was not changed."
+            exit 1
+          fi
+
       - name: Checkout Repository 🛎️
         uses: actions/checkout@v4
         with:
