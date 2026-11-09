@@ -1,152 +1,23 @@
 name: Rollback Deployment
 
-# Republishes the gh-pages branch, which is the live GitHub Pages site.
-# Do not run until Tango Tew approves a production hosting change.
+# Neutralized. This used to force-push a tag onto gh-pages, which published
+# the old static site. It has no pages permission and cannot publish.
+# Production is Amplify on main. See docs/CI-CD.md.
+
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version/Tag to rollback to (e.g., v2025.9.1)'
-        required: true
-        type: string
-      approval:
-        description: 'Type TANGO-APPROVED to republish GitHub Pages'
-        required: true
-        type: string
 
 permissions:
-  contents: write
-  pages: write
-  actions: read
+  contents: read
 
 jobs:
-  validate-and-rollback:
+  refuse:
+    name: refuse gh-pages rollback
     runs-on: ubuntu-latest
     steps:
-      - name: Require explicit approval
+      - name: Refuse to publish GitHub Pages
         run: |
-          if [ "${{ github.event.inputs.approval }}" != "TANGO-APPROVED" ]; then
-            echo "Rollback refused. gh-pages was not changed."
-            exit 1
-          fi
-
-      - name: Checkout Repository 🛎️
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Validate Tag Exists 🏷️
-        id: validate
-        run: |
-          TAG="${{ github.event.inputs.version }}"
-          
-          # Remove 'v' prefix if present for consistency
-          if [[ $TAG == v* ]]; then
-            TAG_CLEAN=${TAG#v}
-            TAG_WITH_V=$TAG
-          else
-            TAG_CLEAN=$TAG
-            TAG_WITH_V=v$TAG
-          fi
-          
-          echo "tag_clean=$TAG_CLEAN" >> $GITHUB_OUTPUT
-          echo "tag_with_v=$TAG_WITH_V" >> $GITHUB_OUTPUT
-          
-          # Check if tag exists
-          if ! git rev-parse "$TAG_WITH_V" >/dev/null 2>&1; then
-            echo "❌ Error: Tag '$TAG_WITH_V' does not exist"
-            echo "Available recent tags:"
-            git tag -l --sort=-version:refname | head -10
-            exit 1
-          fi
-          
-          echo "✅ Tag '$TAG_WITH_V' found and valid"
-
-      - name: Checkout Target Version 📥
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.validate.outputs.tag_with_v }}
-
-      - name: Get Rollback Information 📋
-        id: info
-        run: |
-          TAG="${{ steps.validate.outputs.tag_with_v }}"
-          
-          # Get commit info for the tag
-          COMMIT_SHA=$(git rev-parse $TAG)
-          COMMIT_DATE=$(git log -1 --format=%ci $TAG)
-          COMMIT_MESSAGE=$(git log -1 --format=%s $TAG)
-          
-          echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
-          echo "commit_date=$COMMIT_DATE" >> $GITHUB_OUTPUT
-          echo "commit_message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
-          
-          echo "Rolling back to:"
-          echo "  Tag: $TAG"
-          echo "  Commit: $COMMIT_SHA"
-          echo "  Date: $COMMIT_DATE"
-          echo "  Message: $COMMIT_MESSAGE"
-
-      - name: Force Clean gh-pages Branch 🧹
-        run: |
-          echo "🗑️ Performing clean rollback deployment..."
-          
-          git config user.name "GitHub Actions Rollback"
-          git config user.email "actions@github.com"
-          
-          # Create orphan branch for clean rollback
-          git checkout --orphan gh-pages-rollback
-          git rm -rf .
-          echo "# Rollback in Progress" > README.md
-          git add README.md
-          git commit -m "🔄 Rollback preparation"
-          
-          # Force push to replace gh-pages
-          git push origin gh-pages-rollback:gh-pages --force
-          
-          # Switch back to target version
-          git checkout ${{ steps.validate.outputs.tag_with_v }}
-          git branch -D gh-pages-rollback
-
-      - name: Deploy Rollback Version 🔄
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
-        with:
-          branch: gh-pages
-          folder: .
-          token: ${{ secrets.GITHUB_TOKEN }}
-          clean: true
-          commit-message: |
-            🔄 ROLLBACK to ${{ steps.validate.outputs.tag_with_v }}
-            
-            Rolling back from: ${{ github.sha }}
-            Rolling back to: ${{ steps.info.outputs.commit_sha }}
-            
-            Original commit: ${{ steps.info.outputs.commit_message }}
-            Rollback date: $(date '+%Y-%m-%d %H:%M:%S UTC')
-            Initiated by: ${{ github.actor }}
-
-      - name: Rollback Summary 📊
-        run: |
-          echo "## 🔄 Rollback Completed Successfully!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Rolled back to**: ${{ steps.validate.outputs.tag_with_v }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Target commit**: ${{ steps.info.outputs.commit_sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Original date**: ${{ steps.info.outputs.commit_date }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Initiated by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Rollback time**: $(date '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🌐 **Live Site**: [naathconnect.com](https://naathconnect.com)" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 **GitHub Pages**: [afroinnovate.github.io/naathconnect.com](https://afroinnovate.github.io/naathconnect.com)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⚠️ **Important**: Changes may take 5-10 minutes to appear due to CDN caching." >> $GITHUB_STEP_SUMMARY
-          echo "💡 **Tip**: Use cache-busting URL parameters to see changes immediately." >> $GITHUB_STEP_SUMMARY
-
-      - name: Create Rollback Record 📝
-        run: |
-          echo "Recording rollback in git history..."
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          
-          # Create rollback marker (optional, for tracking)
-          git tag -a "rollback-$(date +%Y%m%d-%H%M%S)" -m "Rollback to ${{ steps.validate.outputs.tag_with_v }} initiated by ${{ github.actor }}"
-          git push origin --tags
+          echo "Rollback to GitHub Pages is disabled."
+          echo "gh-pages was not changed."
+          echo "Production deploys when a pull request merges to main and Amplify builds that branch."
+          exit 1
