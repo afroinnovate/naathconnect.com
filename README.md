@@ -1,176 +1,63 @@
-# 🌍 Naath Connect
+# Naath Connect
 
-**Secure, Compliant Money Transfers to East Africa**
+Preview of the Naath Connect LLC site. The public domain `naathconnect.com` does not resolve. Read [docs/DIAGNOSIS.md](docs/DIAGNOSIS.md) before any registrar, DNS, hosting, or production deploy step. This branch does not go live on its own.
 
-[![Deploy to GitHub Pages](https://github.com/afroinnovate/naathconnect.com/actions/workflows/deploy.yml/badge.svg)](https://github.com/afroinnovate/naathconnect.com/actions/workflows/deploy.yml)
-[![Release](https://github.com/afroinnovate/naathconnect.com/actions/workflows/release.yml/badge.svg)](https://github.com/afroinnovate/naathconnect.com/actions/workflows/release.yml)
+Naath Connect LLC is an Iowa limited liability company owned by Tango Tew. It connects the community with local professional services. Its own practice leads with technology consulting, written for small business owners, community leaders, contractors, and truckers.
 
-> 🚀 **Live Site**: [naathconnect.com](https://naathconnect.com)
+## Stack
 
----
+The old site was static HTML on GitHub Pages. That host cannot run accounts, approvals, or a database.
 
-## 🌟 About Naath Connect
+- **App:** Next.js (App Router) on Node 22.
+- **Production data, when Tango approves it:** Supabase Postgres, Auth, and row-level security. Migration: `supabase/migrations/001_init.sql`. Hosting recommendation is in [docs/DIAGNOSIS.md](docs/DIAGNOSIS.md): Vercel Pro with DNS left in Cloudflare, not Vercel Hobby. Neither project is created here.
+- **This preview:** Node’s built-in SQLite, so review needs no new account and no secrets. Leave the Supabase variables empty.
 
-Naath Connect is a licensed money transmission service specializing in secure, compliant transfers to East Africa. We partner with **Dahabshiil**, a leading financial institution, to ensure your money reaches your loved ones safely and quickly.
+## Run the preview
 
-### 💼 **Our Mission**
-Bridging communities across borders through reliable, affordable, and compliant financial services.
-
-### 🎯 **Key Features**
-- ✅ **Licensed Money Transmitter** - Fully compliant with US regulations
-- 🤝 **Dahabshiil Partnership** - Trusted financial network across East Africa
-- 💬 **WhatsApp Support** - Instant customer service via WhatsApp
-- 🌍 **Multi-Country Coverage** - Serving 8 East African countries
-- 🔒 **Secure Transfers** - AML/KYC compliance and fraud protection
-- 💰 **Competitive Rates** - Low fees, transparent pricing
-
----
-
-## 🌍 Countries We Serve
-
-| Country | Flag | Capital |
-|---------|------|---------|
-| **Somalia** | 🇸🇴 | Mogadishu |
-| **Ethiopia** | 🇪🇹 | Addis Ababa |
-| **Kenya** | 🇰🇪 | Nairobi |
-| **Uganda** | 🇺🇬 | Kampala |
-| **Rwanda** | 🇷🇼 | Kigali |
-| **Djibouti** | 🇩🇯 | Djibouti City |
-
----
-
-## 🛠️ Technical Stack
-
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Styling**: Custom CSS with animations and responsive design
-- **Deployment**: GitHub Pages with automated workflows
-- **CI/CD**: GitHub Actions for deployment and releases
-- **Versioning**: Calendar Versioning (CalVer) - `YYYY.M.ITERATION`
-
----
-
-## 📁 Project Structure
-
-```
-naathconnect.com/
-├── 📄 index.html          # Homepage with partnership showcase
-├── 📄 about.html          # Company information and mission
-├── 📄 services.html       # Service offerings and countries
-├── 📄 partners.html       # Dahabshiil partnership details
-├── 📄 contact.html        # Contact form with WhatsApp integration
-├── 📄 404.html           # Custom error page
-├── 🗺️ sitemap.xml         # SEO sitemap
-├── 🤖 robots.txt         # Search engine directives
-├── 📋 CNAME              # Custom domain configuration
-├── 🔧 _headers           # Security headers
-└── 📂 assets/
-    ├── 🎨 css/           # Stylesheets and animations
-    ├── 🖼️ images/        # Logos, icons, and graphics
-    └── ⚡ js/            # JavaScript and service worker
-```
-
----
-
-## 🚀 Development Setup
-
-### Prerequisites
-- Python 3.x (for local server)
-- Git
-- Modern web browser
-
-### Local Development
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/afroinnovate/naathconnect.com.git
-   cd naathconnect.com
-   ```
-
-2. **Start local server**
-   ```bash
-   python -m http.server 8000
-   ```
-
-3. **Open in browser**
-   ```
-   http://localhost:8000
-   ```
-
-### Live Reload (Optional)
-For development with live reload, you can use:
 ```bash
-# Using Node.js live-server
-npx live-server --port=8000 --open=/index.html
+npm install
+npm run dev
 ```
 
----
+Open `http://localhost:3000`. The amber banner means you are on placeholder data.
 
-## 🔄 Deployment & Releases
+Demo sign-in (not real inboxes):
 
-### Automated Deployment
-- **Triggers**: Push to `main` branch
-- **Platform**: GitHub Pages
-- **URL**: [naathconnect.com](https://naathconnect.com)
+| Who | Email | Password |
+| --- | --- | --- |
+| Admin (Tango’s preview seat) | `placeholder-admin@example.invalid` | `placeholder-admin-password` |
+| Approved professional | `placeholder-pro-one@example.invalid` | `placeholder-professional-password` |
+| Pending applicant | `placeholder-applicant@example.invalid` | `placeholder-professional-password` |
 
-### Release Management
-- **Versioning**: Calendar Versioning (CalVer)
-- **Format**: `YYYY.M.ITERATION` (e.g., `2025.9.1`)
-- **Automation**: Auto-generated on main branch pushes
-- **Release Notes**: Automated commit history and features
+Copy `.env.example` to `.env.local` only when a Supabase project exists. Do not commit secrets.
 
-### Workflow Status
-- ✅ **Deploy Workflow**: Automated GitHub Pages deployment
-- ✅ **Release Workflow**: CalVer-based release creation
-- ✅ **Branch Protection**: Main branch protected
+```bash
+npm test
+npm run typecheck
+```
 
----
+## What is in the preview
 
-## 📞 Contact & Support
+- Technology consultation, with Tango’s photo, and the service list in plain language. Technical terms sit on the small “Under the hood” line.
+- Medical consultation for Dr. Gatbel ChamJock. Photos, biography, specialty, credentials, and contact are placeholders until he approves them.
+- Directory applications that stay pending until an admin approves them.
+- Events from approved professionals, also pending until approval, then a feed on the home page.
+- Views (once per browser per day, not counted for the organizer) and like / heart reactions (approved accounts, one of each).
+- An admin page to approve or reject people and events, and to feature an approved professional on a consultation section.
 
-- **Website**: [naathconnect.com](https://naathconnect.com)
-- **WhatsApp**: [+1 (405) 519-6057](https://wa.me/14055196057)
-- **Email**: Contact via website form
-- **Business Hours**: Monday - Friday, 9 AM - 6 PM EST
+## Adding Gatbel’s photos
 
----
+1. Put files in `public/images/gatbel/` (for example `gown.jpg`).
+2. Edit the `gatbelGallery` array in `lib/consultations.ts`.
+3. Replace the placeholder biography, specialty, credentials, and contact with text he has approved.
+4. Set `placeholder: false` only after that OK.
 
-## 🏢 Company Information
+Do not scrape social media.
 
-**Naath Connect LLC**  
-Licensed Money Transmitter  
-Partnership with Dahabshiil Financial Services  
+## Adding another consultation section
 
-### Compliance
-- ✅ Licensed Money Service Business (MSB)
-- ✅ AML/KYC Compliance Program
-- ✅ OFAC Sanctions Screening
-- ✅ State-by-State Licensing
-- ✅ Regular Compliance Audits
+House profiles live in `lib/consultations.ts`. An approved directory professional can join a section without a code change: on the admin page, open “Consultation listing”, set a category slug such as `medical` or a new one, and feature them. They appear only after their application is approved.
 
----
+## Old site
 
-## 📊 Performance & Analytics
-
-- **Performance**: Optimized for fast loading
-- **SEO**: Complete sitemap and meta optimization
-- **Security**: HTTPS, security headers, CSRF protection
-- **Accessibility**: WCAG 2.1 compliant design
-- **Mobile**: Fully responsive across all devices
-
----
-
-## 🤝 Contributing
-
-This is a private commercial project. For business inquiries or partnership opportunities, please contact us through our website.
-
----
-
-## 📈 Version History
-
-See our [Releases](https://github.com/afroinnovate/naathconnect.com/releases) page for detailed version history following CalVer format.
-
-**Current Focus**: Q4 2025 expansion and enhanced compliance features
-
----
-
-*© 2025 Naath Connect LLC. All rights reserved.*
+The previous static site is in `legacy/`. The GitHub Pages deploy workflow on this branch refuses to publish, so a merge does not copy this app onto `gh-pages`.

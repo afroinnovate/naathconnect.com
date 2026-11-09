@@ -1,105 +1,24 @@
 name: Deploy to GitHub Pages
 
+# FROZEN until Tango Tew explicitly approves production hosting.
+# The previous job force-pushed the gh-pages branch, which is the live
+# GitHub Pages site (CNAME naathconnect.com). This revamp is a Next.js
+# app and must not be copied onto GitHub Pages. Running this workflow
+# does not change gh-pages, DNS, or the registrar.
+
 on:
-  push:
-    branches: [ main ]  # Auto-deploy on main branch pushes
-  workflow_dispatch:    # Manual deployment with rollback option
-    inputs:
-      version:
-        description: 'Version/Tag to deploy (leave empty for latest main)'
-        required: false
-        default: ''
-      force_clean:
-        description: 'Force clean deployment (delete and recreate)'
-        required: false
-        default: true
-        type: boolean
+  workflow_dispatch:
 
 permissions:
-  contents: write
-  pages: write
-  actions: read
+  contents: read
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Determine Deployment Source 🎯
-        id: deploy_source
+      - name: Refuse production deploy
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.version }}" ]; then
-            echo "source=tag" >> $GITHUB_OUTPUT
-            echo "ref=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-            echo "Deploying from tag: ${{ github.event.inputs.version }}"
-          else
-            echo "source=main" >> $GITHUB_OUTPUT
-            echo "ref=main" >> $GITHUB_OUTPUT
-            echo "Deploying from main branch"
-          fi
-
-      - name: Checkout Source 🛎️
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.deploy_source.outputs.ref }}
-          fetch-depth: 0
-
-      - name: Force Clean gh-pages Branch 🧹
-        if: github.event.inputs.force_clean == 'true' || github.event_name == 'push'
-        run: |
-          echo "🗑️ Performing clean deployment..."
-          
-          # Check if gh-pages branch exists
-          if git ls-remote --heads origin gh-pages | grep gh-pages; then
-            echo "Found existing gh-pages branch, preparing for clean deployment"
-            
-            # Create an empty commit for clean deployment
-            git config user.name "GitHub Actions"
-            git config user.email "actions@github.com"
-            
-            # Create orphan branch locally
-            git checkout --orphan gh-pages-temp
-            git rm -rf .
-            echo "# Clean Deployment in Progress" > README.md
-            git add README.md
-            git commit -m "🧹 Clean deployment preparation"
-            
-            # Force push to replace gh-pages
-            git push origin gh-pages-temp:gh-pages --force
-            
-            # Switch back to deployment source
-            git checkout ${{ steps.deploy_source.outputs.ref }}
-            git branch -D gh-pages-temp
-          else
-            echo "No existing gh-pages branch found"
-          fi
-
-      - name: Deploy to GitHub Pages 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
-        with:
-          branch: gh-pages
-          folder: .
-          token: ${{ secrets.GITHUB_TOKEN }}
-          clean: true
-          clean-exclude: |
-            .nojekyll
-          commit-message: |
-            🚀 Deploy from ${{ steps.deploy_source.outputs.source }}: ${{ steps.deploy_source.outputs.ref }}
-            
-            ${{ github.event_name == 'workflow_dispatch' && format('Manual deployment from {0}', github.event.inputs.version != '' && github.event.inputs.version || 'main') || 'Auto deployment from main' }}
-            
-            Timestamp: ${{ github.run_number }}
-            Commit: ${{ github.sha }}
-
-      - name: Deployment Summary 📊
-        run: |
-          echo "## 🎉 Deployment Successful!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Source**: ${{ steps.deploy_source.outputs.source }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Reference**: ${{ steps.deploy_source.outputs.ref }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Clean Deploy**: ${{ github.event.inputs.force_clean || 'true' }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Timestamp**: $(date '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🌐 **Live Site**: [naathconnect.com](https://naathconnect.com)" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 **GitHub Pages**: [afroinnovate.github.io/naathconnect.com](https://afroinnovate.github.io/naathconnect.com)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "💡 **Cache Refresh**: Changes may take 5-10 minutes to appear due to CDN caching." >> $GITHUB_STEP_SUMMARY
+          echo "Production deploy is frozen."
+          echo "Nothing was published. The gh-pages branch was not changed."
+          echo "GitHub Pages cannot run this Next.js app. See docs/DIAGNOSIS.md."
+          exit 1

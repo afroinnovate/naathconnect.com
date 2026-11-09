@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="gownTitle gownDesc">
+  <title id="gownTitle">Placeholder medical gown photo</title>
+  <desc id="gownDesc">Not a photograph of Dr. Gatbel ChamJock. A labeled slot for a photo he approves.</desc>
+  <rect width="800" height="1000" fill="#e7f3f1"/>
+  <rect x="36" y="36" width="728" height="928" fill="none" stroke="#0e6b66" stroke-width="3"/>
+  <path d="M290 250c20-70 50-110 110-110s90 40 110 110l70 90-70 30-40-40v360h-220V330l-40 40-70-30z" fill="#f7fffe" stroke="#0c3f3c" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M360 250c10 40 20 70 40 70s30-30 40-70" fill="none" stroke="#0e6b66" stroke-width="6"/>
+  <path d="M250 430h80M470 430h80M300 560h70M430 560h70" stroke="#9a4f2c" stroke-width="8" stroke-linecap="round"/>
+  <text x="400" y="760" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#0c3f3c">PLACEHOLDER</text>
+  <text x="400" y="820" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#1c2421">Medical gown photo</text>
+  <text x="400" y="870" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5c6763">Not a photo of Dr. Gatbel ChamJock</text>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="portraitTitle portraitDesc">
+  <title id="portraitTitle">Placeholder portrait</title>
+  <desc id="portraitDesc">Not a photograph of Dr. Gatbel ChamJock. A labeled slot for a portrait he approves.</desc>
+  <rect width="800" height="1000" fill="#f6f1e8"/>
+  <rect x="36" y="36" width="728" height="928" fill="none" stroke="#0e6b66" stroke-width="3"/>
+  <circle cx="400" cy="360" r="110" fill="#d9ebe8" stroke="#0c3f3c" stroke-width="8"/>
+  <path d="M230 700c30-120 90-180 170-180s140 60 170 180" fill="#d9ebe8" stroke="#0c3f3c" stroke-width="8"/>
+  <text x="400" y="800" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#0c3f3c">PLACEHOLDER</text>
+  <text x="400" y="860" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#1c2421">Portrait</text>
+  <text x="400" y="910" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#5c6763">Not a photo of Dr. Gatbel ChamJock</text>
+</svg>
