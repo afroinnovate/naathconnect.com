@@ -1,5 +1,5 @@
-import { serviceOffers } from "./services";
-import { RESUME_URL, SITE_EMAIL, SITE_PHONE_DISPLAY, SITE_PHONE_TEL, SITE_WHATSAPP, TANGO_GITHUB, TANGO_LINKEDIN } from "./site";
+import { getService, serviceOffers } from "./services";
+import { RESUME_URL, SITE_EMAIL, SITE_WHATSAPP, TANGO_GITHUB, TANGO_LINKEDIN } from "./site";
 
 export type ProCategory = "tech" | "medical" | "software" | "tax" | "auto" | "finance" | "education";
 
@@ -27,8 +27,6 @@ export type PublicPro = {
   email: string | null;
   /** Account email used only to avoid a second card. Not rendered. */
   dedupeEmail?: string | null;
-  phoneDisplay: string | null;
-  phoneTel: string | null;
   whatsapp: string | null;
   website: string | null;
   github: string | null;
@@ -91,8 +89,6 @@ export const featuredPros: PublicPro[] = [
     remote: true,
     searchTerms: "cloud ai website software technology consulting",
     email: SITE_EMAIL,
-    phoneDisplay: SITE_PHONE_DISPLAY,
-    phoneTel: SITE_PHONE_TEL,
     whatsapp: SITE_WHATSAPP,
     website: RESUME_URL || null,
     github: TANGO_GITHUB,
@@ -120,8 +116,6 @@ export const featuredPros: PublicPro[] = [
     services: [],
     serviceAreas: null,
     email: null,
-    phoneDisplay: null,
-    phoneTel: null,
     whatsapp: null,
     website: null,
     github: null,
@@ -152,8 +146,6 @@ export const featuredPros: PublicPro[] = [
     services: [],
     serviceAreas: null,
     email: null,
-    phoneDisplay: null,
-    phoneTel: null,
     whatsapp: null,
     website: null,
     github: null,
@@ -184,8 +176,6 @@ export const featuredPros: PublicPro[] = [
     services: [],
     serviceAreas: null,
     email: null,
-    phoneDisplay: null,
-    phoneTel: null,
     whatsapp: null,
     website: null,
     github: null,
@@ -216,8 +206,6 @@ export const featuredPros: PublicPro[] = [
     services: [],
     serviceAreas: null,
     email: null,
-    phoneDisplay: null,
-    phoneTel: null,
     whatsapp: null,
     website: null,
     github: null,
@@ -232,6 +220,15 @@ export const homeTiles = featuredPros;
 
 export function getFeaturedPro(slug: string): PublicPro | undefined {
   return featuredPros.find((pro) => pro.slug === slug);
+}
+
+/** Real professionals who list this service. Placeholders are not included. */
+export function professionalsForService(serviceId: string): PublicPro[] {
+  const offer = getService(serviceId);
+  if (!offer) return [];
+  return featuredPros.filter(
+    (pro) => !pro.placeholder && !pro.comingSoon && pro.services.some((service) => service.name === offer.name),
+  );
 }
 
 export function proFromAccount(person: {
@@ -268,8 +265,6 @@ export function proFromAccount(person: {
     serviceAreas: person.serviceArea || null,
     email: null,
     dedupeEmail: person.email || null,
-    phoneDisplay: null,
-    phoneTel: null,
     whatsapp: null,
     website: person.website,
     github: null,

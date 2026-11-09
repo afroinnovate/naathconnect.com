@@ -3,7 +3,7 @@ import { EventSlider } from "@/components/EventSlider";
 import { HeroSearch } from "@/components/HeroSearch";
 import { ServiceSlideshow } from "@/components/ServiceSlideshow";
 import { toEventCard } from "@/lib/event-card";
-import { serviceOffers, serviceSlideIcons } from "@/lib/services";
+import { serviceOffers, servicePath, serviceSlideIcons } from "@/lib/services";
 import { getSession } from "@/lib/session";
 import { getStore } from "@/lib/store";
 import type { SessionUser } from "@/lib/types";
@@ -37,7 +37,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
               tagline={service.title}
               slides={serviceSlideIcons[service.id] ?? []}
               order={index}
-              href="/pros/tango-tew"
+              href={servicePath(service.id)}
             />
           ))}
         </div>

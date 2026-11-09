@@ -89,11 +89,6 @@ export function ProView({ pro }: { pro: PublicPro }) {
               Email
             </a>
           ) : null}
-          {pro.phoneTel ? (
-            <a className="contact-btn" href={`tel:${pro.phoneTel}`}>
-              {pro.phoneDisplay}
-            </a>
-          ) : null}
         </div>
       </div>
     </article>

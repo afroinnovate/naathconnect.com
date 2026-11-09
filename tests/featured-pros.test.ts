@@ -21,7 +21,7 @@ describe("featured professionals", () => {
     const gatbel = getFeaturedPro("gatbel-chamjock");
     assert.equal(gatbel?.placeholder, true);
     assert.equal(gatbel?.email, null);
-    assert.equal(gatbel?.phoneTel, null);
+    assert.equal(gatbel?.whatsapp, null);
     assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 1);
   });
 

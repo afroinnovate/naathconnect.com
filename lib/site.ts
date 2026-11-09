@@ -1,7 +1,6 @@
 /** Public contact Tango supplied for the site and for his own profile. */
 export const SITE_EMAIL = "naathconnect@gmail.com";
-export const SITE_PHONE_DISPLAY = "+1 405-519-6057";
-export const SITE_PHONE_TEL = "+14055196057";
+/** Digits live only inside this URL. The visible label is the word WhatsApp. */
 export const SITE_WHATSAPP = "https://wa.me/14055196057";
 
 /** Tango's resume site. The resume button is hidden when this is empty. */

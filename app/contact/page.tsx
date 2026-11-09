@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_EMAIL, SITE_PHONE_DISPLAY, SITE_PHONE_TEL, SITE_WHATSAPP } from "@/lib/site";
+import { SITE_EMAIL, SITE_WHATSAPP } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Contact" };
 
@@ -13,9 +13,6 @@ export default function ContactPage() {
         </a>
         <a className="contact-btn" href={SITE_WHATSAPP}>
           WhatsApp
-        </a>
-        <a className="contact-btn" href={`tel:${SITE_PHONE_TEL}`}>
-          {SITE_PHONE_DISPLAY}
         </a>
       </div>
     </section>
