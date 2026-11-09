@@ -4,7 +4,7 @@ import Script from "next/script";
 import { DemoBanner } from "@/components/DemoBanner";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { isDemoMode } from "@/lib/config";
+import { allowIndexing, isDemoMode, siteUrl } from "@/lib/config";
 import { getSession } from "@/lib/session";
 import "./globals.css";
 
@@ -14,11 +14,15 @@ const themeBoot = `(function(){try{var k="nc-theme";var s=localStorage.getItem(k
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: { default: "Naath Connect", template: "%s · Naath Connect" },
-  description: "Naath Connect connects Naath communities and businesses worldwide with local professionals.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const indexing = allowIndexing();
+  return {
+    metadataBase: new URL(siteUrl()),
+    title: { default: "Naath Connect", template: "%s · Naath Connect" },
+    description: "Naath Connect connects Naath communities and businesses worldwide with local professionals.",
+    robots: indexing ? { index: true, follow: true } : { index: false, follow: false },
+  };
+}
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();

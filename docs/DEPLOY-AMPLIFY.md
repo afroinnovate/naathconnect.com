@@ -33,8 +33,10 @@ Do not set `DEMO_SESSION_SECRET`, `DEMO_ADMIN_EMAIL`, `DEMO_ADMIN_PASSWORD`, or 
 | `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase dashboard → Project Settings → Data API → Project URL. It looks like `https://<project-ref>.supabase.co` |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Same page → Project API keys → `anon` `public`. This key is meant for the browser. It is not the `service_role` key |
 | `VIEW_SIGNING_SECRET` | Yes | A long random string Tango generates (for example `openssl rand -hex 32`). The same string is inserted into the database as `naath_private.secrets` where `name` is `view_hmac`. The app and the database must match or public view counts stay at the previous total |
+| `NEXT_PUBLIC_SITE_URL` | No | Public origin for `metadataBase`. On the Amplify `main` branch, an empty value defaults to `https://naathconnect.com`. `www.naathconnect.com` redirects to that apex. Set it only to override that origin, and rebuild after changing it |
+| `ALLOW_INDEXING` | No | Leave unset. Indexing stays off (`robots.txt` disallows `/`, pages send `noindex`, and `X-Robots-Tag` is `noindex, nofollow`) until this is the exact string `true` and the app is rebuilt |
 
-`AWS_APP_ID`, `AWS_BRANCH`, and `AWS_COMMIT_ID` are set by Amplify itself. Do not add them by hand.
+`AWS_APP_ID`, `AWS_BRANCH`, and `AWS_COMMIT_ID` are set by Amplify itself. Do not add them by hand. Do not set `ALLOW_INDEXING` for the launch. Demo mode stays off whenever `AWS_APP_ID` or `AWS_BRANCH` is present, which Amplify sets on every branch including `main`.
 
 ## Create the Supabase free project
 
