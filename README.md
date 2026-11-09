@@ -9,7 +9,7 @@ Naath Connect LLC is an Iowa limited liability company owned by Tango Tew. It co
 The old site was static HTML on GitHub Pages. That host cannot run accounts, approvals, or a database.
 
 - **App:** Next.js (App Router) on Node 22.
-- **Production data, when Tango approves it:** Supabase Postgres, Auth, and row-level security. Migration: `supabase/migrations/001_init.sql`. Suggested host for the app: Vercel’s free tier. Neither project is created here.
+- **Production data, when Tango approves it:** Supabase Postgres, Auth, and row-level security. Migration: `supabase/migrations/001_init.sql`. Hosting recommendation is in [docs/DIAGNOSIS.md](docs/DIAGNOSIS.md): Vercel Pro with DNS left in Cloudflare, not Vercel Hobby. Neither project is created here.
 - **This preview:** Node’s built-in SQLite, so review needs no new account and no secrets. Leave the Supabase variables empty.
 
 ## Run the preview
