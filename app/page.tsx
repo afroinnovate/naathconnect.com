@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { EventSlider } from "@/components/EventSlider";
 import { HeroSearch } from "@/components/HeroSearch";
+import { OptimizedPhoto } from "@/components/OptimizedPhoto";
 import { toEventCard } from "@/lib/event-card";
 import { getFeaturedPro } from "@/lib/featured-pros";
 import { serviceOffers } from "@/lib/services";
@@ -13,16 +14,13 @@ function postEventHref(session: SessionUser | null): string {
   return "/account";
 }
 
-const frames = ["photo-face", "photo-desk", "photo-room"];
-
 export default async function HomePage({ searchParams }: { searchParams: Promise<{ events?: string }> }) {
   const params = await searchParams;
   const session = await getSession();
   const store = await getStore();
   const listed = params.events === "empty" ? [] : await store.listApprovedEvents(session?.id ?? null);
   const cards = listed.map((event) => toEventCard(event, session));
-  const tango = getFeaturedPro("tango-tew");
-  const photo = tango?.image;
+  const photos = getFeaturedPro("tango-tew")?.photos ?? [];
 
   return (
     <>
@@ -31,12 +29,12 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         <HeroSearch />
       </section>
 
-      {photo ? (
+      {photos.length > 0 ? (
         <section className="section" aria-label="Photo gallery">
           <div className="photo-gallery">
-            {frames.map((frame) => (
-              <figure key={frame} className={frame}>
-                <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} />
+            {photos.map((photo) => (
+              <figure key={photo.src}>
+                <OptimizedPhoto src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} />
               </figure>
             ))}
           </div>
@@ -46,12 +44,15 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       <section className="section" id="services">
         <h2 className="sr-only">Services</h2>
         <div className="visuals">
-          {serviceOffers.map((service, index) => (
-            <Link key={service.id} href="/pros/tango-tew" className={`visual ${frames[index % frames.length]}`}>
-              {photo ? <img src={photo.src} alt="" width={photo.width} height={photo.height} /> : null}
-              <span>{service.name}</span>
-            </Link>
-          ))}
+          {serviceOffers.map((service, index) => {
+            const photo = photos[index % Math.max(photos.length, 1)];
+            return (
+              <Link key={service.id} href="/pros/tango-tew" className="visual">
+                {photo ? <OptimizedPhoto src={photo.src} alt="" width={photo.width} height={photo.height} /> : null}
+                <span>{service.name}</span>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
