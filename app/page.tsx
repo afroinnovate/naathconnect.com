@@ -1,82 +1,71 @@
 import Link from "next/link";
-import { ConsultationSection } from "@/components/ConsultationSection";
 import { EventSlider } from "@/components/EventSlider";
+import { HeroMedia } from "@/components/HeroMedia";
+import { HeroSearch } from "@/components/HeroSearch";
+import { ProTile } from "@/components/ProTile";
 import { toEventCard } from "@/lib/event-card";
-import { groupConsultations } from "@/lib/consultations";
+import { homeTiles } from "@/lib/featured-pros";
 import { getSession } from "@/lib/session";
-import { getStore, listConsultations } from "@/lib/store";
+import { getStore } from "@/lib/store";
+import type { SessionUser } from "@/lib/types";
 
-export default async function HomePage() {
+function postEventHref(session: SessionUser | null): string {
+  if (!session) return "/login?next=/account";
+  return "/account";
+}
+
+export default async function HomePage({ searchParams }: { searchParams: Promise<{ events?: string }> }) {
+  const params = await searchParams;
   const session = await getSession();
   const store = await getStore();
-  const [events, consultations] = await Promise.all([
-    store.listApprovedEvents(session?.id ?? null),
-    listConsultations(),
-  ]);
-  const groups = groupConsultations(consultations);
-  const cards = events.map((event) => toEventCard(event, session));
+  const listed = params.events === "empty" ? [] : await store.listApprovedEvents(session?.id ?? null);
+  const cards = listed.map((event) => toEventCard(event, session));
 
   return (
     <>
       <section className="hero">
-        <p className="kicker">Naath Connect LLC · an Iowa LLC</p>
-        <h1>Local professional services, and technology help in plain language.</h1>
-        <p className="lede">
-          Naath Connect connects this community with local, community-based professionals and businesses. Our own work
-          leads with technology consulting for small business owners, community leaders, contractors, and truckers.
-        </p>
-        <div className="actions">
-          <a className="button" href="#technology">
-            See how we can help
-          </a>
-          <Link className="button-secondary" href="/directory">
-            Community directory
-          </Link>
-          <Link className="button-secondary" href="/onboarding">
-            Apply as a professional
-          </Link>
+        <div>
+          <h1>Find a local professional.</h1>
+          <p className="hero-line">
+            Naath Connect connects Naath communities and businesses worldwide with local professionals.
+          </p>
+          <HeroSearch />
         </div>
-      </section>
-
-      {groups.map((group) => (
-        <ConsultationSection
-          key={group.category}
-          category={group.category}
-          label={group.label}
-          profiles={group.profiles}
-          showServices={group.category === "technology"}
-        />
-      ))}
-
-      <section className="section" id="directory-how">
-        <h2>The community directory</h2>
-        <p className="lede">
-          Community professionals apply. Tango reviews each application. Only approved people appear in the public
-          directory, and only approved events appear in the feed.
-        </p>
-        <ol className="steps">
-          <li>
-            <strong>Apply.</strong> Tell us who you are and the service you offer.
-          </li>
-          <li>
-            <strong>Review.</strong> The listing stays pending until an admin approves it.
-          </li>
-          <li>
-            <strong>Show up.</strong> Approved professionals can post events, which also wait for approval.
-          </li>
-        </ol>
+        <HeroMedia />
       </section>
 
       <section className="section" id="events">
-        <div className="slider-head">
-          <div>
-            <p className="kicker">Community events</p>
-            <h2>Approved events</h2>
-          </div>
-          <Link href="/events">Full feed</Link>
+        <div className="section-head">
+          <h2>Events</h2>
+          {cards.length > 0 ? <Link href="/events">All</Link> : null}
         </div>
-        <p>A listing shows here only after an admin approves it. Views and reactions are counted on this preview, not as live traffic.</p>
-        {cards.length > 0 ? <EventSlider events={cards} /> : <p>No approved events yet.</p>}
+        {cards.length === 0 ? (
+          <div className="empty">
+            <p>No professional event is posted yet</p>
+            <Link className="post-btn" href={postEventHref(session)}>
+              Post a professional event
+            </Link>
+          </div>
+        ) : (
+          <EventSlider events={cards} />
+        )}
+      </section>
+
+      <section className="section" id="services">
+        <div className="section-head">
+          <h2>Services</h2>
+        </div>
+        <div className="tiles">
+          {homeTiles.map((pro) => (
+            <ProTile key={pro.slug} pro={pro} />
+          ))}
+          <Link href="/onboarding" className="tile join-tile">
+            <span className="chip">Directory</span>
+            <strong>More professionals</strong>
+            <span className="tile-line">Join as a professional.</span>
+            <span className="tile-where">Apply</span>
+          </Link>
+        </div>
       </section>
     </>
   );

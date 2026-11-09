@@ -1,4 +1,5 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { requireSupabaseEnv } from "./config";
 import { cookies } from "next/headers";
 import { profileToConsultation } from "./consultations";
 import { utcDay } from "./time";
@@ -105,8 +106,9 @@ function mapEvent(row: Row, reactions: Set<string>): EventItem {
 }
 
 async function supabase() {
+  const { url, anonKey } = requireSupabaseEnv();
   const jar = await cookies();
-  return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL || "", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "", {
+  return createServerClient(url, anonKey, {
     cookies: {
       getAll() {
         return jar.getAll();

@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import { DatabaseSync } from "node:sqlite";
 import { profileToConsultation } from "./consultations";
 import { demoAdminEmail, demoAdminPassword, demoProfessionalPassword } from "./config";
 import { sanitizeGallery } from "./gallery";
@@ -23,6 +22,30 @@ import type {
 } from "./types";
 
 type SqlRow = Record<string, string | number | bigint | null | Uint8Array>;
+
+type SqliteModule = {
+  DatabaseSync: new (path: string) => {
+    exec(sql: string): void;
+    prepare(sql: string): {
+      get(...params: Array<string | number | null>): SqlRow | undefined;
+      all(...params: Array<string | number | null>): SqlRow[];
+      run(...params: Array<string | number | null>): { changes: number | bigint };
+    };
+  };
+};
+
+function loadSqlite(): SqliteModule {
+  // Runtime-only load so the production bundle never static-links node:sqlite.
+  // Amplify does not call this. Local demo mode does.
+  const specifier = ["node", "sqlite"].join(":");
+  const nodeModule = (
+    process as NodeJS.Process & { getBuiltinModule?: (id: string) => typeof import("node:module") }
+  ).getBuiltinModule?.("node:module");
+  if (!nodeModule) {
+    throw new Error("The local SQLite demo needs Node 22. It is not available on Amplify.");
+  }
+  return nodeModule.createRequire(path.join(process.cwd(), "package.json"))(specifier) as SqliteModule;
+}
 
 const IDS = {
   admin: "00000000-0000-4000-8000-000000000001",
@@ -179,7 +202,7 @@ function sessionFromProfile(profile: Profile): SessionUser {
 }
 
 export function openSqliteStore(filename: string): Store {
-  const db = new DatabaseSync(filename);
+  const db = new (loadSqlite().DatabaseSync)(filename);
   db.exec("PRAGMA foreign_keys = ON");
   if (filename !== ":memory:") db.exec("PRAGMA journal_mode = WAL");
   const schema = fs.readFileSync(path.join(process.cwd(), "lib/demo/schema.sql"), "utf8");
