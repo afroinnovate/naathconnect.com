@@ -1,7 +1,8 @@
 import Image from "next/image";
 import type { PublicPro } from "@/lib/featured-pros";
-import { OptimizedPhoto } from "./OptimizedPhoto";
+import { serviceOffers, serviceSlideIcons } from "@/lib/services";
 import { ProfileLinks, profileLinks } from "./ProfileLinks";
+import { ServiceSlideshow } from "./ServiceSlideshow";
 
 export function ProView({ pro }: { pro: PublicPro }) {
   const svg = pro.image.src.endsWith(".svg");
@@ -60,28 +61,21 @@ export function ProView({ pro }: { pro: PublicPro }) {
             </div>
           ) : null}
         </dl>
-        {pro.photos.length > 0 ? (
-          <div className="photo-gallery photo-gallery-detail">
-            {pro.photos.map((photo) => (
-              <figure key={photo.src}>
-                <OptimizedPhoto src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} />
-              </figure>
-            ))}
-          </div>
-        ) : null}
         {pro.services.length > 0 ? (
-          <ul className="service-tiles">
+          <div className="service-board">
             {pro.services.map((service, index) => {
-              const photo = pro.photos[index % Math.max(pro.photos.length, 1)];
+              const offer = serviceOffers.find((item) => item.name === service.name);
               return (
-                <li key={service.name} className="service-visual">
-                  {photo ? <OptimizedPhoto src={photo.src} alt="" width={photo.width} height={photo.height} /> : null}
-                  <strong>{service.name}</strong>
-                  <span>{service.line}</span>
-                </li>
+                <ServiceSlideshow
+                  key={service.name}
+                  name={service.name}
+                  tagline={service.line}
+                  slides={serviceSlideIcons[offer?.id ?? ""] ?? ["layers", "code", "check"]}
+                  order={index}
+                />
               );
             })}
-          </ul>
+          </div>
         ) : null}
         <div className="contact-row">
           <ProfileLinks links={profileLinks(pro)} />

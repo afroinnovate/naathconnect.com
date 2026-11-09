@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { serviceOffers } from "../lib/services";
+import { serviceOffers, serviceSlideIcons } from "../lib/services";
 
 const jargon = [/kubernetes/i, /gitops/i, /devops/i, /tailwind/i, /remix/i, /typescript/i, /\bapi\b/i, /ci\/cd/i, /vector/i, /infrastructure as code/i];
 
@@ -22,5 +22,16 @@ describe("service headlines", () => {
     assert.match(hoods, /Remix/);
     assert.match(serviceOffers.find((service) => service.id === "ai-assistants")!.body, /truckers/);
     assert.match(serviceOffers.find((service) => service.id === "websites")!.body, /free website/i);
+  });
+
+  it("gives every service a short icon slideshow and no photos", () => {
+    for (const service of serviceOffers) {
+      const slides = serviceSlideIcons[service.id];
+      assert.ok(slides, service.id);
+      assert.ok(slides.length >= 3 && slides.length <= 4, service.id);
+      for (const icon of slides) {
+        assert.match(icon, /^[a-z]+$/);
+      }
+    }
   });
 });
