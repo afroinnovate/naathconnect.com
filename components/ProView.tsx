@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { PublicPro } from "@/lib/featured-pros";
+import { OptimizedPhoto } from "./OptimizedPhoto";
 import { ProfileLinks, profileLinks } from "./ProfileLinks";
 
 export function ProView({ pro }: { pro: PublicPro }) {
@@ -59,14 +60,27 @@ export function ProView({ pro }: { pro: PublicPro }) {
             </div>
           ) : null}
         </dl>
+        {pro.photos.length > 0 ? (
+          <div className="photo-gallery photo-gallery-detail">
+            {pro.photos.map((photo) => (
+              <figure key={photo.src}>
+                <OptimizedPhoto src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} />
+              </figure>
+            ))}
+          </div>
+        ) : null}
         {pro.services.length > 0 ? (
           <ul className="service-tiles">
-            {pro.services.map((service) => (
-              <li key={service.name}>
-                <strong>{service.name}</strong>
-                <span>{service.line}</span>
-              </li>
-            ))}
+            {pro.services.map((service, index) => {
+              const photo = pro.photos[index % Math.max(pro.photos.length, 1)];
+              return (
+                <li key={service.name} className="service-visual">
+                  {photo ? <OptimizedPhoto src={photo.src} alt="" width={photo.width} height={photo.height} /> : null}
+                  <strong>{service.name}</strong>
+                  <span>{service.line}</span>
+                </li>
+              );
+            })}
           </ul>
         ) : null}
         <div className="contact-row">

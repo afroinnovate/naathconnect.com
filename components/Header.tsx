@@ -7,7 +7,7 @@ export function Header({ session }: { session: SessionUser | null }) {
   return (
     <header className="topbar">
       <Link href="/" className="brand">
-        <img src="/brand/official-logo.png" alt="Naath Connect" />
+        <img src="/brand/logo-mark.png" alt="Naath Connect" width={32} height={32} />
       </Link>
       <div className="nav-links">
         <NavLinks signedIn={Boolean(session)} admin={session?.role === "admin"} />

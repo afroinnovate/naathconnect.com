@@ -10,7 +10,7 @@ import "./globals.css";
 
 const grotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-sans", weight: ["400", "500", "700"] });
 
-const themeBoot = `(function(){try{var k="nc-theme";var s=localStorage.getItem(k);var t=s==="light"||s==="dark"?s:(window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();`;
+const themeBoot = `(function(){try{var s=localStorage.getItem("nc-theme");if(s==="light"||s==="dark")document.documentElement.setAttribute("data-theme",s);}catch(e){}})();`;
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
   return (
-    <html lang="en" className={grotesk.variable} suppressHydrationWarning>
+    <html lang="en" className={grotesk.variable} data-theme="dark" suppressHydrationWarning>
       <body>
         <Script id="nc-theme" strategy="beforeInteractive">
           {themeBoot}

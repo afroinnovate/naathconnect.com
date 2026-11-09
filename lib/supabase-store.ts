@@ -18,6 +18,8 @@ import type {
   SessionUser,
   SignUpInput,
   Status,
+  Testimonial,
+  TestimonialInput,
 } from "./types";
 
 type Row = Record<string, unknown>;
@@ -444,5 +446,68 @@ export function getSupabaseStore(): Store {
         },
       };
     },
+
+    async listTestimonials(profileId) {
+      const db = await supabase();
+      const { data, error } = await db
+        .from("testimonials")
+        .select("id, profile_id, quote, client_name, client_role, given_on")
+        .eq("profile_id", profileId)
+        .order("created_at", { ascending: false });
+      if (error) return [];
+      return (data ?? []).map((row) => mapTestimonial(row as Row));
+    },
+
+    async saveTestimonial(userId, testimonialId, input: TestimonialInput) {
+      const user = await this.getUser(userId);
+      if (!user || user.status !== "approved") {
+        return { ok: false, error: "Only an approved account can post a testimonial on their own page." };
+      }
+      const db = await supabase();
+      const payload = {
+        quote: input.quote,
+        client_name: input.clientName,
+        client_role: input.clientRole || null,
+        given_on: input.givenOn || null,
+      };
+      if (testimonialId) {
+        const { error } = await db.from("testimonials").update(payload).eq("id", testimonialId).eq("profile_id", userId);
+        if (error) return { ok: false, error: testimonialError(error.message) };
+        return { ok: true, data: { id: testimonialId } };
+      }
+      const { data, error } = await db.from("testimonials").insert({ ...payload, profile_id: userId }).select("id").single();
+      if (error || !data) return { ok: false, error: testimonialError(error?.message) };
+      return { ok: true, data: { id: asString(data.id) } };
+    },
+
+    async deleteTestimonial(userId, testimonialId) {
+      const user = await this.getUser(userId);
+      if (!user || user.status !== "approved") {
+        return { ok: false, error: "Only an approved account can remove a testimonial." };
+      }
+      const db = await supabase();
+      const { error } = await db.from("testimonials").delete().eq("id", testimonialId).eq("profile_id", userId);
+      if (error) return { ok: false, error: testimonialError(error.message) };
+      return { ok: true, data: null };
+    },
   };
+}
+
+function mapTestimonial(row: Row): Testimonial {
+  return {
+    id: asString(row.id),
+    profileId: asString(row.profile_id),
+    quote: asString(row.quote),
+    clientName: asString(row.client_name),
+    clientRole: asNullable(row.client_role),
+    givenOn: asNullable(row.given_on),
+  };
+}
+
+function testimonialError(message: string | undefined): string {
+  const text = (message ?? "").toLowerCase();
+  if (text.includes("does not exist") || text.includes("schema cache") || text.includes("testimonials")) {
+    return "Testimonials are not available yet.";
+  }
+  return "The testimonial could not be saved.";
 }

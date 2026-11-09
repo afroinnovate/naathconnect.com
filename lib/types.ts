@@ -103,6 +103,22 @@ export type ConsultationInput = {
 
 export type Result<T> = { ok: true; data: T } | { ok: false; error: string };
 
+export type Testimonial = {
+  id: string;
+  profileId: string;
+  quote: string;
+  clientName: string;
+  clientRole: string | null;
+  givenOn: string | null;
+};
+
+export type TestimonialInput = {
+  quote: string;
+  clientName: string;
+  clientRole: string;
+  givenOn: string;
+};
+
 export type ConsultationProfile = {
   id: string;
   slug: string;
