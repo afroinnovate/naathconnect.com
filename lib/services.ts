@@ -23,6 +23,15 @@ export const serviceSlideIcons: Record<string, readonly string[]> = {
   "software-consulting": ["terminal", "branch", "book", "chat"],
 };
 
+export function getService(id: string): ServiceOffer | undefined {
+  return serviceOffers.find((service) => service.id === id);
+}
+
+/** Homepage tiles open this page. A professional card is a separate link. */
+export function servicePath(id: string): string {
+  return `/services/${id}`;
+}
+
 export const serviceOffers: ServiceOffer[] = [
   {
     id: "solution-engineering",

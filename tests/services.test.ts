@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { serviceOffers, serviceSlideIcons } from "../lib/services";
+import { featuredPros, professionalsForService } from "../lib/featured-pros";
+import { getService, serviceOffers, servicePath, serviceSlideIcons } from "../lib/services";
 
 const jargon = [/kubernetes/i, /gitops/i, /devops/i, /tailwind/i, /remix/i, /typescript/i, /\bapi\b/i, /ci\/cd/i, /vector/i, /infrastructure as code/i];
 
@@ -33,5 +34,27 @@ describe("service headlines", () => {
         assert.match(icon, /^[a-z]+$/);
       }
     }
+  });
+
+  it("routes each service tile to its own page, and Tango's card to his profile", () => {
+    for (const service of serviceOffers) {
+      assert.equal(servicePath(service.id), `/services/${service.id}`);
+      assert.equal(getService(service.id)?.name, service.name);
+      assert.notEqual(servicePath(service.id), "/pros/tango-tew");
+      const pros = professionalsForService(service.id);
+      assert.deepEqual(
+        pros.map((pro) => pro.slug),
+        ["tango-tew"],
+      );
+      assert.equal(pros.every((pro) => !pro.placeholder), true);
+    }
+    assert.equal(getService("not-a-service"), undefined);
+    assert.deepEqual(professionalsForService("not-a-service"), []);
+    const tango = featuredPros.find((pro) => pro.slug === "tango-tew");
+    assert.equal(`/pros/${tango?.slug}`, "/pros/tango-tew");
+    assert.equal(
+      featuredPros.some((pro) => pro.placeholder && pro.services.length > 0),
+      false,
+    );
   });
 });

@@ -45,8 +45,8 @@ export function OnboardingForm() {
         <input name="website" type="url" placeholder="https://" />
       </label>
       <label>
-        Public contact note, optional
-        <input name="publicContact" maxLength={160} placeholder="Leave blank if you do not want a number published" />
+        WhatsApp link, optional
+        <input name="publicContact" type="url" maxLength={160} placeholder="https://wa.me/" />
       </label>
       <label className="check">
         <input type="checkbox" name="ack" value="yes" required />
