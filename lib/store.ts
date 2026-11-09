@@ -1,12 +1,14 @@
 import { mergeConsultations, houseConsultations } from "./consultations";
-import { isDemoMode } from "./config";
+import { isAmplifyHosting, isDemoMode } from "./config";
 import type { ConsultationProfile } from "./types";
 import type { Store } from "./sqlite-store";
 
 export type { Store } from "./sqlite-store";
 
 export async function getStore(): Promise<Store> {
-  if (isDemoMode()) {
+  // Amplify never loads the SQLite module. A missing Supabase env fails in
+  // the Supabase client with a clear error instead of opening node:sqlite.
+  if (!isAmplifyHosting() && isDemoMode()) {
     const { getSqliteStore } = await import("./sqlite-store");
     return getSqliteStore();
   }

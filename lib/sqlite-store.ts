@@ -1,6 +1,6 @@
 import fs from "fs";
+import { createRequire } from "node:module";
 import path from "path";
-import { DatabaseSync } from "node:sqlite";
 import { profileToConsultation } from "./consultations";
 import { demoAdminEmail, demoAdminPassword, demoProfessionalPassword } from "./config";
 import { sanitizeGallery } from "./gallery";
@@ -23,6 +23,31 @@ import type {
 } from "./types";
 
 type SqlRow = Record<string, string | number | bigint | null | Uint8Array>;
+
+type SqliteModule = {
+  DatabaseSync: new (path: string) => {
+    exec(sql: string): void;
+    prepare(sql: string): {
+      get(...params: Array<string | number | null>): SqlRow | undefined;
+      all(...params: Array<string | number | null>): SqlRow[];
+      run(...params: Array<string | number | null>): { changes: number | bigint };
+    };
+  };
+};
+
+function loadSqlite(): SqliteModule {
+  // Keep the specifier and the require call out of webpack's static analysis.
+  // Amplify never calls this. A direct createRequire() call makes webpack emit
+  // a broken void-0 replacement and can fail the serverless build.
+  const specifier = ["node", "sqlite"].join(":");
+  const anchor = path.join(process.cwd(), "package.json");
+  const getRequire = new Function(
+    "createRequire",
+    "anchor",
+    "return createRequire(anchor)",
+  ) as (createRequire: typeof import("node:module").createRequire, anchor: string) => (id: string) => SqliteModule;
+  return getRequire(createRequire, anchor)(specifier);
+}
 
 const IDS = {
   admin: "00000000-0000-4000-8000-000000000001",
@@ -179,7 +204,7 @@ function sessionFromProfile(profile: Profile): SessionUser {
 }
 
 export function openSqliteStore(filename: string): Store {
-  const db = new DatabaseSync(filename);
+  const db = new (loadSqlite().DatabaseSync)(filename);
   db.exec("PRAGMA foreign_keys = ON");
   if (filename !== ":memory:") db.exec("PRAGMA journal_mode = WAL");
   const schema = fs.readFileSync(path.join(process.cwd(), "lib/demo/schema.sql"), "utf8");

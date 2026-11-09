@@ -1,0 +1,25 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Amplify SSR supports Node 20, 22, and 24. This app declares Node >= 22.13.
+        # Node 18 and older are rejected for SSR builds.
+        - nvm install 22
+        - nvm use 22
+        - node --version
+        - npm ci --no-audit --no-fund
+    build:
+      commands:
+        # NEXT_PUBLIC_* must already be in the Amplify branch environment.
+        # Next inlines them during this step. A later change needs a new build.
+        - npm run build
+  artifacts:
+    # .next is the SSR output. Do not set this to out. That would be a static export.
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*

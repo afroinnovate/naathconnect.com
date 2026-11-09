@@ -68,7 +68,9 @@ Local review uses Node’s built-in SQLite (`node:sqlite`) when `NEXT_PUBLIC_SUP
 
 ## Recommended hosting plan
 
-Compare the two options Tango asked about, then the recommendation. Prices and limits below are from the vendors’ public pages as of 2026-11-09. They change. He should re-read them before putting a card on file. This pull request does not create an account, add a DNS record, or start a deploy.
+Tango has since chosen **AWS Amplify Hosting** for the Next.js app and the **Supabase free tier** for Postgres and Auth, with DNS staying in Cloudflare. The steps for that choice are in `docs/DEPLOY-AMPLIFY.md`. This pull request adds `amplify.yml` and does not create the Amplify app, the Supabase project, or any DNS record.
+
+The comparison below is the record of the earlier Vercel and Workers options. Prices and limits are from the vendors’ public pages as of 2026-11-09. They change. This pull request does not create an account, add a DNS record, or start a deploy.
 
 Sources:
 
@@ -113,7 +115,9 @@ Workers does not have Vercel’s “personal use only” rule. A business site i
 
 ### Recommendation
 
-**Use Vercel Pro ($20/month) + Supabase Free, and leave DNS in Cloudflare.** Do not use Vercel Hobby.
+Superseded for go-live by Tango’s choice of Amplify Hosting. See `docs/DEPLOY-AMPLIFY.md`. The earlier recommendation is kept below so the comparison stays on record.
+
+**Earlier recommendation: Vercel Pro ($20/month) + Supabase Free, and leave DNS in Cloudflare.** Do not use Vercel Hobby.
 
 Hobby is the cheaper Vercel checkbox and the smaller engineering job, and it is the one the terms do not allow for this LLC. Pro is the same engineering job with a plan that permits a commercial site. The app does not need an adapter. Tango adds the records Vercel displays into the Cloudflare zone he already runs. No nameserver change.
 
