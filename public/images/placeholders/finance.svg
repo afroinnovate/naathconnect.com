@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Placeholder">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Abstract finance graphic. Not a person.">
   <rect width="800" height="1000" fill="#10241c"/>
-  <rect x="70" y="80" width="660" height="840" fill="none" stroke="#3DDC97" stroke-width="2"/>
-  <text x="400" y="470" text-anchor="middle" fill="#3DDC97" font-family="sans-serif" font-size="28" letter-spacing="6">PLACEHOLDER</text>
-  <text x="400" y="530" text-anchor="middle" fill="#f4fff8" font-family="sans-serif" font-size="42">Finance</text>
+  <path d="M140 720l140-180 120 90 220-280" fill="none" stroke="#3DDC97" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="620" cy="350" r="28" fill="#f4fff8"/>
+  <path d="M160 780h480" stroke="#f4fff8" stroke-width="8" opacity="0.5"/>
+  <text x="400" y="880" text-anchor="middle" fill="#3DDC97" font-family="sans-serif" font-size="28" letter-spacing="6">COMING SOON</text>
 </svg>

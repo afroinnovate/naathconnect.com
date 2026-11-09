@@ -1,55 +1,48 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProView } from "@/components/ProView";
-import { getFeaturedPro, type PublicPro } from "@/lib/featured-pros";
+import { Testimonials } from "@/components/Testimonials";
+import { getFeaturedPro, proFromAccount } from "@/lib/featured-pros";
+import { getSession } from "@/lib/session";
 import { getStore } from "@/lib/store";
-import type { Profile } from "@/lib/types";
-
-function fromDirectory(person: Profile): PublicPro {
-  const placeholder = person.bio.includes("PLACEHOLDER");
-  return {
-    slug: person.id,
-    name: person.fullName,
-    category: "tech",
-    categoryLabel: person.profession || "Professional",
-    line: person.businessName,
-    location: person.serviceArea,
-    image: {
-      src: "/images/placeholders/finance.svg",
-      alt: placeholder ? "Placeholder graphic." : person.fullName,
-      width: 800,
-      height: 1000,
-    },
-    placeholder,
-    comingSoon: false,
-    profession: person.profession,
-    school: null,
-    industry: null,
-    years: null,
-    services: [],
-    serviceAreas: person.serviceArea,
-    email: null,
-    phoneDisplay: null,
-    phoneTel: null,
-    whatsapp: null,
-    website: person.website,
-    github: null,
-    linkedin: null,
-  };
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const featured = getFeaturedPro(slug);
-  return { title: featured?.name ?? "Professional" };
+  if (featured) return { title: featured.name };
+  return { title: "Professional" };
 }
 
-export default async function ProfessionalPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProfessionalPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ testimonial?: string }>;
+}) {
   const { slug } = await params;
+  const query = await searchParams;
   const featured = getFeaturedPro(slug);
-  if (featured) return <ProView pro={featured} />;
+  const session = await getSession();
   const store = await getStore();
+
+  if (featured) {
+    return (
+      <>
+        <ProView pro={featured} />
+        <Testimonials items={[]} canEdit={false} profileId={slug} notice={query.testimonial} />
+      </>
+    );
+  }
+
   const person = (await store.listApprovedProfessionals()).find((item) => item.id === slug);
   if (!person) notFound();
-  return <ProView pro={fromDirectory(person)} />;
+  const items = await store.listTestimonials(person.id);
+  const canEdit = Boolean(session && session.id === person.id && session.status === "approved");
+  return (
+    <>
+      <ProView pro={proFromAccount(person)} />
+      <Testimonials items={items} canEdit={canEdit} profileId={person.id} notice={query.testimonial} />
+    </>
+  );
 }

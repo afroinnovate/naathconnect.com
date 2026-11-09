@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Placeholder">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Abstract tax graphic. Not a person.">
   <rect width="800" height="1000" fill="#10241c"/>
-  <rect x="70" y="80" width="660" height="840" fill="none" stroke="#3DDC97" stroke-width="2"/>
-  <text x="400" y="470" text-anchor="middle" fill="#3DDC97" font-family="sans-serif" font-size="28" letter-spacing="6">PLACEHOLDER</text>
-  <text x="400" y="530" text-anchor="middle" fill="#f4fff8" font-family="sans-serif" font-size="42">Tax</text>
+  <rect x="160" y="140" width="480" height="640" rx="28" fill="none" stroke="#3DDC97" stroke-width="10"/>
+  <path d="M240 300h320M240 400h240M240 500h280M240 600h180" stroke="#f4fff8" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="560" cy="680" r="70" fill="none" stroke="#3DDC97" stroke-width="12"/>
+  <text x="400" y="860" text-anchor="middle" fill="#3DDC97" font-family="sans-serif" font-size="28" letter-spacing="6">COMING SOON</text>
 </svg>

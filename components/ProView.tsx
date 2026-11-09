@@ -59,10 +59,20 @@ export function ProView({ pro }: { pro: PublicPro }) {
             </div>
           ) : null}
         </dl>
+        {pro.photos.length > 1 || (pro.photos.length === 1 && !pro.placeholder) ? (
+          <div className="photo-gallery photo-gallery-detail">
+            {["photo-face", "photo-desk", "photo-room"].map((frame) => (
+              <figure key={frame} className={frame}>
+                <img src={pro.image.src} alt={pro.image.alt} width={pro.image.width} height={pro.image.height} />
+              </figure>
+            ))}
+          </div>
+        ) : null}
         {pro.services.length > 0 ? (
           <ul className="service-tiles">
-            {pro.services.map((service) => (
-              <li key={service.name}>
+            {pro.services.map((service, index) => (
+              <li key={service.name} className={`service-visual ${["photo-face", "photo-desk", "photo-room"][index % 3]}`}>
+                <img src={pro.image.src} alt="" width={pro.image.width} height={pro.image.height} />
                 <strong>{service.name}</strong>
                 <span>{service.line}</span>
               </li>

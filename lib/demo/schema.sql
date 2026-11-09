@@ -67,3 +67,16 @@ create table if not exists event_reactions (
 create index if not exists profiles_status_idx on profiles (status);
 create index if not exists events_status_starts_idx on events (status, starts_at);
 create index if not exists profiles_featured_idx on profiles (featured_consultation, consultation_category);
+
+create table if not exists testimonials (
+  id text primary key,
+  profile_id text not null references profiles(id) on delete cascade,
+  quote text not null,
+  client_name text not null,
+  client_role text,
+  given_on text,
+  created_at text not null,
+  updated_at text not null
+);
+
+create index if not exists testimonials_profile_idx on testimonials (profile_id, created_at);

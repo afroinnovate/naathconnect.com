@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import fs from "fs";
 import path from "path";
 import { profileToConsultation } from "./consultations";
@@ -14,6 +15,8 @@ import type {
   GalleryImage,
   Profile,
   ReactionKind,
+  Testimonial,
+  TestimonialInput,
   Result,
   Role,
   SessionUser,
@@ -188,6 +191,9 @@ export type Store = {
     userId: string,
     kind: ReactionKind,
   ): Maybe<Result<Pick<EventItem, "likeCount" | "heartCount" | "viewerHasLike" | "viewerHasHeart">>>;
+  listTestimonials(profileId: string): Maybe<Testimonial[]>;
+  saveTestimonial(userId: string, testimonialId: string | null, input: TestimonialInput): Maybe<Result<{ id: string }>>;
+  deleteTestimonial(userId: string, testimonialId: string): Maybe<Result<null>>;
 };
 
 function sessionFromProfile(profile: Profile): SessionUser {
@@ -711,6 +717,60 @@ export function openSqliteStore(filename: string): Store {
           viewerHasHeart: updated?.viewerHasHeart ?? false,
         },
       };
+    },
+
+    listTestimonials(profileId) {
+      const rows = db
+        .prepare(
+          `select id, profile_id, quote, client_name, client_role, given_on
+           from testimonials where profile_id = ? order by created_at desc`,
+        )
+        .all(profileId);
+      return rows.map((row) => ({
+        id: text(row, "id"),
+        profileId: text(row, "profile_id"),
+        quote: text(row, "quote"),
+        clientName: text(row, "client_name"),
+        clientRole: text(row, "client_role") || null,
+        givenOn: text(row, "given_on") || null,
+      }));
+    },
+
+    saveTestimonial(userId, testimonialId, input) {
+      const user = profileById(userId);
+      if (!user || user.status !== "approved") {
+        return { ok: false, error: "Only an approved account can post a testimonial on their own page." };
+      }
+      const now = new Date().toISOString();
+      if (testimonialId) {
+        const existing = db.prepare("select profile_id from testimonials where id = ?").get(testimonialId);
+        if (!existing || text(existing, "profile_id") !== userId) {
+          return { ok: false, error: "That testimonial was not found." };
+        }
+        db.prepare(
+          `update testimonials
+           set quote = ?, client_name = ?, client_role = ?, given_on = ?, updated_at = ?
+           where id = ? and profile_id = ?`,
+        ).run(input.quote, input.clientName, input.clientRole || null, input.givenOn || null, now, testimonialId, userId);
+        return { ok: true, data: { id: testimonialId } };
+      }
+      const id = randomUUID();
+      db.prepare(
+        `insert into testimonials
+         (id, profile_id, quote, client_name, client_role, given_on, created_at, updated_at)
+         values (?, ?, ?, ?, ?, ?, ?, ?)`,
+      ).run(id, userId, input.quote, input.clientName, input.clientRole || null, input.givenOn || null, now, now);
+      return { ok: true, data: { id } };
+    },
+
+    deleteTestimonial(userId, testimonialId) {
+      const user = profileById(userId);
+      if (!user || user.status !== "approved") {
+        return { ok: false, error: "Only an approved account can remove a testimonial." };
+      }
+      const result = db.prepare("delete from testimonials where id = ? and profile_id = ?").run(testimonialId, userId);
+      if (Number(result.changes) < 1) return { ok: false, error: "That testimonial was not found." };
+      return { ok: true, data: null };
     },
   };
 }

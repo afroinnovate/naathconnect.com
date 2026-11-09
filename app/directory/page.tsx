@@ -1,43 +1,10 @@
 import type { Metadata } from "next";
 import { HeroSearch } from "@/components/HeroSearch";
 import { ProTile } from "@/components/ProTile";
-import { featuredPros, filterPros, type PublicPro } from "@/lib/featured-pros";
+import { featuredPros, filterPros, mergeDirectory, proFromAccount } from "@/lib/featured-pros";
 import { getStore } from "@/lib/store";
-import type { Profile } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Directory" };
-
-function fromProfile(person: Profile): PublicPro {
-  return {
-    slug: person.id,
-    name: person.fullName,
-    category: "tech",
-    categoryLabel: person.profession || "Professional",
-    line: person.bio.includes("PLACEHOLDER") ? "Placeholder." : person.businessName,
-    location: person.serviceArea,
-    image: {
-      src: "/images/placeholders/finance.svg",
-      alt: "",
-      width: 800,
-      height: 1000,
-    },
-    placeholder: person.bio.includes("PLACEHOLDER"),
-    comingSoon: false,
-    profession: person.profession,
-    school: null,
-    industry: null,
-    years: null,
-    services: [],
-    serviceAreas: person.serviceArea,
-    email: null,
-    phoneDisplay: null,
-    phoneTel: null,
-    whatsapp: null,
-    website: person.website,
-    github: null,
-    linkedin: null,
-  };
-}
 
 export default async function DirectoryPage({
   searchParams,
@@ -46,8 +13,11 @@ export default async function DirectoryPage({
 }) {
   const params = await searchParams;
   const store = await getStore();
-  const approved = (await store.listApprovedProfessionals()).map(fromProfile);
-  const people = filterPros([...featuredPros, ...approved], params);
+  const approved = (await store.listApprovedProfessionals()).map(proFromAccount);
+  const merged = mergeDirectory(featuredPros, approved);
+  const people = filterPros(merged, params);
+  const searching = Boolean(params.q?.trim() || params.category?.trim() || params.location?.trim());
+  const comingSoon = searching ? [] : merged.filter((pro) => pro.placeholder || pro.comingSoon);
 
   return (
     <section className="section">
@@ -59,6 +29,16 @@ export default async function DirectoryPage({
           <ProTile key={pro.slug} pro={pro} />
         ))}
       </div>
+      {comingSoon.length > 0 ? (
+        <div className="coming-soon">
+          <h2>Coming soon</h2>
+          <div className="tiles">
+            {comingSoon.map((pro) => (
+              <ProTile key={pro.slug} pro={pro} />
+            ))}
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

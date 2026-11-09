@@ -25,12 +25,19 @@ export type PublicPro = {
   services: ServiceTile[];
   serviceAreas: string | null;
   email: string | null;
+  /** Account email used only to avoid a second card. Not rendered. */
+  dedupeEmail?: string | null;
   phoneDisplay: string | null;
   phoneTel: string | null;
   whatsapp: string | null;
   website: string | null;
   github: string | null;
   linkedin: string | null;
+  /** Matches every location query. Not a personal city. */
+  remote: boolean;
+  /** Extra words that should find this professional. */
+  searchTerms: string;
+  photos: { src: string; alt: string; width: number; height: number }[];
 };
 
 const tangoServices: ServiceTile[] = serviceOffers.map((service) => ({
@@ -52,6 +59,14 @@ export const featuredPros: PublicPro[] = [
       width: 1122,
       height: 1402,
     },
+    photos: [
+      {
+        src: "/images/tango/tango-tech-consultation.jpg",
+        alt: "Tango Tew at his desk.",
+        width: 1122,
+        height: 1402,
+      },
+    ],
     placeholder: false,
     comingSoon: false,
     profession: "Technology consultant",
@@ -60,7 +75,9 @@ export const featuredPros: PublicPro[] = [
     industry: "Technology",
     years: "7 years of tech consulting",
     services: tangoServices,
-    serviceAreas: null,
+    serviceAreas: "Remote · serving clients everywhere",
+    remote: true,
+    searchTerms: "cloud ai website software technology consulting",
     email: SITE_EMAIL,
     phoneDisplay: SITE_PHONE_DISPLAY,
     phoneTel: SITE_PHONE_TEL,
@@ -97,6 +114,9 @@ export const featuredPros: PublicPro[] = [
     website: null,
     github: null,
     linkedin: null,
+    remote: false,
+    searchTerms: "",
+    photos: [],
   },
   {
     slug: "taxation",
@@ -126,6 +146,9 @@ export const featuredPros: PublicPro[] = [
     website: null,
     github: null,
     linkedin: null,
+    remote: false,
+    searchTerms: "",
+    photos: [],
   },
   {
     slug: "finance",
@@ -155,6 +178,9 @@ export const featuredPros: PublicPro[] = [
     website: null,
     github: null,
     linkedin: null,
+    remote: false,
+    searchTerms: "",
+    photos: [],
   },
   {
     slug: "auto",
@@ -184,6 +210,9 @@ export const featuredPros: PublicPro[] = [
     website: null,
     github: null,
     linkedin: null,
+    remote: false,
+    searchTerms: "",
+    photos: [],
   },
 ];
 
@@ -191,6 +220,70 @@ export const homeTiles = featuredPros;
 
 export function getFeaturedPro(slug: string): PublicPro | undefined {
   return featuredPros.find((pro) => pro.slug === slug);
+}
+
+export function proFromAccount(person: {
+  id: string;
+  fullName: string;
+  profession: string;
+  businessName: string;
+  serviceArea: string;
+  bio: string;
+  website: string | null;
+  email: string;
+}): PublicPro {
+  const placeholder = person.bio.includes("PLACEHOLDER");
+  return {
+    slug: person.id,
+    name: person.fullName,
+    category: "tech",
+    categoryLabel: person.profession || "Professional",
+    line: placeholder ? "Placeholder." : person.businessName,
+    location: person.serviceArea || null,
+    image: {
+      src: "/images/placeholders/finance.svg",
+      alt: placeholder ? "Placeholder graphic." : person.fullName,
+      width: 800,
+      height: 1000,
+    },
+    placeholder,
+    comingSoon: false,
+    profession: person.profession,
+    school: null,
+    industry: null,
+    years: null,
+    services: [],
+    serviceAreas: person.serviceArea || null,
+    email: null,
+    dedupeEmail: person.email || null,
+    phoneDisplay: null,
+    phoneTel: null,
+    whatsapp: null,
+    website: person.website,
+    github: null,
+    linkedin: null,
+    remote: /\b(remote|worldwide|everywhere)\b/i.test(person.serviceArea),
+    searchTerms: "",
+    photos: [],
+  };
+}
+
+/** Curated profiles win when an approved account uses the same email or name. */
+export function mergeDirectory(curated: PublicPro[], approved: PublicPro[]): PublicPro[] {
+  const emails = new Set(
+    curated
+      .flatMap((pro) => [pro.email, pro.dedupeEmail])
+      .map((email) => email?.trim().toLowerCase())
+      .filter((email): email is string => Boolean(email)),
+  );
+  const names = new Set(curated.filter((pro) => !pro.placeholder).map((pro) => pro.name.trim().toLowerCase()));
+  const extra = approved.filter((pro) => {
+    const email = (pro.dedupeEmail || pro.email)?.trim().toLowerCase();
+    if (email && emails.has(email)) return false;
+    if (names.has(pro.name.trim().toLowerCase())) return false;
+    return true;
+  });
+  return [...curated, ...extra];
 }
 
 export function filterPros(
@@ -201,8 +294,9 @@ export function filterPros(
   const category = (query.category ?? "").trim().toLowerCase();
   const location = (query.location ?? "").trim().toLowerCase();
   return pros.filter((pro) => {
+    if (pro.placeholder || pro.comingSoon) return false;
     if (category && pro.category !== category) return false;
-    if (location) {
+    if (location && !pro.remote) {
       const where = `${pro.location ?? ""} ${pro.serviceAreas ?? ""}`.toLowerCase();
       if (!where.includes(location)) return false;
     }
@@ -215,6 +309,8 @@ export function filterPros(
       pro.category,
       pro.categoryLabel,
       pro.school,
+      pro.serviceAreas,
+      pro.searchTerms,
       ...pro.services.map((service) => `${service.name} ${service.line}`),
     ]
       .filter(Boolean)

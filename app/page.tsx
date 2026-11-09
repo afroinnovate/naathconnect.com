@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { EventSlider } from "@/components/EventSlider";
-import { HeroMedia } from "@/components/HeroMedia";
 import { HeroSearch } from "@/components/HeroSearch";
-import { ProTile } from "@/components/ProTile";
 import { toEventCard } from "@/lib/event-card";
-import { homeTiles } from "@/lib/featured-pros";
+import { getFeaturedPro } from "@/lib/featured-pros";
+import { serviceOffers } from "@/lib/services";
 import { getSession } from "@/lib/session";
 import { getStore } from "@/lib/store";
 import type { SessionUser } from "@/lib/types";
@@ -14,24 +13,46 @@ function postEventHref(session: SessionUser | null): string {
   return "/account";
 }
 
+const frames = ["photo-face", "photo-desk", "photo-room"];
+
 export default async function HomePage({ searchParams }: { searchParams: Promise<{ events?: string }> }) {
   const params = await searchParams;
   const session = await getSession();
   const store = await getStore();
   const listed = params.events === "empty" ? [] : await store.listApprovedEvents(session?.id ?? null);
   const cards = listed.map((event) => toEventCard(event, session));
+  const tango = getFeaturedPro("tango-tew");
+  const photo = tango?.image;
 
   return (
     <>
-      <section className="hero">
-        <div>
-          <h1>Find a local professional.</h1>
-          <p className="hero-line">
-            Naath Connect connects Naath communities and businesses worldwide with local professionals.
-          </p>
-          <HeroSearch />
+      <section className="hero hero-min">
+        <h1>Find a local professional.</h1>
+        <HeroSearch />
+      </section>
+
+      {photo ? (
+        <section className="section" aria-label="Photo gallery">
+          <div className="photo-gallery">
+            {frames.map((frame) => (
+              <figure key={frame} className={frame}>
+                <img src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} />
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <section className="section" id="services">
+        <h2 className="sr-only">Services</h2>
+        <div className="visuals">
+          {serviceOffers.map((service, index) => (
+            <Link key={service.id} href="/pros/tango-tew" className={`visual ${frames[index % frames.length]}`}>
+              {photo ? <img src={photo.src} alt="" width={photo.width} height={photo.height} /> : null}
+              <span>{service.name}</span>
+            </Link>
+          ))}
         </div>
-        <HeroMedia />
       </section>
 
       <section className="section" id="events">
@@ -49,23 +70,6 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         ) : (
           <EventSlider events={cards} />
         )}
-      </section>
-
-      <section className="section" id="services">
-        <div className="section-head">
-          <h2>Services</h2>
-        </div>
-        <div className="tiles">
-          {homeTiles.map((pro) => (
-            <ProTile key={pro.slug} pro={pro} />
-          ))}
-          <Link href="/onboarding" className="tile join-tile">
-            <span className="chip">Directory</span>
-            <strong>More professionals</strong>
-            <span className="tile-line">Join as a professional.</span>
-            <span className="tile-where">Apply</span>
-          </Link>
-        </div>
       </section>
     </>
   );

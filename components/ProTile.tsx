@@ -25,7 +25,7 @@ export function ProTile({ pro }: { pro: PublicPro }) {
         <span className="chip">{pro.categoryLabel}</span>
         <strong>{pro.name}</strong>
         <span className="tile-line">{pro.line}</span>
-        {pro.location ? <span className="tile-where">{pro.location}</span> : null}
+        {pro.location ? <span className="tile-where">{pro.location}</span> : pro.serviceAreas ? <span className="tile-where">{pro.serviceAreas}</span> : null}
       </Link>
       <ProfileLinks links={links} icons />
     </article>

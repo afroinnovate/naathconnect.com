@@ -1,6 +1,7 @@
 "use server";
 
 import { createHash } from "crypto";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { isDemoMode, safeNextPath } from "@/lib/config";
@@ -208,4 +209,38 @@ export async function toggleReactionAction(
   const result = await store.toggleReaction(eventId, session.id, kind);
   if (!result.ok) return result;
   return { ok: true, ...result.data };
+}
+
+function testimonialInput(formData: FormData): { quote: string; clientName: string; clientRole: string; givenOn: string } | null {
+  const quote = cleanMultiline(String(formData.get("quote") || ""), 600);
+  const clientName = cleanText(String(formData.get("clientName") || ""), 120);
+  const clientRole = cleanText(String(formData.get("clientRole") || ""), 80);
+  const givenOn = cleanText(String(formData.get("givenOn") || ""), 10);
+  if (quote.length < 1 || clientName.length < 1) return null;
+  if (givenOn && !/^\d{4}-\d{2}-\d{2}$/.test(givenOn)) return null;
+  return { quote, clientName, clientRole, givenOn };
+}
+
+export async function saveTestimonialAction(formData: FormData): Promise<void> {
+  const session = await getSession();
+  const profileId = cleanText(String(formData.get("profileId") || ""), 80);
+  if (!session || session.status !== "approved" || session.id !== profileId) redirect(`/pros/${profileId}?testimonial=denied`);
+  const input = testimonialInput(formData);
+  if (!input) redirect(`/pros/${profileId}?testimonial=invalid`);
+  const existing = cleanText(String(formData.get("id") || ""), 80);
+  const store = await getStore();
+  const result = await store.saveTestimonial(session.id, existing || null, input);
+  revalidatePath(`/pros/${profileId}`);
+  redirect(`/pros/${profileId}?testimonial=${result.ok ? "saved" : "unavailable"}`);
+}
+
+export async function deleteTestimonialAction(formData: FormData): Promise<void> {
+  const session = await getSession();
+  const profileId = cleanText(String(formData.get("profileId") || ""), 80);
+  const id = cleanText(String(formData.get("id") || ""), 80);
+  if (!session || session.status !== "approved" || session.id !== profileId || !id) redirect(`/pros/${profileId}?testimonial=denied`);
+  const store = await getStore();
+  const result = await store.deleteTestimonial(session.id, id);
+  revalidatePath(`/pros/${profileId}`);
+  redirect(`/pros/${profileId}?testimonial=${result.ok ? "saved" : "unavailable"}`);
 }
