@@ -1,5 +1,4 @@
 import fs from "fs";
-import { createRequire } from "node:module";
 import path from "path";
 import { profileToConsultation } from "./consultations";
 import { demoAdminEmail, demoAdminPassword, demoProfessionalPassword } from "./config";
@@ -36,17 +35,16 @@ type SqliteModule = {
 };
 
 function loadSqlite(): SqliteModule {
-  // Keep the specifier and the require call out of webpack's static analysis.
-  // Amplify never calls this. A direct createRequire() call makes webpack emit
-  // a broken void-0 replacement and can fail the serverless build.
+  // Runtime-only load so the production bundle never static-links node:sqlite.
+  // Amplify does not call this. Local demo mode does.
   const specifier = ["node", "sqlite"].join(":");
-  const anchor = path.join(process.cwd(), "package.json");
-  const getRequire = new Function(
-    "createRequire",
-    "anchor",
-    "return createRequire(anchor)",
-  ) as (createRequire: typeof import("node:module").createRequire, anchor: string) => (id: string) => SqliteModule;
-  return getRequire(createRequire, anchor)(specifier);
+  const nodeModule = (
+    process as NodeJS.Process & { getBuiltinModule?: (id: string) => typeof import("node:module") }
+  ).getBuiltinModule?.("node:module");
+  if (!nodeModule) {
+    throw new Error("The local SQLite demo needs Node 22. It is not available on Amplify.");
+  }
+  return nodeModule.createRequire(path.join(process.cwd(), "package.json"))(specifier) as SqliteModule;
 }
 
 const IDS = {

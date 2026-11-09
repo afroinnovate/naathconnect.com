@@ -1,60 +1,62 @@
 import type { Metadata } from "next";
-import { monogram } from "@/lib/event-card";
+import { HeroSearch } from "@/components/HeroSearch";
+import { ProTile } from "@/components/ProTile";
+import { featuredPros, filterPros, type PublicPro } from "@/lib/featured-pros";
 import { getStore } from "@/lib/store";
+import type { Profile } from "@/lib/types";
 
-export const metadata: Metadata = { title: "Community directory" };
+export const metadata: Metadata = { title: "Directory" };
 
-export default async function DirectoryPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
-  const { q = "" } = await searchParams;
-  const query = q.trim().toLowerCase();
+function fromProfile(person: Profile): PublicPro {
+  return {
+    slug: person.id,
+    name: person.fullName,
+    category: "tech",
+    categoryLabel: person.profession || "Professional",
+    line: person.bio.includes("PLACEHOLDER") ? "Placeholder." : person.businessName,
+    location: person.serviceArea,
+    image: {
+      src: "/images/placeholders/finance.svg",
+      alt: "",
+      width: 800,
+      height: 1000,
+    },
+    placeholder: person.bio.includes("PLACEHOLDER"),
+    comingSoon: false,
+    profession: person.profession,
+    school: null,
+    industry: null,
+    years: null,
+    services: [],
+    serviceAreas: person.serviceArea,
+    email: null,
+    phoneDisplay: null,
+    phoneTel: null,
+    whatsapp: null,
+    website: person.website,
+    github: null,
+    linkedin: null,
+  };
+}
+
+export default async function DirectoryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; category?: string; location?: string }>;
+}) {
+  const params = await searchParams;
   const store = await getStore();
-  const people = (await store.listApprovedProfessionals()).filter((person) => {
-    if (!query) return true;
-    return [person.fullName, person.businessName, person.profession, person.serviceArea, person.bio]
-      .join(" ")
-      .toLowerCase()
-      .includes(query);
-  });
+  const approved = (await store.listApprovedProfessionals()).map(fromProfile);
+  const people = filterPros([...featuredPros, ...approved], params);
 
   return (
     <section className="section">
-      <p className="kicker">Community directory</p>
-      <h1>Approved professionals</h1>
-      <p className="lede">
-        These listings were approved by an admin. Placeholder names are sample records for this preview, not clients.
-      </p>
-      <form className="stack" action="/directory" method="get">
-        <label>
-          Search by name, profession, or area
-          <input name="q" defaultValue={q} />
-        </label>
-        <button type="submit">Search</button>
-      </form>
-      {people.length === 0 ? <p>No approved professionals match that search.</p> : null}
-      <div className="directory-grid">
-        {people.map((person) => (
-          <article className="person-card" key={person.id}>
-            <div className="person-top">
-              <span className="monogram" aria-hidden="true">
-                {monogram(person.businessName)}
-              </span>
-              <div>
-                <h2>{person.businessName}</h2>
-                <p className="quiet">{person.fullName}</p>
-              </div>
-            </div>
-            <p>{person.profession}</p>
-            <p className="quiet">{person.serviceArea}</p>
-            <p>{person.bio}</p>
-            {person.website ? (
-              <p>
-                <a href={person.website} rel="noreferrer">
-                  {person.website}
-                </a>
-              </p>
-            ) : null}
-            {person.publicContact ? <p>{person.publicContact}</p> : null}
-          </article>
+      <h1>Directory</h1>
+      <HeroSearch q={params.q} category={params.category} location={params.location} />
+      {people.length === 0 ? <p className="hero-line">No professionals match.</p> : null}
+      <div className="tiles">
+        {people.map((pro) => (
+          <ProTile key={pro.slug} pro={pro} />
         ))}
       </div>
     </section>
