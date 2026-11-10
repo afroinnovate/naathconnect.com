@@ -1,4 +1,4 @@
-export type Role = "admin" | "professional";
+export type Role = "admin" | "professional" | "member";
 export type Status = "pending" | "approved" | "rejected";
 export type ReactionKind = "like" | "heart";
 

@@ -166,6 +166,7 @@ type Maybe<T> = T | Promise<T>;
 
 export type Store = {
   signUp(input: SignUpInput): Maybe<Result<{ userId: string }>>;
+  createAccount(email: string, password: string): Maybe<Result<{ userId: string }>>;
   authenticate(email: string, password: string): Maybe<Result<SessionUser>>;
   getUser(id: string): Maybe<SessionUser | null>;
   getProfile(id: string): Maybe<Profile | null>;
@@ -489,6 +490,33 @@ export function openSqliteStore(filename: string): Store {
           return { ok: false, error: "An account with that email already exists. Sign in instead." };
         }
         return { ok: false, error: "The application could not be saved." };
+      }
+      return { ok: true, data: { userId: id } };
+    },
+
+    createAccount(email, password) {
+      const id = crypto.randomUUID();
+      const now = new Date().toISOString();
+      try {
+        transaction(() => {
+          db.prepare(
+            `insert into profiles (
+              id, email, full_name, business_name, profession, service_area, bio, website, public_contact,
+              status, role, created_at, gallery_json, featured_consultation
+            ) values (?, ?, '', '', '', '', '', null, null, 'pending', 'member', ?, '[]', 0)`,
+          ).run(id, email, now);
+          db.prepare("insert into credentials (user_id, password_hash) values (?, ?)").run(id, hashPassword(password));
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "";
+        if (message.includes("UNIQUE")) {
+          return { ok: false, error: "An account with that email already exists. Sign in instead." };
+        }
+        return { ok: false, error: "The account could not be created." };
+      }
+      const created = profileById(id);
+      if (!created || created.status !== "pending" || created.role !== "member") {
+        return { ok: false, error: "The account could not be created." };
       }
       return { ok: true, data: { userId: id } };
     },
