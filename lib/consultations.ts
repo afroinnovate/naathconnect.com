@@ -5,9 +5,8 @@ import type { ConsultationProfile, GalleryImage, Profile } from "./types";
  * Approved directory professionals can join a category later without a
  * code change: an admin sets consultation_category and featured_consultation.
  *
- * Gatbel's photos: drop files in public/images/gatbel/ and replace `src`
- * below. Leave placeholder: true until Dr. Gatbel ChamJock has approved
- * the photos and the wording. Do not scrape social media.
+ * Gatbel's published profile uses his headshot and the wording he approved.
+ * Do not call him Dr. Public records confirm physician assistant, not MD or DO.
  */
 export const CATEGORY_LABELS: Record<string, string> = {
   technology: "Technology consultation",
@@ -29,24 +28,6 @@ const tangoPortrait: GalleryImage = {
   alt: "Tango Tew at a desk with a laptop, holding a mug. Monitors behind him show notes on systems, cloud, and AI. The wall reads: Build. Solve. Deploy. Improve. Make an impact.",
   caption: "Tango Tew. Discipline builds freedom.",
 };
-
-const gatbelGallery: GalleryImage[] = [
-  {
-    src: "/images/gatbel/gown.svg",
-    alt: "Placeholder graphic for a future photo of Dr. Gatbel ChamJock in a medical gown. This is not a photograph of him.",
-    caption: "Placeholder — medical gown photo. Not a picture of Dr. Gatbel ChamJock.",
-  },
-  {
-    src: "/images/gatbel/portrait.svg",
-    alt: "Placeholder graphic for a future portrait of Dr. Gatbel ChamJock. This is not a photograph of him.",
-    caption: "Placeholder — portrait. Not a picture of Dr. Gatbel ChamJock.",
-  },
-  {
-    src: "/images/gatbel/practice.svg",
-    alt: "Placeholder graphic for a future photo of Dr. Gatbel ChamJock at his practice. This is not a photograph of him.",
-    caption: "Placeholder — at the practice. Not a picture of Dr. Gatbel ChamJock.",
-  },
-];
 
 export function houseConsultations(): ConsultationProfile[] {
   return [
@@ -80,20 +61,34 @@ export function houseConsultations(): ConsultationProfile[] {
       slug: "gatbel-chamjock",
       category: "medical",
       categoryLabel: CATEGORY_LABELS.medical,
-      name: "Dr. Gatbel ChamJock",
-      roleLine: "Medical consultation",
-      headline: "Placeholder — headline not yet written with Dr. Gatbel ChamJock.",
+      name: "Gatbel Nyak Chamjock, MPAS, PA-C",
+      roleLine: "Certified Physician Assistant, Emergency Medicine",
+      headline: "Certified Physician Assistant, Emergency Medicine",
       summary:
-        "Placeholder — biography not published. Tango will write this with Dr. Gatbel ChamJock. It stays a placeholder until Gatbel approves the wording and the photos.",
+        "Gatbel is a board-certified physician assistant who specializes in emergency medicine. He works in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado. He holds a bachelor's degree in biology from Tennessee State University and a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska. He is a board member and medical team lead for Gambella Medical Team Connection, and he teaches preventive health to the community, in person around Iowa and remotely through telehealth and online lessons.",
       principles: [],
       pullQuote: null,
-      specialty: "Placeholder — specialty not published.",
-      credentials: "Placeholder — credentials not published.",
-      contactNote: "Placeholder — no phone number or email is published.",
-      portrait: gatbelGallery[0],
-      gallery: gatbelGallery,
+      specialty: "Emergency medicine",
+      credentials: "MPAS, PA-C",
+      contactNote: null,
+      portrait: {
+        src: "/images/gatbel/gatbel-headshot.webp",
+        alt: "Gatbel Nyak Chamjock.",
+        width: 323,
+        height: 431,
+        caption: "Gatbel Nyak Chamjock.",
+      },
+      gallery: [
+        {
+          src: "/images/gatbel/gatbel-headshot.webp",
+          alt: "Gatbel Nyak Chamjock.",
+          width: 323,
+          height: 431,
+          caption: "Gatbel Nyak Chamjock.",
+        },
+      ],
       layout: "profile",
-      placeholder: true,
+      placeholder: false,
       source: "house",
     },
   ];

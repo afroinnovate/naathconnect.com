@@ -6,6 +6,7 @@ export type ProCategory = "tech" | "medical" | "software" | "tax" | "auto" | "fi
 export type ServiceTile = {
   name: string;
   line: string;
+  slides?: readonly string[];
 };
 
 export type PublicPro = {
@@ -29,6 +30,7 @@ export type PublicPro = {
   dedupeEmail?: string | null;
   whatsapp: string | null;
   website: string | null;
+  websiteLabel?: string | null;
   github: string | null;
   linkedin: string | null;
   /** Matches every location query. Not a personal city. */
@@ -36,6 +38,8 @@ export type PublicPro = {
   /** Extra words that should find this professional. */
   searchTerms: string;
   photos: { src: string; alt: string; width: number; height: number }[];
+  bio?: string | null;
+  notice?: string | null;
 };
 
 const tangoServices: ServiceTile[] = serviceOffers.map((service) => ({
@@ -96,33 +100,59 @@ export const featuredPros: PublicPro[] = [
   },
   {
     slug: "gatbel-chamjock",
-    name: "Dr. Gatbel ChamJock",
+    name: "Gatbel Nyak Chamjock, MPAS, PA-C",
     category: "medical",
     categoryLabel: "Medical",
-    line: "Coming soon.",
-    location: "Placeholder — location not published",
+    line: "Certified Physician Assistant, Emergency Medicine",
+    location: null,
     image: {
-      src: "/images/gatbel/gown.svg",
-      alt: "Placeholder graphic. Not a photo of Dr. Gatbel ChamJock.",
-      width: 800,
-      height: 1000,
+      src: "/images/gatbel/gatbel-headshot.webp",
+      alt: "Gatbel Nyak Chamjock.",
+      width: 323,
+      height: 431,
     },
-    placeholder: true,
-    comingSoon: true,
-    profession: null,
+    photos: [
+      {
+        src: "/images/gatbel/gatbel-headshot.webp",
+        alt: "Gatbel Nyak Chamjock.",
+        width: 323,
+        height: 431,
+      },
+    ],
+    placeholder: false,
+    comingSoon: false,
+    profession: "Certified Physician Assistant, Emergency Medicine",
     school: null,
-    industry: null,
+    industry: "Emergency medicine",
     years: null,
-    services: [],
-    serviceAreas: null,
-    email: null,
-    whatsapp: null,
-    website: null,
+    services: [
+      {
+        name: "Preventive health education",
+        line: "Lessons on staying well, for the community.",
+        slides: ["heart", "book", "shield"],
+      },
+      {
+        name: "Telehealth consultations",
+        line: "Visits by telehealth.",
+        slides: ["monitor", "globe", "heart"],
+      },
+      {
+        name: "Community health lessons",
+        line: "In person around Iowa or online.",
+        slides: ["book", "monitor", "globe"],
+      },
+    ],
+    serviceAreas: "Iowa (in person) · Remote telehealth anywhere",
+    email: "gchamjock@gmail.com",
+    whatsapp: "https://wa.me/19705207160",
+    website: "https://gambellamed.org/board-members/",
+    websiteLabel: "Public profile",
     github: null,
     linkedin: null,
-    remote: false,
-    searchTerms: "",
-    photos: [],
+    remote: true,
+    searchTerms: "physician assistant emergency medicine telehealth preventive health Iowa Waterloo",
+    bio: "Gatbel is a board-certified physician assistant who specializes in emergency medicine. He works in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado. He holds a bachelor's degree in biology from Tennessee State University and a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska. He is a board member and medical team lead for Gambella Medical Team Connection, and he teaches preventive health to the community, in person around Iowa and remotely through telehealth and online lessons.",
+    notice: "Information for general education. For emergencies call 911.",
   },
   {
     slug: "taxation",
@@ -318,6 +348,7 @@ export function filterPros(
       pro.school,
       pro.serviceAreas,
       pro.searchTerms,
+      pro.bio,
       ...pro.services.map((service) => `${service.name} ${service.line}`),
     ]
       .filter(Boolean)

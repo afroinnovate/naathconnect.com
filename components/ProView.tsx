@@ -29,6 +29,8 @@ export function ProView({ pro }: { pro: PublicPro }) {
         {pro.placeholder ? (
           <p className="placeholder-note">Placeholder. Biography, credentials, and contact are not published.</p>
         ) : null}
+        {pro.bio ? <p className="hero-line">{pro.bio}</p> : null}
+        {pro.notice ? <p className="profile-note">{pro.notice}</p> : null}
         <dl className="facts">
           {pro.profession ? (
             <div>
@@ -70,7 +72,7 @@ export function ProView({ pro }: { pro: PublicPro }) {
                   key={service.name}
                   name={service.name}
                   tagline={service.line}
-                  slides={serviceSlideIcons[offer?.id ?? ""] ?? ["layers", "code", "check"]}
+                  slides={service.slides ?? serviceSlideIcons[offer?.id ?? ""] ?? ["layers", "code", "check"]}
                   order={index}
                 />
               );

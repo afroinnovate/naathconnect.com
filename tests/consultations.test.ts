@@ -4,14 +4,15 @@ import { groupConsultations, houseConsultations, mergeConsultations, profileToCo
 import type { Profile } from "../lib/types";
 
 describe("consultation sections", () => {
-  it("keeps Gatbel as a labeled placeholder and Tango as the technology feature", () => {
+  it("publishes Gatbel as a physician assistant and keeps Tango as the technology feature", () => {
     const house = houseConsultations();
     const gatbel = house.find((profile) => profile.slug === "gatbel-chamjock");
     const tango = house.find((profile) => profile.slug === "tango-tew");
-    assert.equal(gatbel?.placeholder, true);
-    assert.equal(gatbel?.gallery.length, 3);
-    assert.match(gatbel?.gallery[0].src ?? "", /gown\.svg$/);
-    assert.match(gatbel?.specialty ?? "", /Placeholder/);
+    assert.equal(gatbel?.placeholder, false);
+    assert.equal(gatbel?.name, "Gatbel Nyak Chamjock, MPAS, PA-C");
+    assert.match(gatbel?.portrait?.src ?? "", /gatbel-headshot\.webp$/);
+    assert.doesNotMatch(gatbel?.name ?? "", /Dr\.|ChamJock/);
+    assert.equal(gatbel?.specialty, "Emergency medicine");
     assert.equal(tango?.layout, "feature");
     assert.match(tango?.portrait?.src ?? "", /tango-tech-consultation/);
     const groups = groupConsultations(house);
