@@ -25,6 +25,7 @@ describe("featured professionals", () => {
     assert.equal(gatbel?.line, "Certified Physician Assistant, Emergency Medicine");
     assert.equal(gatbel?.category, "medical");
     assert.match(gatbel?.bio ?? "", /board-certified physician assistant/);
+    assert.match(gatbel?.bio ?? "", /including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons\.$/);
     assert.equal(gatbel?.serviceAreas, "Iowa (in person) · Remote telehealth anywhere");
     assert.equal(gatbel?.remote, true);
     assert.equal(gatbel?.email, "gchamjock@gmail.com");
@@ -56,7 +57,7 @@ describe("featured professionals", () => {
         location,
       );
     }
-    for (const location of ["Iowa", "Waterloo", "Des Moines", "Cedar Rapids", "Iowa City", "Dallas, TX"]) {
+    for (const location of ["Iowa", "Waterloo", "Waterloo, IA", "Des Moines", "Cedar Rapids", "Iowa City", "Dallas, TX"]) {
       const slugs = filterPros(featuredPros, { category: "medical", location }).map((pro) => pro.slug);
       assert.deepEqual(slugs, ["gatbel-chamjock"], location);
     }

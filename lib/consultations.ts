@@ -65,7 +65,7 @@ export function houseConsultations(): ConsultationProfile[] {
       roleLine: "Certified Physician Assistant, Emergency Medicine",
       headline: "Certified Physician Assistant, Emergency Medicine",
       summary:
-        "Gatbel is a board-certified physician assistant who specializes in emergency medicine. He works in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado. He holds a bachelor's degree in biology from Tennessee State University and a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska. He is a board member and medical team lead for Gambella Medical Team Connection, and he teaches preventive health to the community, in person around Iowa and remotely through telehealth and online lessons.",
+        "Gatbel is a board-certified physician assistant who specializes in emergency medicine. He works in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado. He holds a bachelor's degree in biology from Tennessee State University and a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska. He is a board member and medical team lead for Gambella Medical Team Connection, and he teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons.",
       principles: [],
       pullQuote: null,
       specialty: "Emergency medicine",
