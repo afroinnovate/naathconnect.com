@@ -35,6 +35,16 @@ export function canonicalRedirectUrl(hostHeader: string | null, pathname: string
   return `${PRODUCTION_ORIGIN}${path}${search}`;
 }
 
+/** Google sign-in stays off until this is exactly "true". */
+export function googleAuthEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED?.trim().toLowerCase() === "true";
+}
+
+/** Where Supabase sends people after they confirm an email or finish Google. */
+export function authCallbackUrl(): string {
+  return `${siteUrl()}/auth/callback`;
+}
+
 export function isDemoMode(): boolean {
   if (isAmplifyHosting()) return false;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();

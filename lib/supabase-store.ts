@@ -173,6 +173,16 @@ export async function currentSupabaseUser(): Promise<SessionUser | null> {
   };
 }
 
+export async function startGoogleSignIn(redirectTo: string): Promise<Result<{ url: string }>> {
+  const db = await supabase();
+  const { data, error } = await db.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo },
+  });
+  if (error || !data.url) return { ok: false, error: "Google sign-in is not available yet." };
+  return { ok: true, data: { url: data.url } };
+}
+
 export function getSupabaseStore(): Store {
   return {
     async signUp(input: SignUpInput) {
@@ -189,6 +199,7 @@ export function getSupabaseStore(): Store {
             bio: input.bio,
             website: input.website,
             public_contact: input.publicContact,
+            account_role: "professional",
           },
         },
       });
@@ -212,6 +223,41 @@ export function getSupabaseStore(): Store {
           public_contact: input.publicContact || null,
           status: "pending",
           role: "professional",
+        },
+        { onConflict: "id", ignoreDuplicates: true },
+      );
+      return { ok: true, data: { userId: data.user.id } };
+    },
+
+    async createAccount(email, password) {
+      const { authCallbackUrl } = await import("./config");
+      const db = await supabase();
+      const { data, error } = await db.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: authCallbackUrl(),
+          data: { account_role: "member" },
+        },
+      });
+      if (error || !data.user) {
+        const message = error?.message?.toLowerCase() ?? "";
+        if (message.includes("already")) {
+          return { ok: false, error: "An account with that email already exists. Sign in instead." };
+        }
+        return { ok: false, error: "The account could not be created." };
+      }
+      await db.from("profiles").upsert(
+        {
+          id: data.user.id,
+          email,
+          full_name: "",
+          business_name: "",
+          profession: "",
+          service_area: "",
+          bio: "",
+          status: "pending",
+          role: "member",
         },
         { onConflict: "id", ignoreDuplicates: true },
       );

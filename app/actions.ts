@@ -4,7 +4,7 @@ import { createHash } from "crypto";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { isDemoMode, safeNextPath } from "@/lib/config";
+import { authCallbackUrl, googleAuthEnabled, isDemoMode, safeNextPath } from "@/lib/config";
 import { parseGalleryLines } from "@/lib/gallery";
 import { tooMany } from "@/lib/rate-limit";
 import { clearDemoSession, getSession, getViewerKey, setDemoSession } from "@/lib/session";
@@ -81,6 +81,45 @@ export async function signUpAction(_prev: { error: string }, formData: FormData)
   if (!result.ok) return { error: result.error };
   if (isDemoMode()) await setDemoSession(result.data.userId);
   redirect("/account?notice=submitted");
+}
+
+export async function createAccountAction(
+  _prev: { error: string; message: string },
+  formData: FormData,
+): Promise<{ error: string; message: string }> {
+  if (await tooMany(`create-account:${await clientHash()}`, 5, 60 * 60 * 1000)) {
+    return { error: "Too many accounts from this network just now. Try again later.", message: "" };
+  }
+  const email = validateEmail(String(formData.get("email") || ""));
+  const password = validatePassword(String(formData.get("password") || ""));
+  if (!email || !password) return { error: "Enter an email and a password of at least 8 characters.", message: "" };
+  const store = await getStore();
+  const result = await store.createAccount(email, password);
+  if (!result.ok) return { error: result.error, message: "" };
+  return { error: "", message: "Check your email to confirm your account." };
+}
+
+export async function googleSignInAction(): Promise<void> {
+  if (!googleAuthEnabled() || isDemoMode()) {
+    redirect("/login?error=google");
+  }
+  const headerList = await headers();
+  const host = headerList.get("x-forwarded-host") || headerList.get("host");
+  const proto = headerList.get("x-forwarded-proto") || "https";
+  const origin = host ? `${proto}://${host}` : authCallbackUrl().replace(/\/auth\/callback$/, "");
+  try {
+    const { startGoogleSignIn } = await import("@/lib/supabase-store");
+    const result = await startGoogleSignIn(`${origin}/auth/callback`);
+    if (!result.ok) redirect("/login?error=google");
+    redirect(result.data.url);
+  } catch (error) {
+    if (isRedirect(error)) throw error;
+    redirect("/login?error=google");
+  }
+}
+
+function isRedirect(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "digest" in error && String((error as { digest?: string }).digest).startsWith("NEXT_REDIRECT");
 }
 
 export async function createEventAction(_prev: { error: string }, formData: FormData): Promise<{ error: string }> {

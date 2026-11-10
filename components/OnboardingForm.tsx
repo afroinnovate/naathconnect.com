@@ -50,7 +50,7 @@ export function OnboardingForm() {
       </label>
       <label className="check">
         <input type="checkbox" name="ack" value="yes" required />
-        <span>I understand this application stays pending until an admin approves it, and that this preview is not the live site.</span>
+        <span>I understand this application stays pending until an admin approves it.</span>
       </label>
       <button type="submit" disabled={pending}>
         {pending ? "Sending…" : "Submit application"}

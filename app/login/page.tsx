@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LoginForm } from "@/components/LoginForm";
-import { isDemoMode, safeNextPath } from "@/lib/config";
+import { googleAuthEnabled, isDemoMode, safeNextPath } from "@/lib/config";
 
 export const metadata: Metadata = { title: "Log in" };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
-  const { next } = await searchParams;
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string; mode?: string; error?: string }>;
+}) {
+  const { next, mode, error } = await searchParams;
   return (
     <section className="section split">
       <div>
@@ -14,10 +18,18 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <h1>Log in</h1>
         <p>Approved professionals manage events here. Applicants can sign in to see whether they are still pending.</p>
         <p>
-          New professional? <Link href="/onboarding">Apply to the directory</Link>.
+          <Link href="/login?mode=create">Create account</Link>
+          {" · "}
+          <Link href="/onboarding">Apply to the directory</Link>
         </p>
       </div>
-      <LoginForm next={safeNextPath(next)} demo={isDemoMode()} />
+      <LoginForm
+        next={safeNextPath(next)}
+        demo={isDemoMode()}
+        googleEnabled={googleAuthEnabled()}
+        initialMode={mode === "create" ? "create" : "sign-in"}
+        googleError={error === "google"}
+      />
     </section>
   );
 }
