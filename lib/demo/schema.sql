@@ -13,7 +13,7 @@ create table if not exists profiles (
   website text,
   public_contact text,
   status text not null check (status in ('pending', 'approved', 'rejected')),
-  role text not null check (role in ('admin', 'professional')),
+  role text not null check (role in ('admin', 'professional', 'member')),
   review_note text,
   created_at text not null,
   reviewed_at text,
