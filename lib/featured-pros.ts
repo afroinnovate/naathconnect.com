@@ -374,39 +374,29 @@ export const featuredPros: PublicPro[] = [
     ],
     services: [
       {
-        group: "Free",
-        name: "Starting an organization",
-        line: "Help for people who want to start an organization.",
+        name: "Start an Organization / NGO Leadership",
+        line: "Free. Help to start an organization and form its NGO leadership.",
+        slides: ["compass", "layers", "bulb"],
       },
       {
-        group: "Free",
-        name: "Strategic planning",
-        line: "Advice for individuals on strategic planning.",
+        name: "Strategic Planning & NGO Budgeting",
+        line: "Free. Strategic planning, budgeting, and finance so an NGO can last.",
+        slides: ["calendar", "card", "check"],
       },
       {
-        group: "Free",
-        name: "NGO leadership",
-        line: "How to form NGO leadership.",
-      },
-      {
-        group: "Free",
-        name: "NGO budgeting",
-        line: "Budgeting to sustain an NGO.",
-      },
-      {
-        group: "Mentorship",
-        name: "PhD mentorship",
+        name: "PhD Mentorship",
         line: "Mentoring PhD students.",
+        slides: ["book", "chat", "heart"],
       },
       {
-        group: "Paid",
-        name: "Grant-proposal writing",
-        line: "Paid grant-proposal writing.",
+        name: "Grant Proposal Writing",
+        line: "Paid grant proposal writing.",
+        slides: ["file", "folder", "check"],
       },
       {
-        group: "Paid",
-        name: "Grant writing class",
+        name: "Grant Writing Training",
         line: "Paid teaching on how to write grant proposals.",
+        slides: ["monitor", "book", "chat"],
       },
     ],
     serviceAreas: null,
@@ -418,7 +408,7 @@ export const featuredPros: PublicPro[] = [
     remote: false,
     searchTerms: "",
     keywords: "gatluak thach grant writing proposal ngo leadership strategic planning budgeting finance mentorship phd nashville tn",
-    bio: "Dr. Gatluak Ter Thach, PhD, is an educator for NGO leadership and finance. He came to the United States in 1996 as a refugee from South Sudan and, as a Sudanese refugee leader, co-founded the Nashville International Center for Empowerment (NICE) in 2005 with other Sudanese refugee men and women. He earned a B.S. in computer science, with a minor in mathematics, from Tennessee State University in 2003, a master's degree in public service from Cumberland University, and a PhD in Organizational Leadership, with an emphasis on strategic planning, from Argosy University in 2014. In 2015 he was named a White House Champion of Change for World Refugees.",
+    bio: "Dr. Gatluak Ter Thach, PhD, teaches NGO leadership and finance. A Sudanese refugee leader, he came to the United States in 1996 and co-founded NICE in 2005. In 2015 he was named a White House Champion of Change for World Refugees.",
     reference: {
       label: "Affiliation",
       text: "Founder & President/CEO of NICE",
@@ -455,12 +445,43 @@ export const featuredPros: PublicPro[] = [
     school: null,
     industry: null,
     years: null,
-    services: [],
+    services: [
+      {
+        name: "Social Services",
+        line: "Case management, benefits, and practical help for refugees and immigrants, including a Gallatin office.",
+        slides: ["heart", "shield", "compass"],
+      },
+      {
+        name: "Education",
+        line: "ESL and other classes for adults, plus school support and youth programs.",
+        slides: ["book", "monitor", "globe"],
+      },
+      {
+        name: "Employment",
+        line: "One-on-one help toward a job, and introductions to local employers.",
+        slides: ["card", "check", "chat"],
+      },
+      {
+        name: "Immigration Services",
+        line: "Affordable help with citizenship, Green Cards, and other immigration papers.",
+        slides: ["file", "globe", "check"],
+      },
+      {
+        name: "Health",
+        line: "Health education, finding care, and support for mothers and young children.",
+        slides: ["heart", "pulse", "shield"],
+      },
+      {
+        name: "Community / Family Mentorship",
+        line: "Mentors and community programs that help new families settle in.",
+        slides: ["heart", "chat", "book"],
+      },
+    ],
     serviceAreas: "Middle Tennessee",
     email: null,
     whatsapp: null,
     website: "https://www.empowernashville.org/",
-    websiteLabel: "Website",
+    websiteLabel: "See all programs on empowernashville.org",
     github: null,
     linkedin: null,
     remote: false,
@@ -479,228 +500,7 @@ export const featuredPros: PublicPro[] = [
       text: "Dr. Gatluak Ter Thach, PhD, Founder & President/CEO",
       href: "/pros/gatluak-thach",
     },
-    organization: {
-      heading: "Programs",
-      mission: "",
-      summary: "",
-      groups: [
-        {
-          name: "Social Services",
-          items: [
-            {
-              name: "Employment support",
-              line: "One-on-one job coaching, resumes, applications, and interview prep, aimed at living-wage jobs with benefits.",
-            },
-            {
-              name: "Benefits navigation",
-              line: "Help applying for benefits such as SNAP and TennCare.",
-            },
-            {
-              name: "Case management",
-              line: "An assigned case manager for healthcare access, U.S. systems, and referrals to English classes when support is approved.",
-            },
-            {
-              name: "Preferred Communities",
-              line: "Intensive case management for elders, people with disabilities, survivors of violence and torture, and others with higher needs.",
-            },
-            {
-              name: "Arrival support",
-              line: "Caseworkers have met arrivals and arranged housing and basics. After the U.S. Refugee Admissions Program ended, this work shifted to neighbors already here.",
-            },
-            {
-              name: "Transportation support",
-              line: "Rides and transportation help named with the social services team.",
-            },
-            {
-              name: "Gallatin office",
-              line: "A second site in Gallatin helps refugees there with housing, jobs, social services, and case management.",
-            },
-            {
-              name: "Refugee Family Mentorship",
-              line: "Community mentors help recently arrived families with English, jobs, money, the bus, and everyday adjustment.",
-            },
-            {
-              name: "Bus Buddy",
-              line: "A volunteer walks a newcomer family to the school bus stop and helps them find the right bus.",
-            },
-          ],
-        },
-        {
-          name: "Adult Education",
-          items: [
-            {
-              name: "English classes",
-              line: "Classes from beginning literacy to high intermediate, online and at sites across Middle Tennessee, plus workshops on libraries, transit, police help, and medical care.",
-            },
-            {
-              name: "HiSET prep",
-              line: "An online class in math, reading, and social studies for a high school equivalency diploma. Intermediate English is required.",
-            },
-            {
-              name: "Citizenship classes",
-              line: "Civics, U.S. history, English, and interview practice, separate from help with a citizenship application.",
-            },
-            {
-              name: "Digital literacy",
-              line: "Computer-skills classes named in NICE's 2025 Impact Report.",
-            },
-            {
-              name: "Bilingual banking",
-              line: "A bilingual banking certificate class named in the 2025 Impact Report.",
-            },
-            {
-              name: "Career coaching",
-              line: "Intensive career coaching through the adult education team.",
-            },
-            {
-              name: "Childcare during English class",
-              line: "Free childcare while caregivers attend morning or evening English classes.",
-            },
-          ],
-        },
-        {
-          name: "Youth Education",
-          items: [
-            {
-              name: "Refugee School Impact",
-              line: "Help for eligible students with U.S. school orientation, enrollment, and case management soon after arrival.",
-            },
-            {
-              name: "After-school programs",
-              line: "Free after-school English, social-emotional learning, and homework help at named Metro Nashville middle schools.",
-            },
-            {
-              name: "Cultural awareness training",
-              line: "Free trainings for teachers, school administrators, and community groups on refugee and immigrant backgrounds.",
-            },
-            {
-              name: "Youth mentorship",
-              line: "Mentoring for new American children and youth on schoolwork, careers, life skills, and culture.",
-            },
-            {
-              name: "Summer camp",
-              line: "A weekday summer camp for elementary and middle school students with English, social-emotional learning, STEAM projects, and field trips.",
-            },
-          ],
-        },
-        {
-          name: "Employment",
-          items: [
-            {
-              name: "Job placement",
-              line: "One-on-one work with refugee clients on skills, credentials, and introductions to local employers.",
-            },
-            {
-              name: "Preferred Refugee Employer Network",
-              line: "A network of local employers that commit to inclusive workplace practices.",
-            },
-            {
-              name: "Career mentorship",
-              line: "Volunteer mentors advise on certification, licensure, and networking when a client's career interests match.",
-            },
-          ],
-        },
-        {
-          name: "Immigration",
-          items: [
-            {
-              name: "Citizenship applications",
-              line: "Help for adults and children with forms, documents, the interview, the oath, and getting ready to vote.",
-            },
-            {
-              name: "Citizenship certificate replacement",
-              line: "Help replacing a citizenship certificate.",
-            },
-            {
-              name: "Green Card applications",
-              line: "Help applying for a Green Card.",
-            },
-            {
-              name: "Green Card replacement and renewal",
-              line: "Help replacing or renewing a Green Card.",
-            },
-            {
-              name: "Removal of conditions",
-              line: "Help for Green Card holders who need conditions removed.",
-            },
-            {
-              name: "Family reunification",
-              line: "Help with family reunification.",
-            },
-            {
-              name: "Fiancé visa",
-              line: "Help with a fiancé visa.",
-            },
-            {
-              name: "Employment authorization",
-              line: "Help applying for employment authorization.",
-            },
-            {
-              name: "Travel documents",
-              line: "Help with travel documents.",
-            },
-            {
-              name: "Temporary Protected Status",
-              line: "Help with Temporary Protected Status. The NICE site spells this “Temporary Protective Status.”",
-            },
-            {
-              name: "Notary public",
-              line: "Public notarization.",
-            },
-          ],
-        },
-        {
-          name: "Health",
-          items: [
-            {
-              name: "Health case management",
-              line: "Help with medical and mental-health issues, insurance, government services, and learning U.S. systems.",
-            },
-            {
-              name: "Health education",
-              line: "Classes on chronic disease, nutrition, activity, mental health, stress, and vaccines, including community vaccine drives.",
-            },
-            {
-              name: "Mental health and resiliency",
-              line: "Trauma-informed help finding care, plus workshops, group talks, and community activities.",
-            },
-            {
-              name: "MIHOW",
-              line: "A Vanderbilt partnership. Peer mentors visit pregnant women and families with children from birth to age 3.",
-            },
-            {
-              name: "Healthcare navigation",
-              line: "Help finding doctors, understanding insurance, and getting to first appointments.",
-            },
-            {
-              name: "Health outreach",
-              line: "Community health events named in the 2025 Impact Report, such as navigation fairs and women's groups.",
-            },
-            {
-              name: "Partner health guides",
-              line: "Health handbooks and a Medicare guide from partner agencies, shared in several languages.",
-            },
-          ],
-        },
-        {
-          name: "Community",
-          items: [
-            {
-              name: "NICE Voices",
-              line: "Trained refugee and immigrant storytellers can be booked for classrooms, faith gatherings, and other events.",
-            },
-            {
-              name: "Advocacy",
-              line: "Speaking up for refugees and immigrants by building relationships with local elected officials.",
-            },
-            {
-              name: "Welcome donations",
-              line: "Household items, gently used furniture, and thrift donations that support arriving families.",
-            },
-          ],
-        },
-      ],
-    },
+
   },
   {
     slug: "finance",
