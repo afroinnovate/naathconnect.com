@@ -1,3 +1,5 @@
+import type { ServiceType } from "./service-types";
+
 export type Role = "admin" | "professional" | "member";
 export type Status = "pending" | "approved" | "rejected";
 export type ReactionKind = "like" | "heart";
@@ -35,6 +37,8 @@ export type Profile = {
   contactNote: string | null;
   gallery: GalleryImage[];
   featuredConsultation: boolean;
+  /** Empty when the column is missing or no type has been set. */
+  serviceTypes: ServiceType[];
 };
 
 export type SessionUser = {

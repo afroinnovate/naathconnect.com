@@ -24,7 +24,8 @@ create table if not exists profiles (
   credentials text,
   contact_note text,
   gallery_json text not null default '[]',
-  featured_consultation integer not null default 0
+  featured_consultation integer not null default 0,
+  service_types text not null default ''
 );
 
 create table if not exists credentials (

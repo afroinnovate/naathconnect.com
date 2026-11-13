@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { PublicPro } from "@/lib/featured-pros";
-import { serviceOffers, serviceSlideIcons } from "@/lib/services";
+import { serviceOffers, servicePath, serviceSlideIcons } from "@/lib/services";
 import { ProfileLinks, profileLinks } from "./ProfileLinks";
 import { ServiceSlideshow } from "./ServiceSlideshow";
 
@@ -74,6 +74,7 @@ export function ProView({ pro }: { pro: PublicPro }) {
                   tagline={service.line}
                   slides={service.slides ?? serviceSlideIcons[offer?.id ?? ""] ?? ["layers", "code", "check"]}
                   order={index}
+                  href={offer ? servicePath(offer.id) : undefined}
                 />
               );
             })}

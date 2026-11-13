@@ -7,14 +7,3 @@ export const SITE_WHATSAPP = "https://wa.me/14055196057";
 export const RESUME_URL = "https://bold.pro/my/tango-tew-250503225331";
 export const TANGO_GITHUB = "https://github.com/tew9";
 export const TANGO_LINKEDIN = "https://www.linkedin.com/in/tango-tew-759437163";
-
-export const SEARCH_CATEGORIES = [
-  { value: "", label: "All" },
-  { value: "medical", label: "Medical" },
-  { value: "tech", label: "Tech" },
-  { value: "software", label: "Software" },
-  { value: "tax", label: "Tax" },
-  { value: "auto", label: "Auto" },
-  { value: "finance", label: "Finance" },
-  { value: "education", label: "Education" },
-] as const;
