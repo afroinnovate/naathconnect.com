@@ -43,6 +43,8 @@ export type PublicPro = {
   photos: { src: string; alt: string; width: number; height: number }[];
   bio?: string | null;
   notice?: string | null;
+  /** Shown only when Tango has approved a number for this listing. */
+  phone?: { label: string; href: string } | null;
 };
 
 const tangoServices: ServiceTile[] = serviceOffers.map((service) => ({
@@ -162,6 +164,40 @@ export const featuredPros: PublicPro[] = [
     notice: "Information for general education. For emergencies call 911.",
   },
   {
+    slug: "yat-auto-repair",
+    name: "Yat Auto Repair",
+    category: "auto",
+    categoryLabel: "Auto",
+    line: "Auto repair shop",
+    businessName: "Yat Auto Repair",
+    serviceTypes: ["Business"],
+    phone: { label: "(402) 937-2554", href: "tel:+14029372554" },
+    location: "105 5th Ave NE, Le Mars, IA 51031",
+    image: {
+      src: "/images/placeholders/auto-shop.svg",
+      alt: "Wrench icon for Yat Auto Repair.",
+      width: 800,
+      height: 1000,
+    },
+    photos: [],
+    placeholder: false,
+    comingSoon: false,
+    profession: "Auto repair shop",
+    school: null,
+    industry: null,
+    years: null,
+    services: [],
+    serviceAreas: "Le Mars, Iowa (in person)",
+    email: null,
+    whatsapp: null,
+    website: null,
+    github: null,
+    linkedin: null,
+    remote: false,
+    searchTerms: "",
+    bio: "Auto repair shop in Le Mars, Iowa.",
+  },
+  {
     slug: "taxation",
     name: "Taxation",
     category: "tax",
@@ -205,38 +241,6 @@ export const featuredPros: PublicPro[] = [
     image: {
       src: "/images/placeholders/finance.svg",
       alt: "Placeholder graphic for a finance professional.",
-      width: 800,
-      height: 1000,
-    },
-    placeholder: true,
-    comingSoon: true,
-    profession: null,
-    school: null,
-    industry: null,
-    years: null,
-    services: [],
-    serviceAreas: null,
-    email: null,
-    whatsapp: null,
-    website: null,
-    github: null,
-    linkedin: null,
-    remote: false,
-    searchTerms: "",
-    photos: [],
-  },
-  {
-    slug: "auto",
-    name: "Auto",
-    category: "auto",
-    categoryLabel: "Auto",
-    line: "Coming soon.",
-    businessName: null,
-    serviceTypes: [],
-    location: "Placeholder location",
-    image: {
-      src: "/images/placeholders/auto.svg",
-      alt: "Placeholder graphic for an auto professional.",
       width: 800,
       height: 1000,
     },
