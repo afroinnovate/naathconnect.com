@@ -22,7 +22,22 @@ describe("featured professionals", () => {
     assert.equal(gatbel?.placeholder, false);
     assert.equal(gatbel?.comingSoon, false);
     assert.equal(gatbel?.name, "Dr. Gatbel Nyak Chamjock, DrPH, MPAS, PA-C");
-    assert.equal(gatbel?.line, "Board-certified physician assistant in emergency medicine");
+    assert.equal(
+      gatbel?.line,
+      "Board-certified physician assistant in emergency medicine · Epidemiologist · Health Educator",
+    );
+    assert.deepEqual(
+      gatbel?.titles?.map((item) => item.title),
+      [
+        "DrPH",
+        "PA-C",
+        "Epidemiologist",
+        "Health Educator",
+        "MPAS",
+        "Board member and medical team lead",
+        "Bachelor's degree in biology",
+      ],
+    );
     assert.deepEqual(gatbel?.credentialBadges, ["DrPH", "MPAS", "PA-C"]);
     assert.equal(gatbel?.experience?.[0]?.title, "Emergency care in Waterloo, Iowa");
     assert.equal(gatbel?.titles?.[0]?.title, "DrPH");

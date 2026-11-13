@@ -119,7 +119,7 @@ export const featuredPros: PublicPro[] = [
     name: "Dr. Gatbel Nyak Chamjock, DrPH, MPAS, PA-C",
     category: "medical",
     categoryLabel: "Medical",
-    line: "Board-certified physician assistant in emergency medicine",
+    line: "Board-certified physician assistant in emergency medicine · Epidemiologist · Health Educator",
     businessName: null,
     serviceTypes: ["Charity"],
     location: null,
@@ -169,6 +169,14 @@ export const featuredPros: PublicPro[] = [
       {
         title: "PA-C",
         detail: "Board-certified physician assistant.",
+      },
+      {
+        title: "Epidemiologist",
+        detail: "Epidemiologist.",
+      },
+      {
+        title: "Health Educator",
+        detail: "Health Educator.",
       },
       {
         title: "MPAS",
