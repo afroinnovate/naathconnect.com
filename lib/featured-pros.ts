@@ -8,6 +8,11 @@ export type ServiceTile = {
   slides?: readonly string[];
 };
 
+export type ProfilePoint = {
+  title: string;
+  detail: string;
+};
+
 export type PublicPro = {
   slug: string;
   name: string;
@@ -43,6 +48,12 @@ export type PublicPro = {
   photos: { src: string; alt: string; width: number; height: number }[];
   bio?: string | null;
   notice?: string | null;
+  /** Short credentials shown as badges, such as DrPH. */
+  credentialBadges?: readonly string[];
+  /** Professional experience, already ordered by impact. */
+  experience?: readonly ProfilePoint[];
+  /** Titles and credentials, already ordered by impact. */
+  titles?: readonly ProfilePoint[];
 };
 
 const tangoServices: ServiceTile[] = serviceOffers.map((service) => ({
@@ -105,10 +116,10 @@ export const featuredPros: PublicPro[] = [
   },
   {
     slug: "gatbel-chamjock",
-    name: "Dr. Gatbel Nyak Chamjock, MPAS, PA-C",
+    name: "Dr. Gatbel Nyak Chamjock, DrPH, MPAS, PA-C",
     category: "medical",
     categoryLabel: "Medical",
-    line: "Certified Physician Assistant, Emergency Medicine",
+    line: "Board-certified physician assistant in emergency medicine",
     businessName: null,
     serviceTypes: ["Charity"],
     location: null,
@@ -128,7 +139,50 @@ export const featuredPros: PublicPro[] = [
     ],
     placeholder: false,
     comingSoon: false,
-    profession: "Certified Physician Assistant, Emergency Medicine",
+    profession: "Board-certified physician assistant in emergency medicine",
+    credentialBadges: ["DrPH", "MPAS", "PA-C"],
+    experience: [
+      {
+        title: "Emergency care in Waterloo, Iowa",
+        detail:
+          "Board-certified physician assistant who specializes in emergency medicine and works in emergency care in Waterloo, Iowa.",
+      },
+      {
+        title: "Patients in Iowa, Nebraska, and Colorado",
+        detail: "Has served patients in Iowa, Nebraska and Colorado.",
+      },
+      {
+        title: "Preventive health teaching",
+        detail:
+          "Teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons.",
+      },
+      {
+        title: "Gambella Medical Team Connection",
+        detail: "Board member and medical team lead.",
+      },
+    ],
+    titles: [
+      {
+        title: "DrPH",
+        detail: "Doctor of Public Health.",
+      },
+      {
+        title: "PA-C",
+        detail: "Board-certified physician assistant.",
+      },
+      {
+        title: "MPAS",
+        detail: "Master of Physician Assistant Studies, Union College in Lincoln, Nebraska.",
+      },
+      {
+        title: "Board member and medical team lead",
+        detail: "Gambella Medical Team Connection.",
+      },
+      {
+        title: "Bachelor's degree in biology",
+        detail: "Tennessee State University.",
+      },
+    ],
     school: null,
     industry: "Emergency medicine",
     years: null,
