@@ -180,6 +180,11 @@ const icons: Record<string, ReactNode> = {
       <path d="M6 8v8M8 6h4a4 4 0 0 1 4 4" {...stroke} />
     </Frame>
   ),
+  heart: (
+    <Frame>
+      <path d="M12 19s-6.5-4.2-6.5-8.2A3.4 3.4 0 0 1 12 8a3.4 3.4 0 0 1 6.5 2.8C18.5 14.8 12 19 12 19z" {...stroke} />
+    </Frame>
+  ),
   book: (
     <Frame>
       <path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3 3zM5 4v16" {...stroke} />

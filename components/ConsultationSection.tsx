@@ -69,9 +69,7 @@ function StandardProfile({ profile }: { profile: ConsultationProfile }) {
       <div>
         {profile.placeholder ? (
           <p className="consent">
-            Placeholder profile. The photos, biography, specialty, credentials, and contact are not final. Dr. Gatbel
-            ChamJock has not approved this section. Nothing here was taken from social media. Tango will supply the
-            photos and get Gatbel’s OK before this is treated as his profile.
+            Placeholder profile. The photos, biography, specialty, credentials, and contact are not published yet.
           </p>
         ) : null}
         <h2>{profile.name}</h2>

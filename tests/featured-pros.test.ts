@@ -19,10 +19,24 @@ describe("featured professionals", () => {
     assert.equal(tango?.github, "https://github.com/tew9");
     assert.equal(tango?.linkedin, "https://www.linkedin.com/in/tango-tew-759437163");
     const gatbel = getFeaturedPro("gatbel-chamjock");
-    assert.equal(gatbel?.placeholder, true);
-    assert.equal(gatbel?.email, null);
-    assert.equal(gatbel?.whatsapp, null);
-    assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 1);
+    assert.equal(gatbel?.placeholder, false);
+    assert.equal(gatbel?.comingSoon, false);
+    assert.equal(gatbel?.name, "Dr. Gatbel Nyak Chamjock, MPAS, PA-C");
+    assert.equal(gatbel?.line, "Certified Physician Assistant, Emergency Medicine");
+    assert.equal(gatbel?.category, "medical");
+    assert.match(gatbel?.bio ?? "", /^Dr\. Gatbel is a board-certified physician assistant/);
+    assert.match(gatbel?.bio ?? "", /including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons\.$/);
+    assert.equal(gatbel?.serviceAreas, "Iowa (in person) · Remote telehealth anywhere");
+    assert.equal(gatbel?.remote, true);
+    assert.equal(gatbel?.email, "gchamjock@gmail.com");
+    assert.equal(gatbel?.whatsapp, "https://wa.me/19705207160");
+    assert.equal(gatbel?.website, "https://gambellamed.org/board-members/");
+    assert.equal(gatbel?.websiteLabel, "Public profile");
+    assert.equal(gatbel?.notice, "Information for general education. For emergencies call 911.");
+    assert.match(gatbel?.image.src ?? "", /gatbel-headshot\.webp$/);
+    assert.doesNotMatch(`${gatbel?.name} ${gatbel?.bio} ${gatbel?.serviceAreas} ${gatbel?.notice}`, /970|tel:|\bMD\b|\bDO\b/);
+    assert.equal(getFeaturedPro("tango-tew")?.image.src, "/images/tango/tango-headshot-circle.webp");
+    assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 2);
   });
 
   it("filters by category, keyword, and location", () => {
@@ -43,6 +57,10 @@ describe("featured professionals", () => {
         ["tango-tew"],
         location,
       );
+    }
+    for (const location of ["Iowa", "Waterloo", "Waterloo, IA", "Des Moines", "Cedar Rapids", "Iowa City", "Dallas, TX"]) {
+      const slugs = filterPros(featuredPros, { category: "medical", location }).map((pro) => pro.slug);
+      assert.deepEqual(slugs, ["gatbel-chamjock"], location);
     }
     assert.equal(
       featuredPros.some((pro) => /lam tax/i.test(pro.name)),

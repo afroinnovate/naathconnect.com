@@ -163,7 +163,7 @@ button[type="submit"] {
 }
 .icon-btn svg { width: 1.15rem; height: 1.15rem; }
 .tile-media { border-radius: 18px; overflow: hidden; background: #10241c; aspect-ratio: 4 / 3; }
-.tile-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tile-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; display: block; }
 .chip { justify-self: start; border-radius: 999px; background: var(--chip); color: var(--green); padding: 0.2rem 0.55rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
 .tile strong { font-size: 1.45rem; letter-spacing: -0.04em; }
 .tile-line, .tile-where, .quiet { color: var(--muted); }
@@ -171,7 +171,8 @@ button[type="submit"] {
 
 .pro { display: grid; gap: 1.2rem; padding: 1.5rem 0 2rem; width: min(1180px, calc(100% - 2rem)); margin-inline: auto; }
 .pro-media { border-radius: 28px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); }
-.pro-media img { width: 100%; max-height: 720px; object-fit: cover; object-position: center top; display: block; }
+.pro-media img { width: 100%; max-height: 720px; object-fit: cover; object-position: center 18%; display: block; }
+.profile-note { color: var(--warn); max-width: 42rem; }
 .pro-copy { display: grid; gap: 0.9rem; align-content: start; }
 .pro-line { font-size: 1.4rem; }
 .placeholder-note { color: var(--warn); }

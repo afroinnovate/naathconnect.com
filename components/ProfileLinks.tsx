@@ -5,7 +5,9 @@ export type ProfileLink = { href: string; label: string };
 
 export function profileLinks(pro: PublicPro): ProfileLink[] {
   const links: ProfileLink[] = [];
-  if (pro.website) links.push({ href: pro.website, label: pro.website === RESUME_URL ? "Resume" : "Website" });
+  if (pro.website) {
+    links.push({ href: pro.website, label: pro.websiteLabel || (pro.website === RESUME_URL ? "Resume" : "Website") });
+  }
   if (pro.github) links.push({ href: pro.github, label: "GitHub" });
   if (pro.linkedin) links.push({ href: pro.linkedin, label: "LinkedIn" });
   return links;
