@@ -33,7 +33,7 @@ describe("featured professionals", () => {
     assert.equal(gatbel?.website, "https://gambellamed.org/board-members/");
     assert.equal(gatbel?.websiteLabel, "Public profile");
     assert.equal(gatbel?.notice, "Information for general education. For emergencies call 911.");
-    assert.match(gatbel?.image.src ?? "", /gatbel-headshot\.webp$/);
+    assert.match(gatbel?.image.src ?? "", /gatbel-coat\.webp$/);
     assert.doesNotMatch(`${gatbel?.name} ${gatbel?.bio} ${gatbel?.serviceAreas} ${gatbel?.notice}`, /970|tel:|\bMD\b|\bDO\b/);
     assert.equal(getFeaturedPro("tango-tew")?.image.src, "/images/tango/tango-headshot-circle.webp");
     assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 2);
