@@ -179,7 +179,19 @@ button[type="submit"] {
 }
 .profile-section { display: grid; gap: 0.55rem; }
 .profile-section h2 { font-size: clamp(1.45rem, 2vw, 1.8rem); }
+.profile-section h3 { margin: 0.2rem 0 0; font-size: 1.15rem; }
 .profile-section ol { margin: 0; padding-left: 1.15rem; display: grid; gap: 0.75rem; }
+.help-group { display: grid; gap: 0.35rem; }
+.help-group ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.65rem; }
+.org-profile { grid-column: 1 / -1; }
+.wordmark { width: min(100%, 440px); height: auto; background: #f7f4ee; border-radius: 18px; padding: 0.7rem 0.9rem; }
+.org-heading { display: flex; align-items: center; gap: 0.8rem; }
+.org-heading img { width: 72px; height: 72px; object-fit: contain; }
+.org-heading h2 { margin: 0; }
+.mission { margin: 0; max-width: 40rem; font-size: 1.35rem; line-height: 1.45; }
+.mission::before { content: "\201C"; }
+.mission::after { content: "\201D"; }
+.org-profile p { margin: 0; max-width: 46rem; color: var(--muted); }
 .profile-section li { display: grid; gap: 0.15rem; }
 .profile-section strong { letter-spacing: -0.03em; }
 .profile-section span { color: var(--muted); }

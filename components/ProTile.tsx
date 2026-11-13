@@ -19,6 +19,14 @@ export function ProTile({ pro }: { pro: PublicPro }) {
               width={pro.image.width}
               height={pro.image.height}
               sizes="(min-width: 900px) 30vw, 100vw"
+              style={
+                pro.image.position || pro.image.fit
+                  ? {
+                      objectPosition: pro.image.position ?? "center",
+                      ...(pro.image.fit === "contain" ? { objectFit: "contain" as const } : {}),
+                    }
+                  : undefined
+              }
             />
           )}
         </span>
@@ -42,6 +50,7 @@ export function ProTile({ pro }: { pro: PublicPro }) {
         <strong>{pro.name}</strong>
         <span className="tile-line">{pro.line}</span>
         {pro.serviceSummary ? <span className="tile-line">{pro.serviceSummary}</span> : null}
+        {pro.businessName && pro.businessName !== pro.name ? <span className="tile-line">{pro.businessName}</span> : null}
         {pro.location ? <span className="tile-where">{pro.location}</span> : pro.serviceAreas ? <span className="tile-where">{pro.serviceAreas}</span> : null}
         {pro.offersRemote ? <span className="tile-where">Remote services available</span> : null}
       </Link>
