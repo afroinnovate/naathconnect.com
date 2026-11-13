@@ -118,6 +118,12 @@ export function ProView({ pro }: { pro: PublicPro }) {
               <dd>{pro.serviceAreas}</dd>
             </div>
           ) : null}
+          {pro.offersRemote ? (
+            <div>
+              <dt>Remote</dt>
+              <dd>Remote services available</dd>
+            </div>
+          ) : null}
         </dl>
         {pro.services.some((service) => service.icon) ? (
           <section className="profile-section">
