@@ -209,10 +209,11 @@ describe("directory filters", () => {
   it("lists Dr. Gatluak Ter Thach apart from NICE's programs", () => {
     const gat = featuredPros.find((pro) => pro.slug === "gatluak-thach");
     assert.equal(gat?.name, "Dr. Gatluak Ter Thach, PhD");
-    assert.equal(gat?.line, "NGO Leadership · Finance · Grant Writing Educator");
-    assert.equal(gat?.profession, "Educator for NGO leadership and finance");
+    assert.equal(gat?.line, "Prof, Tennessee State University · President/CEO, N.I.C.E");
+    assert.match(gat?.profession ?? "", /Adjunct Professor of Strategic Leadership and Organizational Development/);
     assert.deepEqual(gat?.serviceTypes, ["Business", "Free/Volunteer"]);
-    assert.deepEqual(gat?.credentialBadges, ["PhD"]);
+    assert.ok(gat?.credentialBadges?.includes("Grant writing"));
+    assert.ok(gat?.credentialBadges?.includes("Strategic advocacy"));
     assert.equal(gat?.businessName, null);
     assert.equal(gat?.location, "Nashville, TN");
     assert.equal(gat?.website, null);
@@ -237,8 +238,11 @@ describe("directory filters", () => {
     assert.deepEqual(profileLinks(gat!), []);
     assert.match(gat?.image.src ?? "", /gatluak-thach\.webp$/);
     const published = JSON.stringify(gat);
-    assert.doesNotMatch(published, /harvard|adjunct|tel:|315[\s.\-]*9681|207[\s.\-]*1686|Duang|Selena|Nyakuma|Gallatin office|Digital literacy/i);
-    assert.match(published, /White House Champion of Change for World Refugees/);
+    assert.doesNotMatch(published, /tel:|315[\s.\-]*9681|207[\s.\-]*1686|Duang|Selena|Nyakuma|Gallatin office|Digital literacy/i);
+    assert.match(published, /Adjunct Professor of Strategic Leadership/);
+    assert.match(published, /Harvard Kennedy School/);
+    assert.match(published, /White House Champion of Change/);
+    assert.match(published, /Life of the Leader/);
     assert.match(published, /Tennessee State University/);
     assert.match(published, /Cumberland University/);
     assert.match(published, /Argosy University/);
