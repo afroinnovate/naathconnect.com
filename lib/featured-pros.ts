@@ -6,6 +6,8 @@ export type ServiceTile = {
   name: string;
   line: string;
   slides?: readonly string[];
+  /** Compact shop-service icon. These do not open a service page. */
+  icon?: string;
 };
 
 export type PublicPro = {
@@ -40,6 +42,8 @@ export type PublicPro = {
   remote: boolean;
   /** Extra words that should find this professional. */
   searchTerms: string;
+  /** Short services line for the directory card. */
+  serviceSummary?: string | null;
   photos: { src: string; alt: string; width: number; height: number }[];
   bio?: string | null;
   notice?: string | null;
@@ -186,7 +190,20 @@ export const featuredPros: PublicPro[] = [
     school: null,
     industry: null,
     years: null,
-    services: [],
+    serviceSummary: "From tires and brakes to engine work.",
+    services: [
+      { name: "Tires", line: "Mounting, balancing, rotation, and flat repair.", icon: "tire" },
+      { name: "Oil changes and fluids", line: "Oil changes and fluid service.", icon: "oil" },
+      { name: "Brakes", line: "Pads and rotors.", icon: "brake" },
+      { name: "Batteries and electrical", line: "Batteries and electrical repair.", icon: "bolt" },
+      { name: "Suspension and steering", line: "Suspension and steering.", icon: "steering" },
+      { name: "Alignment", line: "Wheel alignment.", icon: "alignment" },
+      { name: "Exhaust", line: "Exhaust work.", icon: "exhaust" },
+      { name: "AC and heating", line: "Air conditioning and heating.", icon: "climate" },
+      { name: "Diagnostics and check engine light", line: "Diagnostics and the check engine light.", icon: "pulse" },
+      { name: "Transmission", line: "Transmission service.", icon: "transmission" },
+      { name: "Engine repair", line: "Engine repair.", icon: "engine" },
+    ],
     serviceAreas: "Le Mars, Iowa (in person)",
     email: null,
     whatsapp: null,
@@ -195,7 +212,7 @@ export const featuredPros: PublicPro[] = [
     linkedin: null,
     remote: false,
     searchTerms: "",
-    bio: "Auto repair shop in Le Mars, Iowa.",
+    bio: "Full-service auto repair shop in Le Mars, Iowa, handling everything from tires and brakes to engine work.",
   },
   {
     slug: "taxation",
@@ -389,6 +406,11 @@ export function filterPros(
     if (!keyword) return true;
     const name = pro.name.toLowerCase();
     const business = (pro.businessName ?? "").trim().toLowerCase();
-    return name.includes(keyword) || (business.length > 0 && business.includes(keyword));
+    const serviceWords = pro.services.flatMap((service) =>
+      `${service.name} ${service.line}`.toLowerCase().split(/[^a-z0-9]+/),
+    );
+    const words = keyword.split(/[^a-z0-9]+/).filter(Boolean);
+    const servicesMatch = words.length > 0 && words.every((word) => serviceWords.includes(word));
+    return name.includes(keyword) || (business.length > 0 && business.includes(keyword)) || servicesMatch;
   });
 }

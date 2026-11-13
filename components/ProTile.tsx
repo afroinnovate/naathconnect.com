@@ -32,6 +32,7 @@ export function ProTile({ pro }: { pro: PublicPro }) {
         </span>
         <strong>{pro.name}</strong>
         <span className="tile-line">{pro.line}</span>
+        {pro.serviceSummary ? <span className="tile-line">{pro.serviceSummary}</span> : null}
         {pro.location ? <span className="tile-where">{pro.location}</span> : pro.serviceAreas ? <span className="tile-where">{pro.serviceAreas}</span> : null}
       </Link>
       {pro.phone ? (
