@@ -372,7 +372,11 @@ export function filterPros(
   const type = SERVICE_TYPES.find((item) => item.toLowerCase() === (query.type ?? "").trim().toLowerCase());
   return pros.filter((pro) => {
     if (pro.placeholder || pro.comingSoon) return false;
-    if (category && pro.category !== category) return false;
+    if (category) {
+      const key = pro.category.trim().toLowerCase();
+      const label = pro.categoryLabel.trim().toLowerCase();
+      if (key !== category && label !== category) return false;
+    }
     if (type && !pro.serviceTypes.includes(type)) return false;
     if (location && !pro.remote) {
       const where = `${pro.location ?? ""} ${pro.serviceAreas ?? ""}`.toLowerCase();

@@ -61,6 +61,32 @@ describe("directory filters", () => {
     );
   });
 
+  it("filters tiles from a category label or key as soon as it is chosen", () => {
+    const slugs = (query: { q?: string; category?: string; location?: string; type?: string }) =>
+      filterPros(featuredPros, query).map((pro) => pro.slug);
+    assert.deepEqual(slugs({ category: "Medical" }), ["gatbel-chamjock"]);
+    assert.deepEqual(slugs({ category: "medical" }), ["gatbel-chamjock"]);
+    assert.deepEqual(slugs({ category: "TECH" }), ["tango-tew"]);
+    assert.deepEqual(slugs({ category: "Tech" }), ["tango-tew"]);
+    assert.deepEqual(slugs({ type: "Charity" }), ["gatbel-chamjock"]);
+    assert.deepEqual(slugs({ type: "business" }), ["tango-tew"]);
+    assert.deepEqual(slugs({ q: "Tang" }), ["tango-tew"]);
+    assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock"]);
+
+    const renamed = featuredPros.map((pro) =>
+      pro.slug === "gatbel-chamjock" ? { ...pro, category: "pa", categoryLabel: "Medical" } : pro,
+    );
+    assert.deepEqual(filterPros(renamed, { category: "Medical" }).map((pro) => pro.slug), ["gatbel-chamjock"]);
+    assert.deepEqual(filterPros(renamed, { category: "PA" }).map((pro) => pro.slug), ["gatbel-chamjock"]);
+
+    const browser = readFileSync("components/DirectoryBrowser.tsx", "utf8");
+    assert.match(browser, /filterPros\(pros, applied\)/);
+    assert.match(browser, /field === "category" \|\| field === "type"/);
+    assert.match(browser, /TEXT_DEBOUNCE_MS/);
+    assert.match(browser, /history\.replaceState/);
+    assert.match(browser, /onSearch/);
+  });
+
   it("matches a partial name or business name without regard to case", () => {
     const shop = withName(featuredPros[0], "ada-books", "Ada Okoth", "Bright Books");
     const people = [...featuredPros, shop];
