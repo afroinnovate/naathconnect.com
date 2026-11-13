@@ -9,7 +9,7 @@ export function ExampleFlow() {
         </div>
         <div className="ex-card" aria-hidden="true">
           <span>Tax</span>
-          <strong>Lam Tax Service</strong>
+          <strong>Tax service</strong>
           <em>Tap</em>
         </div>
         <div className="ex-phone" aria-hidden="true">
@@ -17,7 +17,7 @@ export function ExampleFlow() {
           <strong>Connecting on WhatsApp</strong>
         </div>
       </div>
-      <p className="example-note">Lam Tax Service is not a listed professional.</p>
+      <p className="example-note">An example of how search works.</p>
     </div>
   );
 }

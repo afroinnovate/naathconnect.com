@@ -247,6 +247,12 @@ const icons: Record<string, ReactNode> = {
       <path d="M8 8V5M12 8V4M16 8V5M8 17v2M16 17v2M3 11h2M19 11h2M3 14h2M19 14h2" {...stroke} />
     </Frame>
   ),
+  refund: (
+    <Frame>
+      <path d="M4 10.5 12 4l8 6.5V20H4z" {...stroke} />
+      <path d="M10 20v-6h4v6" {...stroke} />
+    </Frame>
+  ),
 };
 
 export function ServiceIcon({ name }: { name: string }) {

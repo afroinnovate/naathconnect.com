@@ -96,6 +96,12 @@ export function ProView({ pro }: { pro: PublicPro }) {
               <dd>{pro.years}</dd>
             </div>
           ) : null}
+          {pro.founder ? (
+            <div>
+              <dt>Founder</dt>
+              <dd>{pro.founder}</dd>
+            </div>
+          ) : null}
           {pro.location && !pro.placeholder ? (
             <div>
               <dt>Address</dt>
