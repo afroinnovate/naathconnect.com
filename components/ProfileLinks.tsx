@@ -1,31 +1,50 @@
 import type { PublicPro } from "@/lib/featured-pros";
 import { RESUME_URL } from "@/lib/site";
 
-export type ProfileLink = { href: string; label: string };
+export type ProfileLink = { href: string; label: string; globe?: boolean };
 
 export function profileLinks(pro: PublicPro): ProfileLink[] {
   const links: ProfileLink[] = [];
   if (pro.website) {
-    links.push({ href: pro.website, label: pro.websiteLabel || (pro.website === RESUME_URL ? "Resume" : "Website") });
+    links.push({
+      href: pro.website,
+      label: pro.websiteLabel || (pro.website === RESUME_URL ? "Resume" : "Website"),
+      globe: true,
+    });
   }
   if (pro.github) links.push({ href: pro.github, label: "GitHub" });
   if (pro.linkedin) links.push({ href: pro.linkedin, label: "LinkedIn" });
   return links;
 }
 
+function GlobeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="btn-globe">
+      <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M4 12h16M12 4c2.2 2.4 3.2 5 3.2 8s-1 5.6-3.2 8c-2.2-2.4-3.2-5-3.2-8s1-5.6 3.2-8z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+    </svg>
+  );
+}
+
 export function ProfileLinks({ links, icons = false }: { links: ProfileLink[]; icons?: boolean }) {
   if (links.length === 0) return null;
   const items = links.map((link) => (
     <a key={link.href} className={icons ? "icon-btn" : "contact-btn"} href={link.href} target="_blank" rel="noreferrer">
-      {icons ? <LinkIcon label={link.label} /> : link.label}
-      {icons ? <span className="sr-only">{link.label}</span> : null}
+      {icons ? <LinkIcon label={link.label} globe={link.globe} /> : link.globe ? <GlobeIcon /> : null}
+      {icons ? <span className="sr-only">{link.label}</span> : link.label}
     </a>
   ));
   if (!icons) return <>{items}</>;
   return <div className="tile-links">{items}</div>;
 }
 
-function LinkIcon({ label }: { label: string }) {
+function LinkIcon({ label, globe = false }: { label: string; globe?: boolean }) {
+  if (globe) return <GlobeIcon />;
   if (label === "GitHub") {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -46,12 +65,5 @@ function LinkIcon({ label }: { label: string }) {
       </svg>
     );
   }
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        fill="currentColor"
-        d="M6 2h8l4 4v16H6V2zm8 1.5V7h3.5L14 3.5zM8 11h8v1.5H8V11zm0 3h8v1.5H8V14zm0 3h5v1.5H8V17z"
-      />
-    </svg>
-  );
+  return null;
 }
