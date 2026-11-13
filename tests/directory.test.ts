@@ -112,7 +112,7 @@ describe("directory filters", () => {
     assert.equal(lam?.whatsapp, null);
     assert.deepEqual(lam?.serviceTypes, ["Business"]);
     assert.match(lam?.bio ?? "", /founded in 2016 by Lam Chuol/);
-    assert.match(lam?.image.src ?? "", /tax-shop\.svg$/);
+    assert.match(lam?.image.src ?? "", /lam-chuol\.webp$/);
     assert.equal(featuredPros.some((pro) => pro.placeholder && pro.category === "tax"), false);
     for (const location of ["St. Cloud", "Saint Cloud", "MN", "Minnesota", "56304"]) {
       assert.deepEqual(
