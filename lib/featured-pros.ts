@@ -164,7 +164,7 @@ export const featuredPros: PublicPro[] = [
     titles: [
       {
         title: "Doctor of Public Health",
-        detail: "DrPH.",
+        detail: "DrPH, Capella University, Minneapolis, Minnesota.",
       },
       {
         title: "Epidemiologist",
@@ -220,7 +220,7 @@ export const featuredPros: PublicPro[] = [
     linkedin: null,
     remote: true,
     searchTerms: "physician assistant emergency medicine telehealth preventive health Iowa Waterloo",
-    bio: "Dr. Gatbel Nyak Chamjock is a Doctor of Public Health, an epidemiologist, and a health educator. He teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons. He is a board member and medical team lead for Gambella Medical Team Connection. He holds a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska, and a bachelor's degree in biology from Tennessee State University. He also practices as a board-certified physician assistant (PA-C) in emergency medicine, working in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado.",
+    bio: "Dr. Gatbel Nyak Chamjock is a Doctor of Public Health, an epidemiologist, and a health educator. He holds a Doctor of Public Health (DrPH) from Capella University in Minneapolis, Minnesota. He teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons. He is a board member and medical team lead for Gambella Medical Team Connection. He holds a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska, and a bachelor's degree in biology from Tennessee State University. He also practices as a board-certified physician assistant (PA-C) in emergency medicine, working in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado.",
     notice: "Information for general education. For emergencies call 911.",
   },
   {
