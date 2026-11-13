@@ -107,7 +107,31 @@ describe("directory filters", () => {
     assert.equal(yat?.line, "Auto repair shop");
     assert.equal(yat?.location, "105 5th Ave NE, Le Mars, IA 51031");
     assert.equal(yat?.serviceAreas, "Le Mars, Iowa (in person)");
-    assert.equal(yat?.bio, "Auto repair shop in Le Mars, Iowa.");
+    assert.equal(yat?.bio, "Full-service auto repair shop in Le Mars, Iowa, handling everything from tires and brakes to engine work.");
+    assert.equal(yat?.serviceSummary, "From tires and brakes to engine work.");
+    assert.deepEqual(
+      yat?.services.map((service) => service.name),
+      [
+        "Tires",
+        "Oil changes and fluids",
+        "Brakes",
+        "Batteries and electrical",
+        "Suspension and steering",
+        "Alignment",
+        "Exhaust",
+        "AC and heating",
+        "Diagnostics and check engine light",
+        "Transmission",
+        "Engine repair",
+      ],
+    );
+    for (const keyword of ["tires", "brakes", "engine"]) {
+      assert.deepEqual(
+        filterPros(featuredPros, { q: keyword }).map((pro) => pro.slug),
+        ["yat-auto-repair"],
+        keyword,
+      );
+    }
     assert.deepEqual(yat?.serviceTypes, ["Business"]);
     assert.equal(yat?.phone?.label, "(402) 937-2554");
     assert.equal(yat?.phone?.href, "tel:+14029372554");

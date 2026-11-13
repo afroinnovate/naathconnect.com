@@ -190,6 +190,63 @@ const icons: Record<string, ReactNode> = {
       <path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3 3zM5 4v16" {...stroke} />
     </Frame>
   ),
+  tire: (
+    <Frame>
+      <circle cx="12" cy="12" r="8" {...stroke} />
+      <circle cx="12" cy="12" r="3" {...stroke} />
+      <path d="M12 4v2M12 18v2M4 12h2M18 12h2" {...stroke} />
+    </Frame>
+  ),
+  oil: (
+    <Frame>
+      <path d="M12 3s5 6.2 5 9.5a5 5 0 0 1-10 0C7 9.2 12 3 12 3z" {...stroke} />
+    </Frame>
+  ),
+  brake: (
+    <Frame>
+      <circle cx="12" cy="12" r="7" {...stroke} />
+      <circle cx="12" cy="12" r="2" {...stroke} />
+      <path d="M8 5.5 9.2 8M16 5.5 14.8 8M8 18.5 9.2 16M16 18.5 14.8 16" {...stroke} />
+    </Frame>
+  ),
+  steering: (
+    <Frame>
+      <circle cx="12" cy="12" r="8" {...stroke} />
+      <circle cx="12" cy="12" r="2" {...stroke} />
+      <path d="M12 10V4M10.2 12.8 5.5 16M13.8 12.8 18.5 16" {...stroke} />
+    </Frame>
+  ),
+  alignment: (
+    <Frame>
+      <circle cx="12" cy="12" r="7" {...stroke} />
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4" {...stroke} />
+    </Frame>
+  ),
+  exhaust: (
+    <Frame>
+      <path d="M4 16h6l2-4h5a3 3 0 0 0 0-6H14" {...stroke} />
+      <path d="M8 16v3M14 8v3" {...stroke} />
+    </Frame>
+  ),
+  climate: (
+    <Frame>
+      <path d="M12 3v18M5.5 7.5l13 9M18.5 7.5l-13 9" {...stroke} />
+      <circle cx="12" cy="12" r="2" {...stroke} />
+    </Frame>
+  ),
+  transmission: (
+    <Frame>
+      <circle cx="8" cy="8" r="3" {...stroke} />
+      <circle cx="16" cy="16" r="3" {...stroke} />
+      <path d="M10.5 9.5 13.5 14.5" {...stroke} />
+    </Frame>
+  ),
+  engine: (
+    <Frame>
+      <rect x="5" y="8" width="14" height="9" rx="1.5" {...stroke} />
+      <path d="M8 8V5M12 8V4M16 8V5M8 17v2M16 17v2M3 11h2M19 11h2M3 14h2M19 14h2" {...stroke} />
+    </Frame>
+  ),
 };
 
 export function ServiceIcon({ name }: { name: string }) {
