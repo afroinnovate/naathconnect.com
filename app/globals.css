@@ -242,7 +242,8 @@ button[type="submit"] {
 .testimonial-list blockquote { margin: 0 0 0.35rem; font-size: 1.35rem; letter-spacing: -0.03em; }
 .testimonial-form { display: grid; gap: 0.55rem; max-width: 36rem; margin-top: 0.8rem; }
 .contact-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.contact-btn { width: auto; padding-inline: 1rem; }
+.contact-btn { width: auto; padding-inline: 1rem; gap: 0.4rem; }
+.contact-btn .btn-globe { width: 1.05rem; height: 1.05rem; flex: none; }
 
 .event-card, .person-card, .queue-card, .panel {
   background: var(--bg-2); border: 1px solid var(--line); border-radius: 20px; padding: 1rem;
