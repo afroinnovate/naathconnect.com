@@ -224,9 +224,16 @@ describe("directory filters", () => {
       href: "/pros/nice-empower-nashville",
     });
     assert.deepEqual(
-      gat?.services.map((service) => service.group),
-      ["Free", "Free", "Free", "Free", "Mentorship", "Paid", "Paid"],
+      gat?.services.map((service) => service.name),
+      [
+        "Start an Organization / NGO Leadership",
+        "Strategic Planning & NGO Budgeting",
+        "PhD Mentorship",
+        "Grant Proposal Writing",
+        "Grant Writing Training",
+      ],
     );
+    assert.equal(gat?.services.every((service) => (service.slides?.length ?? 0) >= 2), true);
     assert.deepEqual(profileLinks(gat!), []);
     assert.match(gat?.image.src ?? "", /gatluak-thach\.webp$/);
     const published = JSON.stringify(gat);
@@ -294,17 +301,27 @@ describe("directory filters", () => {
       text: "Dr. Gatluak Ter Thach, PhD, Founder & President/CEO",
       href: "/pros/gatluak-thach",
     });
-    assert.equal(nice?.organization?.heading, "Programs");
+    assert.equal(nice?.organization, undefined);
     assert.deepEqual(
-      nice?.organization?.groups.map((group) => group.name),
-      ["Social Services", "Adult Education", "Youth Education", "Employment", "Immigration", "Health", "Community"],
+      nice?.services.map((service) => service.name),
+      [
+        "Social Services",
+        "Education",
+        "Employment",
+        "Immigration Services",
+        "Health",
+        "Community / Family Mentorship",
+      ],
     );
-    const programNames = nice?.organization?.groups.flatMap((group) => group.items.map((item) => item.name)) ?? [];
-    for (const name of ["Gallatin office", "Refugee Family Mentorship", "Digital literacy", "Bilingual banking", "NICE Voices"]) {
-      assert.ok(programNames.includes(name), name);
-    }
-    assert.equal(programNames.some((name) => /driver/i.test(name)), false);
-    assert.deepEqual(profileLinks(nice!), [{ href: "https://www.empowernashville.org/", label: "Website", globe: true }]);
+    assert.equal(nice?.services.every((service) => (service.slides?.length ?? 0) >= 2), true);
+    assert.equal(JSON.stringify(nice?.services).includes("Digital literacy"), false);
+    assert.deepEqual(profileLinks(nice!), [
+      {
+        href: "https://www.empowernashville.org/",
+        label: "See all programs on empowernashville.org",
+        globe: true,
+      },
+    ]);
     assert.deepEqual(categoryOptions(featuredPros).find((option) => option.value === "ngo"), {
       value: "ngo",
       label: "NGO / Social Empowerment",
