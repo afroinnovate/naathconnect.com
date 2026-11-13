@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { PublicPro } from "@/lib/featured-pros";
+import type { OrganizationProfile, PublicPro, ServiceTile } from "@/lib/featured-pros";
 import { serviceOffers, servicePath, serviceSlideIcons } from "@/lib/services";
 import { ProfileLinks, profileLinks } from "./ProfileLinks";
 import { ServiceIcon } from "./ServiceIcon";
@@ -9,8 +9,74 @@ function mapsSearchUrl(address: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 }
 
+function helpGroups(services: ServiceTile[]): { name: string; items: ServiceTile[] }[] {
+  const groups: { name: string; items: ServiceTile[] }[] = [];
+  for (const service of services) {
+    const name = service.group ?? "Services";
+    const found = groups.find((group) => group.name === name);
+    if (found) found.items.push(service);
+    else groups.push({ name, items: [service] });
+  }
+  return groups;
+}
+
+function HelpGroups({ services }: { services: ServiceTile[] }) {
+  return (
+    <section className="profile-section">
+      <h2>How he can help</h2>
+      {helpGroups(services).map((group) => (
+        <div key={group.name} className="help-group">
+          <h3>{group.name}</h3>
+          <ul>
+            {group.items.map((item) => (
+              <li key={item.name}>
+                <strong>{item.name}</strong>
+                <span>{item.line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function OrganizationSection({ organization }: { organization: OrganizationProfile }) {
+  return (
+    <section className="org-profile profile-section">
+      <div className="org-heading">
+        {organization.mark ? (
+          <Image
+            src={organization.mark.src}
+            alt={organization.mark.alt}
+            width={organization.mark.width}
+            height={organization.mark.height}
+          />
+        ) : null}
+        <h2>{organization.heading}</h2>
+      </div>
+      <blockquote className="mission">{organization.mission}</blockquote>
+      <p>{organization.summary}</p>
+      {organization.groups.map((group) => (
+        <div key={group.name} className="help-group">
+          <h3>{group.name}</h3>
+          <ul>
+            {group.items.map((item) => (
+              <li key={item.name}>
+                <strong>{item.name}</strong>
+                <span>{item.line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+  );
+}
+
 export function ProView({ pro }: { pro: PublicPro }) {
   const svg = pro.image.src.endsWith(".svg");
+  const groupedHelp = pro.services.length > 0 && pro.services.every((service) => Boolean(service.group) && !service.icon);
   return (
     <article className="pro">
       <div className="pro-media">
@@ -24,6 +90,11 @@ export function ProView({ pro }: { pro: PublicPro }) {
             height={pro.image.height}
             priority
             sizes="(min-width: 900px) 42vw, 100vw"
+            style={
+              pro.image.position
+                ? { objectPosition: pro.image.position, objectFit: "contain", height: "auto" }
+                : undefined
+            }
           />
         )}
       </div>
@@ -40,6 +111,8 @@ export function ProView({ pro }: { pro: PublicPro }) {
             ))}
           </ul>
         ) : null}
+        {groupedHelp && pro.bio ? <p className="hero-line">{pro.bio}</p> : null}
+        {groupedHelp ? <HelpGroups services={pro.services} /> : null}
         {pro.placeholder ? (
           <p className="placeholder-note">Placeholder. Biography, credentials, and contact are not published.</p>
         ) : null}
@@ -69,7 +142,7 @@ export function ProView({ pro }: { pro: PublicPro }) {
             </ol>
           </section>
         ) : null}
-        {pro.bio ? <p className="hero-line">{pro.bio}</p> : null}
+        {pro.bio && !groupedHelp ? <p className="hero-line">{pro.bio}</p> : null}
         {pro.notice ? <p className="profile-note">{pro.notice}</p> : null}
         <dl className="facts">
           {pro.profession && !pro.experience ? (
@@ -125,7 +198,7 @@ export function ProView({ pro }: { pro: PublicPro }) {
             </div>
           ) : null}
         </dl>
-        {pro.services.some((service) => service.icon) ? (
+        {groupedHelp ? null : pro.services.some((service) => service.icon) ? (
           <section className="profile-section">
             <h2>Services</h2>
             <ul className="shop-services">
@@ -171,6 +244,7 @@ export function ProView({ pro }: { pro: PublicPro }) {
           ) : null}
         </div>
       </div>
+      {pro.organization ? <OrganizationSection organization={pro.organization} /> : null}
     </article>
   );
 }

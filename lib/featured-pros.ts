@@ -8,6 +8,29 @@ export type ServiceTile = {
   slides?: readonly string[];
   /** Compact icon for a shop service. These do not open a service page. */
   icon?: string;
+  /** Groups plain-language help, instead of a shop icon or a slideshow. */
+  group?: string;
+};
+
+export type PublicImage = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  /** Overrides the shared card crop when a portrait needs a different anchor. */
+  position?: string;
+};
+
+export type OrgProgram = { name: string; line: string };
+
+export type OrgProgramGroup = { name: string; items: readonly OrgProgram[] };
+
+export type OrganizationProfile = {
+  heading: string;
+  mission: string;
+  summary: string;
+  mark?: PublicImage;
+  groups: readonly OrgProgramGroup[];
 };
 
 export type ProfilePoint = {
@@ -26,7 +49,7 @@ export type PublicPro = {
   /** Empty means no type is known. A professional can have more than one. */
   serviceTypes: ServiceType[];
   location: string | null;
-  image: { src: string; alt: string; width: number; height: number };
+  image: PublicImage;
   placeholder: boolean;
   comingSoon: boolean;
   profession: string | null;
@@ -51,7 +74,9 @@ export type PublicPro = {
   keywords?: string;
   /** Shows "Remote services available" without matching every location. */
   offersRemote?: boolean;
-  photos: { src: string; alt: string; width: number; height: number }[];
+  photos: PublicImage[];
+  /** Organization programs shown after the person's own services. */
+  organization?: OrganizationProfile | null;
   bio?: string | null;
   notice?: string | null;
   /** Founder line, shown on the profile when set. */
@@ -280,6 +305,336 @@ export const featuredPros: PublicPro[] = [
     bio: "Lam Tax Service, LLC was founded in 2016 by Lam Chuol, who brings more than four years of experience at H&R Block and a Bachelor of Science in Accounting from Ohio Valley University. The firm serves individuals and small businesses with accurate, affordable tax and accounting services. In 2023 it received the Initiative Foundation's New Business of the Year award.",
   },
   {
+    slug: "gatluak-thach",
+    name: "Dr. Gatluak Ter Thach, PhD",
+    category: "ngo",
+    categoryLabel: "NGO / Social Empowerment",
+    line: "NGO Leadership · Finance · Grant Writing Educator",
+    businessName: "Nashville International Center for Empowerment (NICE)",
+    serviceTypes: ["Charity", "Free/Volunteer", "Business"],
+    location: "417 Welshwood Drive, Ste. 100, Nashville, TN 37211",
+    image: {
+      src: "/images/gatluak/gatluak-thach.webp",
+      alt: "Dr. Gatluak Ter Thach.",
+      width: 1080,
+      height: 1080,
+      position: "center",
+    },
+    photos: [],
+    placeholder: false,
+    comingSoon: false,
+    profession: "Educator for NGO leadership and finance",
+    school: null,
+    industry: null,
+    years: null,
+    founder: "Founder, President and CEO (est. 2005)",
+    credentialBadges: ["PhD"],
+    titles: [
+      {
+        title: "Founder, President and CEO",
+        detail: "Nashville International Center for Empowerment (NICE), established in 2005.",
+      },
+      {
+        title: "White House Champion of Change for World Refugees",
+        detail: "Honored in 2015.",
+      },
+      {
+        title: "PhD in Organizational Leadership",
+        detail: "Emphasis on strategic planning. Argosy University, Nashville, Tennessee, 2014.",
+      },
+      {
+        title: "Master's degree in public service",
+        detail: "Cumberland University, Lebanon, Tennessee. Member of Pi Gamma Mu International Honor Society. Graduation year is not stated on the official biography.",
+      },
+      {
+        title: "B.S. in computer science",
+        detail: "Minor in mathematics. Tennessee State University, Nashville, Tennessee, 2003.",
+      },
+      {
+        title: "Author",
+        detail: "My New American Dream.",
+      },
+    ],
+    services: [
+      {
+        group: "Free",
+        name: "Starting an organization",
+        line: "Help for people who want to start an organization.",
+      },
+      {
+        group: "Free",
+        name: "Strategic planning",
+        line: "Advice for individuals on strategic planning.",
+      },
+      {
+        group: "Free",
+        name: "NGO leadership",
+        line: "How to form NGO leadership.",
+      },
+      {
+        group: "Free",
+        name: "NGO budgeting",
+        line: "Budgeting to sustain an NGO.",
+      },
+      {
+        group: "Mentorship",
+        name: "PhD mentorship",
+        line: "Mentoring PhD students.",
+      },
+      {
+        group: "Paid",
+        name: "Grant-proposal writing",
+        line: "Paid grant-proposal writing.",
+      },
+      {
+        group: "Paid",
+        name: "Grant writing class",
+        line: "Paid teaching on how to write grant proposals.",
+      },
+    ],
+    serviceAreas: "Middle Tennessee, including a Gallatin office",
+    email: null,
+    whatsapp: null,
+    website: "https://www.empowernashville.org/",
+    websiteLabel: "Website",
+    github: null,
+    linkedin: null,
+    remote: false,
+    searchTerms: "Nashville Tennessee TN Gallatin",
+    keywords:
+      "ngo nonprofit grant writing proposal leadership strategic planning budgeting finance mentorship phd refugee immigrant nashville tennessee tn nice empower",
+    bio: "Dr. Gatluak Ter Thach, PhD, is an educator for NGO leadership and finance and the founder and President/CEO of the Nashville International Center for Empowerment (NICE). He came to the United States in 1996 as a refugee from South Sudan and, as a Sudanese refugee leader, co-founded NICE in 2005 with other Sudanese refugee men and women. He earned a B.S. in computer science, with a minor in mathematics, from Tennessee State University in 2003, a master's degree in public service from Cumberland University, and a PhD in Organizational Leadership, with an emphasis on strategic planning, from Argosy University in 2014. In 2015 he was named a White House Champion of Change for World Refugees.",
+    organization: {
+      heading: "About NICE / Empower Nashville",
+      mission: "To ensure refugees and immigrants achieve their full potential now and for generations to come.",
+      summary:
+        "Nashville International Center for Empowerment (NICE) is a 501(c)(3) nonprofit based in South Nashville (EIN 02-0674431). It was established in 2005 and was formerly the Sudanese Community and Women's Service Center. Since 2010 it has been an affiliate of the Ethiopian Community Development Council. NICE serves refugees and immigrants in Middle Tennessee.",
+      mark: {
+        src: "/images/gatluak/nice-icon.webp",
+        alt: "Nashville International Center for Empowerment icon.",
+        width: 512,
+        height: 512,
+      },
+      groups: [
+        {
+          name: "Social Services",
+          items: [
+            {
+              name: "Employment support",
+              line: "One-on-one job coaching, resumes, applications, and interview prep, aimed at living-wage jobs with benefits.",
+            },
+            {
+              name: "Benefits navigation",
+              line: "Help applying for benefits such as SNAP and TennCare.",
+            },
+            {
+              name: "Case management",
+              line: "An assigned case manager for healthcare access, U.S. systems, and referrals to English classes when support is approved.",
+            },
+            {
+              name: "Preferred Communities",
+              line: "Intensive case management for elders, people with disabilities, survivors of violence and torture, and others with higher needs.",
+            },
+            {
+              name: "Arrival support",
+              line: "Caseworkers have met arrivals and arranged housing and basics. After the U.S. Refugee Admissions Program ended, this work shifted to neighbors already here.",
+            },
+            {
+              name: "Transportation support",
+              line: "Rides and transportation help named with the social services team.",
+            },
+            {
+              name: "Gallatin office",
+              line: "A second site in Gallatin helps refugees there with housing, jobs, social services, and case management.",
+            },
+            {
+              name: "Refugee Family Mentorship",
+              line: "Community mentors help recently arrived families with English, jobs, money, the bus, and everyday adjustment.",
+            },
+            {
+              name: "Bus Buddy",
+              line: "A volunteer walks a newcomer family to the school bus stop and helps them find the right bus.",
+            },
+          ],
+        },
+        {
+          name: "Adult Education",
+          items: [
+            {
+              name: "English classes",
+              line: "Classes from beginning literacy to high intermediate, online and at sites across Middle Tennessee, plus workshops on libraries, transit, police help, and medical care.",
+            },
+            {
+              name: "HiSET prep",
+              line: "An online class in math, reading, and social studies for a high school equivalency diploma. Intermediate English is required.",
+            },
+            {
+              name: "Citizenship classes",
+              line: "Civics, U.S. history, English, and interview practice, separate from help with a citizenship application.",
+            },
+            {
+              name: "Digital literacy",
+              line: "Computer-skills classes named in NICE's 2025 Impact Report.",
+            },
+            {
+              name: "Bilingual banking",
+              line: "A bilingual banking certificate class named in the 2025 Impact Report.",
+            },
+            {
+              name: "Career coaching",
+              line: "Intensive career coaching through the adult education team.",
+            },
+            {
+              name: "Childcare during English class",
+              line: "Free childcare while caregivers attend morning or evening English classes.",
+            },
+          ],
+        },
+        {
+          name: "Youth Education",
+          items: [
+            {
+              name: "Refugee School Impact",
+              line: "Help for eligible students with U.S. school orientation, enrollment, and case management soon after arrival.",
+            },
+            {
+              name: "After-school programs",
+              line: "Free after-school English, social-emotional learning, and homework help at named Metro Nashville middle schools.",
+            },
+            {
+              name: "Cultural awareness training",
+              line: "Free trainings for teachers, school administrators, and community groups on refugee and immigrant backgrounds.",
+            },
+            {
+              name: "Youth mentorship",
+              line: "Mentoring for new American children and youth on schoolwork, careers, life skills, and culture.",
+            },
+            {
+              name: "Summer camp",
+              line: "A weekday summer camp for elementary and middle school students with English, social-emotional learning, STEAM projects, and field trips.",
+            },
+          ],
+        },
+        {
+          name: "Employment",
+          items: [
+            {
+              name: "Job placement",
+              line: "One-on-one work with refugee clients on skills, credentials, and introductions to local employers.",
+            },
+            {
+              name: "Preferred Refugee Employer Network",
+              line: "A network of local employers that commit to inclusive workplace practices.",
+            },
+            {
+              name: "Career mentorship",
+              line: "Volunteer mentors advise on certification, licensure, and networking when a client's career interests match.",
+            },
+          ],
+        },
+        {
+          name: "Immigration",
+          items: [
+            {
+              name: "Citizenship applications",
+              line: "Help for adults and children with forms, documents, the interview, the oath, and getting ready to vote.",
+            },
+            {
+              name: "Citizenship certificate replacement",
+              line: "Help replacing a citizenship certificate.",
+            },
+            {
+              name: "Green Card applications",
+              line: "Help applying for a Green Card.",
+            },
+            {
+              name: "Green Card replacement and renewal",
+              line: "Help replacing or renewing a Green Card.",
+            },
+            {
+              name: "Removal of conditions",
+              line: "Help for Green Card holders who need conditions removed.",
+            },
+            {
+              name: "Family reunification",
+              line: "Help with family reunification.",
+            },
+            {
+              name: "Fiancé visa",
+              line: "Help with a fiancé visa.",
+            },
+            {
+              name: "Employment authorization",
+              line: "Help applying for employment authorization.",
+            },
+            {
+              name: "Travel documents",
+              line: "Help with travel documents.",
+            },
+            {
+              name: "Temporary Protected Status",
+              line: "Help with Temporary Protected Status. The NICE site spells this “Temporary Protective Status.”",
+            },
+            {
+              name: "Notary public",
+              line: "Public notarization.",
+            },
+          ],
+        },
+        {
+          name: "Health",
+          items: [
+            {
+              name: "Health case management",
+              line: "Help with medical and mental-health issues, insurance, government services, and learning U.S. systems.",
+            },
+            {
+              name: "Health education",
+              line: "Classes on chronic disease, nutrition, activity, mental health, stress, and vaccines, including community vaccine drives.",
+            },
+            {
+              name: "Mental health and resiliency",
+              line: "Trauma-informed help finding care, plus workshops, group talks, and community activities.",
+            },
+            {
+              name: "MIHOW",
+              line: "A Vanderbilt partnership. Peer mentors visit pregnant women and families with children from birth to age 3.",
+            },
+            {
+              name: "Healthcare navigation",
+              line: "Help finding doctors, understanding insurance, and getting to first appointments.",
+            },
+            {
+              name: "Health outreach",
+              line: "Community health events named in the 2025 Impact Report, such as navigation fairs and women's groups.",
+            },
+            {
+              name: "Partner health guides",
+              line: "Health handbooks and a Medicare guide from partner agencies, shared in several languages.",
+            },
+          ],
+        },
+        {
+          name: "Community",
+          items: [
+            {
+              name: "NICE Voices",
+              line: "Trained refugee and immigrant storytellers can be booked for classrooms, faith gatherings, and other events.",
+            },
+            {
+              name: "Advocacy",
+              line: "Speaking up for refugees and immigrants by building relationships with local elected officials.",
+            },
+            {
+              name: "Welcome donations",
+              line: "Household items, gently used furniture, and thrift donations that support arriving families.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     slug: "finance",
     name: "Finance",
     category: "finance",
@@ -477,9 +832,13 @@ export function filterPros(
     if (!keyword) return true;
     const name = pro.name.toLowerCase();
     const business = (pro.businessName ?? "").trim().toLowerCase();
-    const serviceWords = pro.services.flatMap((service) =>
-      `${service.name} ${service.line}`.toLowerCase().split(/[^a-z0-9]+/),
+    const orgWords = (pro.organization?.groups ?? []).flatMap((group) =>
+      group.items.flatMap((item) => `${group.name} ${item.name} ${item.line}`.toLowerCase().split(/[^a-z0-9]+/)),
     );
+    const serviceWords = [
+      ...pro.services.flatMap((service) => `${service.group ?? ""} ${service.name} ${service.line}`.toLowerCase().split(/[^a-z0-9]+/)),
+      ...orgWords,
+    ];
     const keywordWords = (pro.keywords ?? "").toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
     const words = keyword.split(/[^a-z0-9]+/).filter(Boolean);
     const servicesMatch = words.length > 0 && words.every((word) => serviceWords.includes(word));

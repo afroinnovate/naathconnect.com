@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { categoryOptions, featuredPros, filterPros, homepageProfessionals, type PublicPro } from "../lib/featured-pros";
+import { profileLinks } from "../components/ProfileLinks";
 import { HOME_PURPOSE, HOME_QUOTE, HOME_QUOTE_ATTRIBUTION, HOME_QUOTE_CLOSE, HOME_QUOTE_GLOSS, HOME_QUOTE_OPEN } from "../lib/home";
 import { openSqliteStore } from "../lib/sqlite-store";
 import { parseServiceTypes } from "../lib/service-types";
@@ -39,14 +40,14 @@ describe("directory filters", () => {
     const volunteer = filterPros(featuredPros, { type: "Free/Volunteer" }).map((pro) => pro.slug);
     const business = filterPros(featuredPros, { type: "Business" }).map((pro) => pro.slug);
     const charity = filterPros(featuredPros, { type: "Charity" }).map((pro) => pro.slug);
-    assert.deepEqual(volunteer, ["tango-tew"]);
-    assert.deepEqual(business, ["tango-tew", "lam-tax-service"]);
-    assert.deepEqual(charity, ["gatbel-chamjock"]);
+    assert.deepEqual(volunteer, ["tango-tew", "gatluak-thach"]);
+    assert.deepEqual(business, ["tango-tew", "lam-tax-service", "gatluak-thach"]);
+    assert.deepEqual(charity, ["gatbel-chamjock", "gatluak-thach"]);
 
     const unset = withName(featuredPros[2], "lam-tax-demo", "Lam Tax Service", "Lam Tax Service");
     unset.serviceTypes = [];
     const people = [...featuredPros, unset];
-    assert.deepEqual(filterPros(people, { type: "Charity" }).map((pro) => pro.slug), ["gatbel-chamjock"]);
+    assert.deepEqual(filterPros(people, { type: "Charity" }).map((pro) => pro.slug), ["gatbel-chamjock", "gatluak-thach"]);
     assert.ok(filterPros(people, {}).some((pro) => pro.slug === "lam-tax-demo"));
     assert.equal(filterPros(people, { type: "Business" }).some((pro) => pro.slug === "lam-tax-demo"), false);
 
@@ -68,10 +69,10 @@ describe("directory filters", () => {
     assert.deepEqual(slugs({ category: "medical" }), ["gatbel-chamjock"]);
     assert.deepEqual(slugs({ category: "TECH" }), ["tango-tew"]);
     assert.deepEqual(slugs({ category: "Tech" }), ["tango-tew"]);
-    assert.deepEqual(slugs({ type: "Charity" }), ["gatbel-chamjock"]);
-    assert.deepEqual(slugs({ type: "business" }), ["tango-tew", "lam-tax-service"]);
+    assert.deepEqual(slugs({ type: "Charity" }), ["gatbel-chamjock", "gatluak-thach"]);
+    assert.deepEqual(slugs({ type: "business" }), ["tango-tew", "lam-tax-service", "gatluak-thach"]);
     assert.deepEqual(slugs({ q: "Tang" }), ["tango-tew"]);
-    assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock", "lam-tax-service"]);
+    assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock", "lam-tax-service", "gatluak-thach"]);
 
     const renamed = featuredPros.map((pro) =>
       pro.slug === "gatbel-chamjock" ? { ...pro, category: "pa", categoryLabel: "Medical" } : pro,
@@ -93,7 +94,7 @@ describe("directory filters", () => {
     for (const keyword of ["Tang", "tango", "  Tango Tew "]) {
       assert.deepEqual(filterPros(people, { q: keyword }).map((pro) => pro.slug), ["tango-tew"], keyword);
     }
-    assert.deepEqual(filterPros(people, { q: "Gat" }).map((pro) => pro.slug), ["gatbel-chamjock"]);
+    assert.deepEqual(filterPros(people, { q: "Gat" }).map((pro) => pro.slug), ["gatbel-chamjock", "gatluak-thach"]);
     assert.deepEqual(filterPros(people, { q: "bright" }).map((pro) => pro.slug), ["ada-books"]);
     assert.deepEqual(filterPros(people, { q: "okoth" }).map((pro) => pro.slug), ["ada-books"]);
     assert.deepEqual(filterPros(people, { q: "nomatch" }), []);
@@ -149,6 +150,99 @@ describe("directory filters", () => {
     assert.match(profile, /Remote services available/);
   });
 
+  it("lists Dr. Gatluak Ter Thach and finds him by NGO, grant, and Nashville words", () => {
+    const gat = featuredPros.find((pro) => pro.slug === "gatluak-thach");
+    assert.equal(gat?.placeholder, false);
+    assert.equal(gat?.name, "Dr. Gatluak Ter Thach, PhD");
+    assert.equal(gat?.line, "NGO Leadership · Finance · Grant Writing Educator");
+    assert.equal(gat?.profession, "Educator for NGO leadership and finance");
+    assert.equal(gat?.category, "ngo");
+    assert.equal(gat?.categoryLabel, "NGO / Social Empowerment");
+    assert.deepEqual(gat?.serviceTypes, ["Charity", "Free/Volunteer", "Business"]);
+    assert.deepEqual(gat?.credentialBadges, ["PhD"]);
+    assert.equal(gat?.businessName, "Nashville International Center for Empowerment (NICE)");
+    assert.equal(gat?.location, "417 Welshwood Drive, Ste. 100, Nashville, TN 37211");
+    assert.equal(gat?.website, "https://www.empowernashville.org/");
+    assert.equal(gat?.email, null);
+    assert.equal(gat?.whatsapp, null);
+    assert.equal(gat?.remote, false);
+    assert.equal(gat?.offersRemote, undefined);
+    assert.equal("phone" in (gat ?? {}), false);
+    assert.match(gat?.image.src ?? "", /gatluak-thach\.webp$/);
+    assert.equal(gat?.image.width, 1080);
+    assert.equal(gat?.image.height, 1080);
+    assert.equal(gat?.image.position, "center");
+    assert.equal(
+      gat?.organization?.mission,
+      "To ensure refugees and immigrants achieve their full potential now and for generations to come.",
+    );
+    assert.equal(gat?.organization?.heading, "About NICE / Empower Nashville");
+    assert.deepEqual(
+      gat?.organization?.groups.map((group) => group.name),
+      ["Social Services", "Adult Education", "Youth Education", "Employment", "Immigration", "Health", "Community"],
+    );
+    const programNames = gat?.organization?.groups.flatMap((group) => group.items.map((item) => item.name)) ?? [];
+    for (const name of [
+      "Gallatin office",
+      "Refugee Family Mentorship",
+      "Digital literacy",
+      "Bilingual banking",
+      "NICE Voices",
+    ]) {
+      assert.ok(programNames.includes(name), name);
+    }
+    assert.equal(programNames.some((name) => /driver/i.test(name)), false);
+    assert.deepEqual(
+      gat?.services.map((service) => service.group),
+      ["Free", "Free", "Free", "Free", "Mentorship", "Paid", "Paid"],
+    );
+    assert.deepEqual(profileLinks(gat!), [{ href: "https://www.empowernashville.org/", label: "Website", globe: true }]);
+    assert.deepEqual(
+      categoryOptions(featuredPros).find((option) => option.value === "ngo"),
+      { value: "ngo", label: "NGO / Social Empowerment" },
+    );
+    const published = JSON.stringify(gat);
+    assert.doesNotMatch(published, /harvard|adjunct|tel:|315[\s.\-]*9681|207[\s.\-]*1686|Duang|Selena|Nyakuma/i);
+    assert.match(published, /White House Champion of Change for World Refugees/);
+    assert.match(published, /Tennessee State University/);
+    assert.match(published, /Cumberland University/);
+    assert.match(published, /Argosy University/);
+    assert.doesNotMatch(published, /founded in 2003/i);
+    for (const keyword of [
+      "nonprofit",
+      "grant",
+      "grant writing",
+      "grant proposal",
+      "leadership",
+      "strategic planning",
+      "budgeting",
+      "finance",
+      "mentorship",
+      "refugee",
+      "immigrant",
+      "Nashville",
+      "Tennessee",
+      "TN",
+      "NICE",
+      "Empower Nashville",
+      "Gatluak",
+      "Thach",
+    ]) {
+      assert.deepEqual(filterPros(featuredPros, { q: keyword }).map((pro) => pro.slug), ["gatluak-thach"], keyword);
+    }
+    for (const keyword of ["NGO", "PhD"]) {
+      assert.ok(filterPros(featuredPros, { q: keyword }).some((pro) => pro.slug === "gatluak-thach"), keyword);
+    }
+    for (const location of ["Nashville", "Tennessee", "TN", "Gallatin", "37211"]) {
+      assert.deepEqual(
+        filterPros(featuredPros, { category: "ngo", location }).map((pro) => pro.slug),
+        ["gatluak-thach"],
+        location,
+      );
+    }
+    assert.equal(filterPros(featuredPros, { category: "ngo", location: "Omaha" }).length, 0);
+  });
+
   it("leaves demo accounts untyped when the column is missing or empty", () => {
     assert.deepEqual(parseServiceTypes(undefined), []);
     assert.deepEqual(parseServiceTypes(null), []);
@@ -175,6 +269,7 @@ describe("homepage professionals", () => {
       "/pros/tango-tew",
       "/pros/gatbel-chamjock",
       "/pros/lam-tax-service",
+      "/pros/gatluak-thach",
     ]);
     assert.equal(people.some((pro) => pro.placeholder), false);
 
