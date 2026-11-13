@@ -112,7 +112,12 @@ describe("directory filters", () => {
     assert.equal(lam?.whatsapp, null);
     assert.deepEqual(lam?.serviceTypes, ["Business"]);
     assert.match(lam?.bio ?? "", /founded in 2016 by Lam Chuol/);
-    assert.match(lam?.image.src ?? "", /lam-chuol\.webp$/);
+    assert.match(lam?.image.src ?? "", /lam-portrait\.webp$/);
+    assert.equal(lam?.image.width, 523);
+    assert.equal(lam?.image.height, 630);
+    assert.equal(lam?.remote, false);
+    assert.equal(lam?.offersRemote, true);
+    assert.equal("phone" in (lam ?? {}), false);
     assert.equal(featuredPros.some((pro) => pro.placeholder && pro.category === "tax"), false);
     for (const location of ["St. Cloud", "Saint Cloud", "MN", "Minnesota", "56304"]) {
       assert.deepEqual(
@@ -129,7 +134,19 @@ describe("directory filters", () => {
       );
     }
     assert.ok(filterPros(featuredPros, { q: "tax" }).some((pro) => pro.slug === "lam-tax-service"));
-    assert.doesNotMatch(`${lam?.bio} ${lam?.location} ${lam?.line}`, /tel:/);
+    for (const keyword of ["filing", "filling", "Minnesota", "MN", "remote", "remote services"]) {
+      assert.deepEqual(
+        filterPros(featuredPros, { q: keyword }).map((pro) => pro.slug),
+        ["lam-tax-service"],
+        keyword,
+      );
+    }
+    assert.equal(filterPros(featuredPros, { q: "cloud" }).some((pro) => pro.slug === "lam-tax-service"), false);
+    assert.doesNotMatch(`${lam?.bio} ${lam?.location} ${lam?.line} ${lam?.keywords}`, /tel:/);
+    const tile = readFileSync("components/ProTile.tsx", "utf8");
+    const profile = readFileSync("components/ProView.tsx", "utf8");
+    assert.match(tile, /Remote services available/);
+    assert.match(profile, /Remote services available/);
   });
 
   it("leaves demo accounts untyped when the column is missing or empty", () => {

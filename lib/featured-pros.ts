@@ -47,6 +47,10 @@ export type PublicPro = {
   remote: boolean;
   /** Extra words that should find this professional. */
   searchTerms: string;
+  /** Whole-word aliases for the directory name search. */
+  keywords?: string;
+  /** Shows "Remote services available" without matching every location. */
+  offersRemote?: boolean;
   photos: { src: string; alt: string; width: number; height: number }[];
   bio?: string | null;
   notice?: string | null;
@@ -237,10 +241,10 @@ export const featuredPros: PublicPro[] = [
     serviceTypes: ["Business"],
     location: "22 Wilson Ave NE, Suite 201, St. Cloud, MN 56304",
     image: {
-      src: "/images/lam/lam-chuol.webp",
+      src: "/images/lam/lam-portrait.webp",
       alt: "Lam Chuol.",
-      width: 439,
-      height: 707,
+      width: 523,
+      height: 630,
     },
     photos: [],
     placeholder: false,
@@ -270,7 +274,9 @@ export const featuredPros: PublicPro[] = [
     github: null,
     linkedin: null,
     remote: false,
+    offersRemote: true,
     searchTerms: "Saint Cloud",
+    keywords: "tax filing filling Minnesota MN remote services",
     bio: "Lam Tax Service, LLC was founded in 2016 by Lam Chuol, who brings more than four years of experience at H&R Block and a Bachelor of Science in Accounting from Ohio Valley University. The firm serves individuals and small businesses with accurate, affordable tax and accounting services. In 2023 it received the Initiative Foundation's New Business of the Year award.",
   },
   {
@@ -474,8 +480,10 @@ export function filterPros(
     const serviceWords = pro.services.flatMap((service) =>
       `${service.name} ${service.line}`.toLowerCase().split(/[^a-z0-9]+/),
     );
+    const keywordWords = (pro.keywords ?? "").toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
     const words = keyword.split(/[^a-z0-9]+/).filter(Boolean);
     const servicesMatch = words.length > 0 && words.every((word) => serviceWords.includes(word));
-    return name.includes(keyword) || (business.length > 0 && business.includes(keyword)) || servicesMatch;
+    const keywordsMatch = words.length > 0 && words.every((word) => keywordWords.includes(word));
+    return name.includes(keyword) || (business.length > 0 && business.includes(keyword)) || servicesMatch || keywordsMatch;
   });
 }
