@@ -40,7 +40,7 @@ describe("directory filters", () => {
     const business = filterPros(featuredPros, { type: "Business" }).map((pro) => pro.slug);
     const charity = filterPros(featuredPros, { type: "Charity" }).map((pro) => pro.slug);
     assert.deepEqual(volunteer, ["tango-tew"]);
-    assert.deepEqual(business, ["tango-tew"]);
+    assert.deepEqual(business, ["tango-tew", "lam-tax-service"]);
     assert.deepEqual(charity, ["gatbel-chamjock"]);
 
     const unset = withName(featuredPros[2], "lam-tax-demo", "Lam Tax Service", "Lam Tax Service");
@@ -69,9 +69,9 @@ describe("directory filters", () => {
     assert.deepEqual(slugs({ category: "TECH" }), ["tango-tew"]);
     assert.deepEqual(slugs({ category: "Tech" }), ["tango-tew"]);
     assert.deepEqual(slugs({ type: "Charity" }), ["gatbel-chamjock"]);
-    assert.deepEqual(slugs({ type: "business" }), ["tango-tew"]);
+    assert.deepEqual(slugs({ type: "business" }), ["tango-tew", "lam-tax-service"]);
     assert.deepEqual(slugs({ q: "Tang" }), ["tango-tew"]);
-    assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock"]);
+    assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock", "lam-tax-service"]);
 
     const renamed = featuredPros.map((pro) =>
       pro.slug === "gatbel-chamjock" ? { ...pro, category: "pa", categoryLabel: "Medical" } : pro,
@@ -99,6 +99,39 @@ describe("directory filters", () => {
     assert.deepEqual(filterPros(people, { q: "nomatch" }), []);
   });
 
+  it("lists Lam Tax Service in St. Cloud and finds the firm by place or service", () => {
+    const lam = featuredPros.find((pro) => pro.slug === "lam-tax-service");
+    assert.equal(lam?.placeholder, false);
+    assert.equal(lam?.name, "Lam Tax Service, LLC");
+    assert.equal(lam?.line, "Tax preparation, bookkeeping and payroll in St. Cloud, MN");
+    assert.equal(lam?.founder, "Lam Chuol, founder (est. 2016)");
+    assert.equal(lam?.location, "22 Wilson Ave NE, Suite 201, St. Cloud, MN 56304");
+    assert.equal(lam?.serviceAreas, "St. Cloud, Minnesota (in person)");
+    assert.equal(lam?.website, "https://lamtaxservice.com");
+    assert.equal(lam?.email, "info@lamtaxservice.com");
+    assert.equal(lam?.whatsapp, null);
+    assert.deepEqual(lam?.serviceTypes, ["Business"]);
+    assert.match(lam?.bio ?? "", /founded in 2016 by Lam Chuol/);
+    assert.match(lam?.image.src ?? "", /tax-shop\.svg$/);
+    assert.equal(featuredPros.some((pro) => pro.placeholder && pro.category === "tax"), false);
+    for (const location of ["St. Cloud", "Saint Cloud", "MN", "Minnesota", "56304"]) {
+      assert.deepEqual(
+        filterPros(featuredPros, { category: "tax", location }).map((pro) => pro.slug),
+        ["lam-tax-service"],
+        location,
+      );
+    }
+    for (const keyword of ["bookkeeping", "payroll", "QuickBooks"]) {
+      assert.deepEqual(
+        filterPros(featuredPros, { q: keyword }).map((pro) => pro.slug),
+        ["lam-tax-service"],
+        keyword,
+      );
+    }
+    assert.ok(filterPros(featuredPros, { q: "tax" }).some((pro) => pro.slug === "lam-tax-service"));
+    assert.doesNotMatch(`${lam?.bio} ${lam?.location} ${lam?.line}`, /tel:/);
+  });
+
   it("leaves demo accounts untyped when the column is missing or empty", () => {
     assert.deepEqual(parseServiceTypes(undefined), []);
     assert.deepEqual(parseServiceTypes(null), []);
@@ -121,7 +154,11 @@ describe("homepage professionals", () => {
       people.map((pro) => pro.slug),
       filterPros(featuredPros, {}).map((pro) => pro.slug),
     );
-    assert.deepEqual(people.map((pro) => `/pros/${pro.slug}`), ["/pros/tango-tew", "/pros/gatbel-chamjock"]);
+    assert.deepEqual(people.map((pro) => `/pros/${pro.slug}`), [
+      "/pros/tango-tew",
+      "/pros/gatbel-chamjock",
+      "/pros/lam-tax-service",
+    ]);
     assert.equal(people.some((pro) => pro.placeholder), false);
 
     const page = readFileSync("app/page.tsx", "utf8");

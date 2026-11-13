@@ -62,13 +62,13 @@ describe("featured professionals", () => {
       featuredPros.filter((pro) => pro.placeholder || pro.comingSoon).every((pro) => pro.serviceTypes.length === 0),
       true,
     );
-    assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 2);
+    assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 3);
   });
 
   it("filters by category, keyword, and location", () => {
     assert.deepEqual(
       filterPros(featuredPros, { category: "tax" }).map((pro) => pro.slug),
-      [],
+      ["lam-tax-service"],
     );
     for (const keyword of ["Tang", "tango", "TANGO"]) {
       assert.deepEqual(
@@ -90,10 +90,7 @@ describe("featured professionals", () => {
       const slugs = filterPros(featuredPros, { category: "medical", location }).map((pro) => pro.slug);
       assert.deepEqual(slugs, ["gatbel-chamjock"], location);
     }
-    assert.equal(
-      featuredPros.some((pro) => /lam tax/i.test(pro.name)),
-      false,
-    );
+    assert.equal(featuredPros.some((pro) => pro.slug === "lam-tax-service" && !pro.placeholder), true);
   });
 
   it("keeps one card when an approved account repeats a curated professional", () => {

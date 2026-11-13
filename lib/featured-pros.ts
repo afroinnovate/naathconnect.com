@@ -6,6 +6,8 @@ export type ServiceTile = {
   name: string;
   line: string;
   slides?: readonly string[];
+  /** Compact icon for a shop service. These do not open a service page. */
+  icon?: string;
 };
 
 export type ProfilePoint = {
@@ -48,6 +50,8 @@ export type PublicPro = {
   photos: { src: string; alt: string; width: number; height: number }[];
   bio?: string | null;
   notice?: string | null;
+  /** Founder line, shown on the profile when set. */
+  founder?: string | null;
   /** Short credentials shown as badges, such as DrPH. */
   credentialBadges?: readonly string[];
   /** Professional experience, already ordered by impact. */
@@ -224,36 +228,50 @@ export const featuredPros: PublicPro[] = [
     notice: "Information for general education. For emergencies call 911.",
   },
   {
-    slug: "taxation",
-    name: "Taxation",
+    slug: "lam-tax-service",
+    name: "Lam Tax Service, LLC",
     category: "tax",
     categoryLabel: "Tax",
-    line: "Coming soon.",
-    businessName: null,
-    serviceTypes: [],
-    location: "Placeholder location",
+    line: "Tax preparation, bookkeeping and payroll in St. Cloud, MN",
+    businessName: "Lam Tax Service, LLC",
+    serviceTypes: ["Business"],
+    location: "22 Wilson Ave NE, Suite 201, St. Cloud, MN 56304",
     image: {
-      src: "/images/placeholders/tax.svg",
-      alt: "Placeholder graphic for a tax professional.",
+      src: "/images/placeholders/tax-shop.svg",
+      alt: "Calculator icon for Lam Tax Service.",
       width: 800,
       height: 1000,
     },
-    placeholder: true,
-    comingSoon: true,
+    photos: [],
+    placeholder: false,
+    comingSoon: false,
     profession: null,
     school: null,
     industry: null,
     years: null,
-    services: [],
-    serviceAreas: null,
-    email: null,
+    founder: "Lam Chuol, founder (est. 2016)",
+    services: [
+      { name: "Personal tax returns", line: "W-2 and 1099.", icon: "file" },
+      { name: "Small business taxes", line: "LLC, partnership 1065, S-Corp 1120S, and C-Corp 1120.", icon: "folder" },
+      { name: "MN property tax and renter refunds", line: "Minnesota property tax and renter refunds.", icon: "refund" },
+      { name: "Bookkeeping", line: "Bookkeeping for small businesses.", icon: "book" },
+      { name: "Payroll", line: "Payroll.", icon: "card" },
+      { name: "QuickBooks setup and training", line: "QuickBooks setup and training.", icon: "monitor" },
+      { name: "Sales tax reporting", line: "Sales tax reporting.", icon: "archive" },
+      { name: "Accounts payable and receivable", line: "Accounts payable and receivable.", icon: "layers" },
+      { name: "Monthly financial statements", line: "Monthly financial statements.", icon: "calendar" },
+      { name: "Business entity selection", line: "Business entity selection.", icon: "puzzle" },
+    ],
+    serviceAreas: "St. Cloud, Minnesota (in person)",
+    email: "info@lamtaxservice.com",
     whatsapp: null,
-    website: null,
+    website: "https://lamtaxservice.com",
+    websiteLabel: "Website",
     github: null,
     linkedin: null,
     remote: false,
-    searchTerms: "",
-    photos: [],
+    searchTerms: "Saint Cloud",
+    bio: "Lam Tax Service, LLC was founded in 2016 by Lam Chuol, who brings more than four years of experience at H&R Block and a Bachelor of Science in Accounting from Ohio Valley University. The firm serves individuals and small businesses with accurate, affordable tax and accounting services. In 2023 it received the Initiative Foundation's New Business of the Year award.",
   },
   {
     slug: "finance",
@@ -424,6 +442,11 @@ export function homepageProfessionals(pros: PublicPro[]): PublicPro[] {
   return filterPros(pros, {});
 }
 
+function placeHaystack(pro: PublicPro): string {
+  const raw = `${pro.location ?? ""} ${pro.serviceAreas ?? ""} ${pro.searchTerms}`.toLowerCase();
+  return raw.replace(/\bst\.?\s+cloud\b/g, "st. cloud st cloud saint cloud");
+}
+
 export function filterPros(
   pros: PublicPro[],
   query: { q?: string; category?: string; location?: string; type?: string },
@@ -441,12 +464,18 @@ export function filterPros(
     }
     if (type && !pro.serviceTypes.includes(type)) return false;
     if (location && !pro.remote) {
-      const where = `${pro.location ?? ""} ${pro.serviceAreas ?? ""}`.toLowerCase();
-      if (!where.includes(location)) return false;
+      const where = placeHaystack(pro);
+      const wanted = location.replace(/\bsaint\s+cloud\b/g, "saint cloud");
+      if (!where.includes(wanted)) return false;
     }
     if (!keyword) return true;
     const name = pro.name.toLowerCase();
     const business = (pro.businessName ?? "").trim().toLowerCase();
-    return name.includes(keyword) || (business.length > 0 && business.includes(keyword));
+    const serviceWords = pro.services.flatMap((service) =>
+      `${service.name} ${service.line}`.toLowerCase().split(/[^a-z0-9]+/),
+    );
+    const words = keyword.split(/[^a-z0-9]+/).filter(Boolean);
+    const servicesMatch = words.length > 0 && words.every((word) => serviceWords.includes(word));
+    return name.includes(keyword) || (business.length > 0 && business.includes(keyword)) || servicesMatch;
   });
 }

@@ -2,7 +2,12 @@ import Image from "next/image";
 import type { PublicPro } from "@/lib/featured-pros";
 import { serviceOffers, servicePath, serviceSlideIcons } from "@/lib/services";
 import { ProfileLinks, profileLinks } from "./ProfileLinks";
+import { ServiceIcon } from "./ServiceIcon";
 import { ServiceSlideshow } from "./ServiceSlideshow";
+
+function mapsSearchUrl(address: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
 
 export function ProView({ pro }: { pro: PublicPro }) {
   const svg = pro.image.src.endsWith(".svg");
@@ -91,6 +96,22 @@ export function ProView({ pro }: { pro: PublicPro }) {
               <dd>{pro.years}</dd>
             </div>
           ) : null}
+          {pro.founder ? (
+            <div>
+              <dt>Founder</dt>
+              <dd>{pro.founder}</dd>
+            </div>
+          ) : null}
+          {pro.location && !pro.placeholder ? (
+            <div>
+              <dt>Address</dt>
+              <dd>
+                <a href={mapsSearchUrl(pro.location)} target="_blank" rel="noreferrer">
+                  {pro.location}
+                </a>
+              </dd>
+            </div>
+          ) : null}
           {pro.serviceAreas ? (
             <div>
               <dt>Where</dt>
@@ -98,7 +119,22 @@ export function ProView({ pro }: { pro: PublicPro }) {
             </div>
           ) : null}
         </dl>
-        {pro.services.length > 0 ? (
+        {pro.services.some((service) => service.icon) ? (
+          <section className="profile-section">
+            <h2>Services</h2>
+            <ul className="shop-services">
+              {pro.services.map((service) => (
+                <li key={service.name}>
+                  <span className="shop-icon">
+                    <ServiceIcon name={service.icon ?? ""} />
+                  </span>
+                  <strong>{service.name}</strong>
+                  <span>{service.line}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : pro.services.length > 0 ? (
           <div className="service-board">
             {pro.services.map((service, index) => {
               const offer = serviceOffers.find((item) => item.name === service.name);

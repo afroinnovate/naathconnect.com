@@ -190,6 +190,12 @@ const icons: Record<string, ReactNode> = {
       <path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 0-3 3zM5 4v16" {...stroke} />
     </Frame>
   ),
+  refund: (
+    <Frame>
+      <path d="M4 10.5 12 4l8 6.5V20H4z" {...stroke} />
+      <path d="M10 20v-6h4v6" {...stroke} />
+    </Frame>
+  ),
 };
 
 export function ServiceIcon({ name }: { name: string }) {
