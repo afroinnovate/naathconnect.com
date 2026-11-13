@@ -40,7 +40,7 @@ describe("directory filters", () => {
     const business = filterPros(featuredPros, { type: "Business" }).map((pro) => pro.slug);
     const charity = filterPros(featuredPros, { type: "Charity" }).map((pro) => pro.slug);
     assert.deepEqual(volunteer, ["tango-tew"]);
-    assert.deepEqual(business, ["tango-tew"]);
+    assert.deepEqual(business, ["tango-tew", "yat-auto-repair"]);
     assert.deepEqual(charity, ["gatbel-chamjock"]);
 
     const unset = withName(featuredPros[2], "lam-tax-demo", "Lam Tax Service", "Lam Tax Service");
@@ -69,9 +69,9 @@ describe("directory filters", () => {
     assert.deepEqual(slugs({ category: "TECH" }), ["tango-tew"]);
     assert.deepEqual(slugs({ category: "Tech" }), ["tango-tew"]);
     assert.deepEqual(slugs({ type: "Charity" }), ["gatbel-chamjock"]);
-    assert.deepEqual(slugs({ type: "business" }), ["tango-tew"]);
+    assert.deepEqual(slugs({ type: "business" }), ["tango-tew", "yat-auto-repair"]);
     assert.deepEqual(slugs({ q: "Tang" }), ["tango-tew"]);
-    assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock"]);
+    assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock", "yat-auto-repair"]);
 
     const renamed = featuredPros.map((pro) =>
       pro.slug === "gatbel-chamjock" ? { ...pro, category: "pa", categoryLabel: "Medical" } : pro,
@@ -99,6 +99,62 @@ describe("directory filters", () => {
     assert.deepEqual(filterPros(people, { q: "nomatch" }), []);
   });
 
+  it("finds Yat Auto Repair by city, state, and street address", () => {
+    const yat = featuredPros.find((pro) => pro.slug === "yat-auto-repair");
+    assert.equal(yat?.placeholder, false);
+    assert.equal(yat?.comingSoon, false);
+    assert.equal(yat?.name, "Yat Auto Repair");
+    assert.equal(yat?.line, "Auto repair shop");
+    assert.equal(yat?.location, "105 5th Ave NE, Le Mars, IA 51031");
+    assert.equal(yat?.serviceAreas, "Le Mars, Iowa (in person)");
+    assert.equal(yat?.bio, "Full-service auto repair shop in Le Mars, Iowa, handling everything from tires and brakes to engine work.");
+    assert.equal(yat?.serviceSummary, "From tires and brakes to engine work.");
+    assert.deepEqual(
+      yat?.services.map((service) => service.name),
+      [
+        "Tires",
+        "Oil changes and fluids",
+        "Brakes",
+        "Batteries and electrical",
+        "Suspension and steering",
+        "Alignment",
+        "Exhaust",
+        "AC and heating",
+        "Diagnostics and check engine light",
+        "Transmission",
+        "Engine repair",
+      ],
+    );
+    for (const keyword of ["tires", "brakes", "engine"]) {
+      assert.deepEqual(
+        filterPros(featuredPros, { q: keyword }).map((pro) => pro.slug),
+        ["yat-auto-repair"],
+        keyword,
+      );
+    }
+    assert.deepEqual(yat?.serviceTypes, ["Business"]);
+    assert.equal(yat?.phone?.label, "(402) 937-2554");
+    assert.equal(yat?.phone?.href, "tel:+14029372554");
+    assert.equal(yat?.email, null);
+    assert.equal(yat?.whatsapp, null);
+    assert.equal(featuredPros.filter((pro) => pro.phone).map((pro) => pro.slug).join(), "yat-auto-repair");
+    assert.match(yat?.image.src ?? "", /auto-shop\.svg$/);
+    assert.equal(featuredPros.some((pro) => pro.placeholder && pro.category === "auto"), false);
+
+    for (const location of ["Le Mars", "Le Mars, IA", "Iowa", "51031", "5th Ave"]) {
+      assert.deepEqual(
+        filterPros(featuredPros, { category: "auto", location }).map((pro) => pro.slug),
+        ["yat-auto-repair"],
+        location,
+      );
+    }
+    assert.deepEqual(filterPros(featuredPros, { category: "Auto" }).map((pro) => pro.slug), ["yat-auto-repair"]);
+    assert.equal(filterPros(featuredPros, { type: "Business" }).some((pro) => pro.slug === "yat-auto-repair"), true);
+    assert.equal(filterPros(featuredPros, { type: "Charity" }).some((pro) => pro.slug === "yat-auto-repair"), false);
+    assert.ok(homepageProfessionals(featuredPros).some((pro) => pro.slug === "yat-auto-repair"));
+    assert.doesNotMatch(`${yat?.bio} ${yat?.location} ${yat?.line}`, /tel:/);
+  });
+
   it("leaves demo accounts untyped when the column is missing or empty", () => {
     assert.deepEqual(parseServiceTypes(undefined), []);
     assert.deepEqual(parseServiceTypes(null), []);
@@ -121,7 +177,11 @@ describe("homepage professionals", () => {
       people.map((pro) => pro.slug),
       filterPros(featuredPros, {}).map((pro) => pro.slug),
     );
-    assert.deepEqual(people.map((pro) => `/pros/${pro.slug}`), ["/pros/tango-tew", "/pros/gatbel-chamjock"]);
+    assert.deepEqual(people.map((pro) => `/pros/${pro.slug}`), [
+      "/pros/tango-tew",
+      "/pros/gatbel-chamjock",
+      "/pros/yat-auto-repair",
+    ]);
     assert.equal(people.some((pro) => pro.placeholder), false);
 
     const page = readFileSync("app/page.tsx", "utf8");

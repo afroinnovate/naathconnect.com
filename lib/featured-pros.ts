@@ -6,6 +6,8 @@ export type ServiceTile = {
   name: string;
   line: string;
   slides?: readonly string[];
+  /** Compact shop-service icon. These do not open a service page. */
+  icon?: string;
 };
 
 export type PublicPro = {
@@ -40,9 +42,13 @@ export type PublicPro = {
   remote: boolean;
   /** Extra words that should find this professional. */
   searchTerms: string;
+  /** Short services line for the directory card. */
+  serviceSummary?: string | null;
   photos: { src: string; alt: string; width: number; height: number }[];
   bio?: string | null;
   notice?: string | null;
+  /** Shown only when Tango has approved a number for this listing. */
+  phone?: { label: string; href: string } | null;
 };
 
 const tangoServices: ServiceTile[] = serviceOffers.map((service) => ({
@@ -162,6 +168,53 @@ export const featuredPros: PublicPro[] = [
     notice: "Information for general education. For emergencies call 911.",
   },
   {
+    slug: "yat-auto-repair",
+    name: "Yat Auto Repair",
+    category: "auto",
+    categoryLabel: "Auto",
+    line: "Auto repair shop",
+    businessName: "Yat Auto Repair",
+    serviceTypes: ["Business"],
+    phone: { label: "(402) 937-2554", href: "tel:+14029372554" },
+    location: "105 5th Ave NE, Le Mars, IA 51031",
+    image: {
+      src: "/images/placeholders/auto-shop.svg",
+      alt: "Wrench icon for Yat Auto Repair.",
+      width: 800,
+      height: 1000,
+    },
+    photos: [],
+    placeholder: false,
+    comingSoon: false,
+    profession: "Auto repair shop",
+    school: null,
+    industry: null,
+    years: null,
+    serviceSummary: "From tires and brakes to engine work.",
+    services: [
+      { name: "Tires", line: "Mounting, balancing, rotation, and flat repair.", icon: "tire" },
+      { name: "Oil changes and fluids", line: "Oil changes and fluid service.", icon: "oil" },
+      { name: "Brakes", line: "Pads and rotors.", icon: "brake" },
+      { name: "Batteries and electrical", line: "Batteries and electrical repair.", icon: "bolt" },
+      { name: "Suspension and steering", line: "Suspension and steering.", icon: "steering" },
+      { name: "Alignment", line: "Wheel alignment.", icon: "alignment" },
+      { name: "Exhaust", line: "Exhaust work.", icon: "exhaust" },
+      { name: "AC and heating", line: "Air conditioning and heating.", icon: "climate" },
+      { name: "Diagnostics and check engine light", line: "Diagnostics and the check engine light.", icon: "pulse" },
+      { name: "Transmission", line: "Transmission service.", icon: "transmission" },
+      { name: "Engine repair", line: "Engine repair.", icon: "engine" },
+    ],
+    serviceAreas: "Le Mars, Iowa (in person)",
+    email: null,
+    whatsapp: null,
+    website: null,
+    github: null,
+    linkedin: null,
+    remote: false,
+    searchTerms: "",
+    bio: "Full-service auto repair shop in Le Mars, Iowa, handling everything from tires and brakes to engine work.",
+  },
+  {
     slug: "taxation",
     name: "Taxation",
     category: "tax",
@@ -205,38 +258,6 @@ export const featuredPros: PublicPro[] = [
     image: {
       src: "/images/placeholders/finance.svg",
       alt: "Placeholder graphic for a finance professional.",
-      width: 800,
-      height: 1000,
-    },
-    placeholder: true,
-    comingSoon: true,
-    profession: null,
-    school: null,
-    industry: null,
-    years: null,
-    services: [],
-    serviceAreas: null,
-    email: null,
-    whatsapp: null,
-    website: null,
-    github: null,
-    linkedin: null,
-    remote: false,
-    searchTerms: "",
-    photos: [],
-  },
-  {
-    slug: "auto",
-    name: "Auto",
-    category: "auto",
-    categoryLabel: "Auto",
-    line: "Coming soon.",
-    businessName: null,
-    serviceTypes: [],
-    location: "Placeholder location",
-    image: {
-      src: "/images/placeholders/auto.svg",
-      alt: "Placeholder graphic for an auto professional.",
       width: 800,
       height: 1000,
     },
@@ -385,6 +406,11 @@ export function filterPros(
     if (!keyword) return true;
     const name = pro.name.toLowerCase();
     const business = (pro.businessName ?? "").trim().toLowerCase();
-    return name.includes(keyword) || (business.length > 0 && business.includes(keyword));
+    const serviceWords = pro.services.flatMap((service) =>
+      `${service.name} ${service.line}`.toLowerCase().split(/[^a-z0-9]+/),
+    );
+    const words = keyword.split(/[^a-z0-9]+/).filter(Boolean);
+    const servicesMatch = words.length > 0 && words.every((word) => serviceWords.includes(word));
+    return name.includes(keyword) || (business.length > 0 && business.includes(keyword)) || servicesMatch;
   });
 }
