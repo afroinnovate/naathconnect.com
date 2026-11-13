@@ -4,6 +4,10 @@ import { serviceOffers, servicePath, serviceSlideIcons } from "@/lib/services";
 import { ProfileLinks, profileLinks } from "./ProfileLinks";
 import { ServiceSlideshow } from "./ServiceSlideshow";
 
+function mapsSearchUrl(address: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
+
 export function ProView({ pro }: { pro: PublicPro }) {
   const svg = pro.image.src.endsWith(".svg");
   return (
@@ -56,6 +60,16 @@ export function ProView({ pro }: { pro: PublicPro }) {
               <dd>{pro.years}</dd>
             </div>
           ) : null}
+          {pro.location && !pro.placeholder ? (
+            <div>
+              <dt>Address</dt>
+              <dd>
+                <a href={mapsSearchUrl(pro.location)} target="_blank" rel="noreferrer">
+                  {pro.location}
+                </a>
+              </dd>
+            </div>
+          ) : null}
           {pro.serviceAreas ? (
             <div>
               <dt>Where</dt>
@@ -82,6 +96,11 @@ export function ProView({ pro }: { pro: PublicPro }) {
         ) : null}
         <div className="contact-row">
           <ProfileLinks links={profileLinks(pro)} />
+          {pro.phone ? (
+            <a className="contact-btn" href={pro.phone.href}>
+              {pro.phone.label}
+            </a>
+          ) : null}
           {pro.whatsapp ? (
             <a className="contact-btn" href={pro.whatsapp}>
               WhatsApp
