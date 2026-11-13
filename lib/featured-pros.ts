@@ -106,17 +106,17 @@ export const featuredPros: PublicPro[] = [
     line: "Certified Physician Assistant, Emergency Medicine",
     location: null,
     image: {
-      src: "/images/gatbel/gatbel-headshot.webp",
+      src: "/images/gatbel/gatbel-coat.webp",
       alt: "Dr. Gatbel Nyak Chamjock.",
-      width: 323,
-      height: 431,
+      width: 900,
+      height: 1125,
     },
     photos: [
       {
-        src: "/images/gatbel/gatbel-headshot.webp",
+        src: "/images/gatbel/gatbel-coat.webp",
         alt: "Dr. Gatbel Nyak Chamjock.",
-        width: 323,
-        height: 431,
+        width: 900,
+        height: 1125,
       },
     ],
     placeholder: false,
