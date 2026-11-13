@@ -8,6 +8,37 @@ export type ServiceTile = {
   slides?: readonly string[];
   /** Compact icon for a shop service. These do not open a service page. */
   icon?: string;
+  /** Groups plain-language help, instead of a shop icon or a slideshow. */
+  group?: string;
+};
+
+export type PublicImage = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  /** Overrides the shared card crop when a portrait needs a different anchor. */
+  position?: string;
+  /** Use contain when the whole mark should stay visible inside the tile. */
+  fit?: "cover" | "contain";
+};
+
+export type ProfileReference = {
+  label: string;
+  text: string;
+  href: string;
+};
+
+export type OrgProgram = { name: string; line: string };
+
+export type OrgProgramGroup = { name: string; items: readonly OrgProgram[] };
+
+export type OrganizationProfile = {
+  heading: string;
+  mission: string;
+  summary: string;
+  mark?: PublicImage;
+  groups: readonly OrgProgramGroup[];
 };
 
 export type ProfilePoint = {
@@ -26,7 +57,7 @@ export type PublicPro = {
   /** Empty means no type is known. A professional can have more than one. */
   serviceTypes: ServiceType[];
   location: string | null;
-  image: { src: string; alt: string; width: number; height: number };
+  image: PublicImage;
   placeholder: boolean;
   comingSoon: boolean;
   profession: string | null;
@@ -51,7 +82,19 @@ export type PublicPro = {
   keywords?: string;
   /** Shows "Remote services available" without matching every location. */
   offersRemote?: boolean;
-  photos: { src: string; alt: string; width: number; height: number }[];
+  photos: PublicImage[];
+  /** Wide organization mark shown above the profile title. */
+  wordmark?: PublicImage;
+  /** Quoted mission, shown once. */
+  mission?: string;
+  /** Sentences in the organization's own words. */
+  statements?: readonly string[];
+  /** Link to a related directory listing. */
+  reference?: ProfileReference;
+  /** Short labeled facts, such as an EIN. */
+  records?: readonly { label: string; value: string }[];
+  /** Organization programs shown after the person's own services. */
+  organization?: OrganizationProfile | null;
   bio?: string | null;
   notice?: string | null;
   /** Founder line, shown on the profile when set. */
@@ -280,6 +323,192 @@ export const featuredPros: PublicPro[] = [
     bio: "Lam Tax Service, LLC was founded in 2016 by Lam Chuol, who brings more than four years of experience at H&R Block and a Bachelor of Science in Accounting from Ohio Valley University. The firm serves individuals and small businesses with accurate, affordable tax and accounting services. In 2023 it received the Initiative Foundation's New Business of the Year award.",
   },
   {
+    slug: "gatluak-thach",
+    name: "Dr. Gatluak Ter Thach, PhD",
+    category: "ngo",
+    categoryLabel: "NGO / Social Empowerment",
+    line: "Prof, Tennessee State University · President/CEO, N.I.C.E",
+    businessName: null,
+    serviceTypes: ["Business", "Free/Volunteer"],
+    location: "Nashville, TN",
+    image: {
+      src: "/images/gatluak/gatluak-thach.webp",
+      alt: "Dr. Gatluak Ter Thach.",
+      width: 1080,
+      height: 1080,
+      position: "center",
+    },
+    photos: [],
+    placeholder: false,
+    comingSoon: false,
+    profession: "Adjunct Professor of Strategic Leadership and Organizational Development, Tennessee State University",
+    school: null,
+    industry: null,
+    years: null,
+    credentialBadges: [
+      "Community & organizational development",
+      "Leadership principles",
+      "Program & budget planning",
+      "Strategic planning",
+      "Partnership building",
+      "Grant writing",
+      "Executive coaching",
+      "Strategic advocacy",
+    ],
+    titles: [
+      {
+        title: "B.S. in Computer Science",
+        detail: "Minor in mathematics, Tennessee State University.",
+      },
+      {
+        title: "Master's in Public Service",
+        detail: "Cumberland University. Pi Gamma Mu International Honor Society.",
+      },
+      {
+        title: "PhD in Organizational Leadership",
+        detail: "Strategic Management, Argosy University, Nashville.",
+      },
+      {
+        title: "Effective Leadership Certificate",
+        detail: "Harvard Kennedy School.",
+      },
+    ],
+    services: [
+      {
+        name: "Start an Organization / NGO Leadership",
+        line: "Free. Help to start an organization and form its NGO leadership.",
+        slides: ["compass", "layers", "bulb"],
+      },
+      {
+        name: "Strategic Planning & NGO Budgeting",
+        line: "Free. Strategic planning, budgeting, and finance so an NGO can last.",
+        slides: ["calendar", "card", "check"],
+      },
+      {
+        name: "PhD Mentorship",
+        line: "Mentoring PhD students.",
+        slides: ["book", "chat", "heart"],
+      },
+      {
+        name: "Grant Proposal Writing",
+        line: "Paid grant proposal writing.",
+        slides: ["file", "folder", "check"],
+      },
+      {
+        name: "Grant Writing Training",
+        line: "Paid teaching on how to write grant proposals.",
+        slides: ["monitor", "book", "chat"],
+      },
+    ],
+    serviceAreas: null,
+    email: "gatluak@empowernashville.org",
+    whatsapp: "https://wa.me/16154772767",
+    website: null,
+    github: null,
+    linkedin: null,
+    remote: false,
+    searchTerms: "",
+    keywords: "gatluak thach grant writing proposal ngo leadership strategic planning budgeting finance mentorship phd nashville tn",
+    bio: "Adjunct Professor of Strategic Leadership and Organizational Development at Tennessee State University, and founder and President/CEO of NICE, which he has led for more than 20 years. He is a refugee and immigrant rights activist.",
+    statements: [
+      "Boards and councils: Sudanese Human Rights Organization; Advisory Council of the Tennessee Department of Children's Services; Mayor's New American Council; Tennessee for All of Us; Nashville Area Habitat for Humanity; Sudanese Presbyterian Church; Alliance for South Sudanese in Diaspora; South Sudan Relief Rehabilitation Agency – USA; Volar Collegiate Academy.",
+      "Author of My New American Dream and Life of the Leader. Upcoming: The 12 Leadership Principles, Successful Integration, and Why My People Continue to Suffer in South Sudan.",
+      "Awards include the White House Champion of Change from President Obama, CEO of the Year, Distinguished Service Award, Human Right Rising Advocate Award, Power of Inclusion Award, Community Empowering Award, New Immigrant Leadership Award, and Peace Ambassadors USA Award.",
+    ],
+    reference: {
+      label: "Affiliation",
+      text: "Founder & President/CEO of NICE",
+      href: "/pros/nice-empower-nashville",
+    },
+  },
+  {
+    slug: "nice-empower-nashville",
+    name: "Nashville International Center for Empowerment (NICE)",
+    category: "ngo",
+    categoryLabel: "NGO / Social Empowerment",
+    line: "Everyone deserves a chance to thrive.",
+    businessName: null,
+    serviceTypes: ["Charity", "Free/Volunteer"],
+    location: "417 Welshwood Drive, Ste. 100, Nashville, TN 37211",
+    image: {
+      src: "/images/gatluak/nice-icon.webp",
+      alt: "Nashville International Center for Empowerment icon.",
+      width: 512,
+      height: 512,
+      position: "center",
+      fit: "contain",
+    },
+    wordmark: {
+      src: "/images/gatluak/nice-wordmark.webp",
+      alt: "Nashville International Center for Empowerment.",
+      width: 750,
+      height: 150,
+    },
+    photos: [],
+    placeholder: false,
+    comingSoon: false,
+    profession: null,
+    school: null,
+    industry: null,
+    years: null,
+    services: [
+      {
+        name: "Social Services",
+        line: "Case management, benefits, and practical help for refugees and immigrants, including a Gallatin office.",
+        slides: ["heart", "shield", "compass"],
+      },
+      {
+        name: "Education",
+        line: "ESL and other classes for adults, plus school support and youth programs.",
+        slides: ["book", "monitor", "globe"],
+      },
+      {
+        name: "Employment",
+        line: "One-on-one help toward a job, and introductions to local employers.",
+        slides: ["card", "check", "chat"],
+      },
+      {
+        name: "Immigration Services",
+        line: "Affordable help with citizenship, Green Cards, and other immigration papers.",
+        slides: ["file", "globe", "check"],
+      },
+      {
+        name: "Health",
+        line: "Health education, finding care, and support for mothers and young children.",
+        slides: ["heart", "pulse", "shield"],
+      },
+      {
+        name: "Community / Family Mentorship",
+        line: "Mentors and community programs that help new families settle in.",
+        slides: ["heart", "chat", "book"],
+      },
+    ],
+    serviceAreas: "Middle Tennessee",
+    email: null,
+    whatsapp: null,
+    website: "https://www.empowernashville.org/",
+    websiteLabel: "See all programs on empowernashville.org",
+    github: null,
+    linkedin: null,
+    remote: false,
+    searchTerms: "Gallatin",
+    keywords: "nice empower nashville refugee immigrant nonprofit ngo tennessee tn esl employment immigration youth",
+    mission: "To ensure refugees and immigrants achieve their full potential now and for generations to come.",
+    statements: [
+      "Since 2005, NICE has helped refugees and immigrants find housing, work, and belonging in Middle Tennessee — because no one should have to build a new life alone.",
+      "Nashville International Center for Empowerment (NICE) is a 501(c)(3) nonprofit organization based in South Nashville.",
+      "NICE is an affiliate of ECDC.",
+      "Formerly known as Sudanese Community & Women's Service Center.",
+    ],
+    records: [{ label: "EIN", value: "02-0674431" }],
+    reference: {
+      label: "Point of contact",
+      text: "Dr. Gatluak Ter Thach, PhD, Founder & President/CEO",
+      href: "/pros/gatluak-thach",
+    },
+
+  },
+  {
     slug: "finance",
     name: "Finance",
     category: "finance",
@@ -477,9 +706,13 @@ export function filterPros(
     if (!keyword) return true;
     const name = pro.name.toLowerCase();
     const business = (pro.businessName ?? "").trim().toLowerCase();
-    const serviceWords = pro.services.flatMap((service) =>
-      `${service.name} ${service.line}`.toLowerCase().split(/[^a-z0-9]+/),
+    const orgWords = (pro.organization?.groups ?? []).flatMap((group) =>
+      group.items.flatMap((item) => `${group.name} ${item.name} ${item.line}`.toLowerCase().split(/[^a-z0-9]+/)),
     );
+    const serviceWords = [
+      ...pro.services.flatMap((service) => `${service.group ?? ""} ${service.name} ${service.line}`.toLowerCase().split(/[^a-z0-9]+/)),
+      ...orgWords,
+    ];
     const keywordWords = (pro.keywords ?? "").toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
     const words = keyword.split(/[^a-z0-9]+/).filter(Boolean);
     const servicesMatch = words.length > 0 && words.every((word) => serviceWords.includes(word));
