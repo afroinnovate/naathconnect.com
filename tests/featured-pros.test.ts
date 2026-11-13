@@ -21,10 +21,10 @@ describe("featured professionals", () => {
     const gatbel = getFeaturedPro("gatbel-chamjock");
     assert.equal(gatbel?.placeholder, false);
     assert.equal(gatbel?.comingSoon, false);
-    assert.equal(gatbel?.name, "Gatbel Nyak Chamjock, MPAS, PA-C");
+    assert.equal(gatbel?.name, "Dr. Gatbel Nyak Chamjock, MPAS, PA-C");
     assert.equal(gatbel?.line, "Certified Physician Assistant, Emergency Medicine");
     assert.equal(gatbel?.category, "medical");
-    assert.match(gatbel?.bio ?? "", /board-certified physician assistant/);
+    assert.match(gatbel?.bio ?? "", /^Dr\. Gatbel is a board-certified physician assistant/);
     assert.match(gatbel?.bio ?? "", /including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons\.$/);
     assert.equal(gatbel?.serviceAreas, "Iowa (in person) · Remote telehealth anywhere");
     assert.equal(gatbel?.remote, true);
@@ -34,7 +34,8 @@ describe("featured professionals", () => {
     assert.equal(gatbel?.websiteLabel, "Public profile");
     assert.equal(gatbel?.notice, "Information for general education. For emergencies call 911.");
     assert.match(gatbel?.image.src ?? "", /gatbel-headshot\.webp$/);
-    assert.doesNotMatch(`${gatbel?.name} ${gatbel?.bio} ${gatbel?.serviceAreas} ${gatbel?.notice}`, /970|tel:|Dr\./);
+    assert.doesNotMatch(`${gatbel?.name} ${gatbel?.bio} ${gatbel?.serviceAreas} ${gatbel?.notice}`, /970|tel:|\bMD\b|\bDO\b/);
+    assert.equal(getFeaturedPro("tango-tew")?.image.src, "/images/tango/tango-headshot-circle.webp");
     assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 2);
   });
 
