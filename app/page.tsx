@@ -3,7 +3,7 @@ import { EventSlider } from "@/components/EventSlider";
 import { ProTile } from "@/components/ProTile";
 import { toEventCard } from "@/lib/event-card";
 import { featuredPros, homepageProfessionals, mergeDirectory, proFromAccount } from "@/lib/featured-pros";
-import { HOME_OVERVIEW, HOME_PURPOSE, HOME_QUOTE, HOME_QUOTE_ATTRIBUTION, HOME_QUOTE_GLOSS } from "@/lib/home";
+import { HOME_OVERVIEW, HOME_PURPOSE, HOME_QUOTE, HOME_QUOTE_ATTRIBUTION, HOME_QUOTE_CLOSE, HOME_QUOTE_GLOSS, HOME_QUOTE_OPEN } from "@/lib/home";
 import { getSession } from "@/lib/session";
 import { getStore } from "@/lib/store";
 import type { SessionUser } from "@/lib/types";
@@ -29,7 +29,9 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         <figure className="pull-quote">
           <blockquote>
             <p>
-              &quot;{HOME_QUOTE}&quot; {HOME_QUOTE_GLOSS}
+              {HOME_QUOTE_OPEN}
+              {HOME_QUOTE}
+              {HOME_QUOTE_CLOSE} {HOME_QUOTE_GLOSS}
             </p>
           </blockquote>
           <figcaption>{HOME_QUOTE_ATTRIBUTION}</figcaption>
