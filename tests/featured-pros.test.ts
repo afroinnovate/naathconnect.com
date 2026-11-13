@@ -21,8 +21,28 @@ describe("featured professionals", () => {
     const gatbel = getFeaturedPro("gatbel-chamjock");
     assert.equal(gatbel?.placeholder, false);
     assert.equal(gatbel?.comingSoon, false);
-    assert.equal(gatbel?.name, "Dr. Gatbel Nyak Chamjock, MPAS, PA-C");
-    assert.equal(gatbel?.line, "Certified Physician Assistant, Emergency Medicine");
+    assert.equal(gatbel?.name, "Dr. Gatbel Nyak Chamjock, DrPH, MPAS, PA-C");
+    assert.equal(
+      gatbel?.line,
+      "Board-certified physician assistant in emergency medicine · Epidemiologist · Health Educator",
+    );
+    assert.deepEqual(
+      gatbel?.titles?.map((item) => item.title),
+      [
+        "DrPH",
+        "PA-C",
+        "Epidemiologist",
+        "Health Educator",
+        "MPAS",
+        "Board member and medical team lead",
+        "Bachelor's degree in biology",
+      ],
+    );
+    assert.deepEqual(gatbel?.credentialBadges, ["DrPH", "MPAS", "PA-C"]);
+    assert.equal(gatbel?.experience?.[0]?.title, "Emergency care in Waterloo, Iowa");
+    assert.equal(gatbel?.titles?.[0]?.title, "DrPH");
+    assert.match(gatbel?.titles?.map((item) => item.detail).join(" ") ?? "", /Union College in Lincoln, Nebraska/);
+    assert.match(gatbel?.titles?.map((item) => item.detail).join(" ") ?? "", /Tennessee State University/);
     assert.equal(gatbel?.category, "medical");
     assert.match(gatbel?.bio ?? "", /^Dr\. Gatbel is a board-certified physician assistant/);
     assert.match(gatbel?.bio ?? "", /including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons\.$/);

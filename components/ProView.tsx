@@ -30,13 +30,48 @@ export function ProView({ pro }: { pro: PublicPro }) {
         <p className="chip">{pro.placeholder ? "Placeholder" : pro.categoryLabel}</p>
         <h1>{pro.name}</h1>
         <p className="pro-line">{pro.comingSoon ? "Coming soon." : pro.line}</p>
+        {pro.credentialBadges && pro.credentialBadges.length > 0 ? (
+          <ul className="credential-row">
+            {pro.credentialBadges.map((badge) => (
+              <li key={badge} className="credential">
+                {badge}
+              </li>
+            ))}
+          </ul>
+        ) : null}
         {pro.placeholder ? (
           <p className="placeholder-note">Placeholder. Biography, credentials, and contact are not published.</p>
+        ) : null}
+        {pro.experience && pro.experience.length > 0 ? (
+          <section className="profile-section">
+            <h2>Experience</h2>
+            <ol>
+              {pro.experience.map((item) => (
+                <li key={item.title}>
+                  <strong>{item.title}</strong>
+                  <span>{item.detail}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
+        {pro.titles && pro.titles.length > 0 ? (
+          <section className="profile-section">
+            <h2>Titles and Credentials</h2>
+            <ol>
+              {pro.titles.map((item) => (
+                <li key={item.title}>
+                  <strong>{item.title}</strong>
+                  <span>{item.detail}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
         ) : null}
         {pro.bio ? <p className="hero-line">{pro.bio}</p> : null}
         {pro.notice ? <p className="profile-note">{pro.notice}</p> : null}
         <dl className="facts">
-          {pro.profession ? (
+          {pro.profession && !pro.experience ? (
             <div>
               <dt>Profession</dt>
               <dd>{pro.profession}</dd>

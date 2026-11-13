@@ -30,6 +30,15 @@ export function ProTile({ pro }: { pro: PublicPro }) {
             </span>
           ))}
         </span>
+        {pro.credentialBadges && pro.credentialBadges.length > 0 ? (
+          <span className="credential-row">
+            {pro.credentialBadges.map((badge) => (
+              <span key={badge} className="credential">
+                {badge}
+              </span>
+            ))}
+          </span>
+        ) : null}
         <strong>{pro.name}</strong>
         <span className="tile-line">{pro.line}</span>
         {pro.location ? <span className="tile-where">{pro.location}</span> : pro.serviceAreas ? <span className="tile-where">{pro.serviceAreas}</span> : null}
