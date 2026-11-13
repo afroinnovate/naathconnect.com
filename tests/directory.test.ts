@@ -161,7 +161,8 @@ describe("directory filters", () => {
     assert.equal(gat?.businessName, null);
     assert.equal(gat?.location, "Nashville, TN");
     assert.equal(gat?.website, null);
-    assert.equal(gat?.email, null);
+    assert.equal(gat?.email, "gatluak@empowernashville.org");
+    assert.equal(gat?.whatsapp, "https://wa.me/16154772767");
     assert.equal(gat?.organization, undefined);
     assert.deepEqual(gat?.reference, {
       label: "Affiliation",
