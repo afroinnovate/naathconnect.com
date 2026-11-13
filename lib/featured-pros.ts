@@ -354,7 +354,7 @@ export function categoryOptions(pros: PublicPro[]): CategoryOption[] {
   const options = [...labels.entries()]
     .map(([value, item]) => ({ value, label: item.label }))
     .sort((a, b) => a.label.localeCompare(b.label));
-  return [{ value: "", label: "All" }, ...options];
+  return [{ value: "", label: "All categories" }, ...options];
 }
 
 /** Professionals the directory lists when no filter is set. The homepage uses the same set. */

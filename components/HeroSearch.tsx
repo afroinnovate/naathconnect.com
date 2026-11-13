@@ -17,8 +17,8 @@ export function HeroSearch({
   return (
     <form className="search" action="/directory" method="get">
       <label>
-        <span className="sr-only">Category</span>
-        <select name="category" defaultValue={category} aria-label="Category">
+        <span className="sr-only">All categories</span>
+        <select name="category" defaultValue={category} aria-label="All categories">
           {categories.map((item) => (
             <option key={item.value || "all"} value={item.value}>
               {item.label}
@@ -27,9 +27,9 @@ export function HeroSearch({
         </select>
       </label>
       <label>
-        <span className="sr-only">Service type</span>
-        <select name="type" defaultValue={type} aria-label="Service type">
-          <option value="">All</option>
+        <span className="sr-only">All service types</span>
+        <select name="type" defaultValue={type} aria-label="All service types">
+          <option value="">All service types</option>
           {SERVICE_TYPES.map((item) => (
             <option key={item} value={item}>
               {item}

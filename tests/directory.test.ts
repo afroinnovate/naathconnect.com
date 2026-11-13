@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { categoryOptions, featuredPros, filterPros, homepageProfessionals, type PublicPro } from "../lib/featured-pros";
-import { HOME_PURPOSE, HOME_QUOTE, HOME_QUOTE_ATTRIBUTION, HOME_QUOTE_GLOSS } from "../lib/home";
+import { HOME_PURPOSE, HOME_QUOTE, HOME_QUOTE_ATTRIBUTION, HOME_QUOTE_CLOSE, HOME_QUOTE_GLOSS, HOME_QUOTE_OPEN } from "../lib/home";
 import { openSqliteStore } from "../lib/sqlite-store";
 import { parseServiceTypes } from "../lib/service-types";
 
@@ -13,7 +13,7 @@ function withName(pro: PublicPro, slug: string, name: string, businessName: stri
 describe("directory filters", () => {
   it("builds the category dropdown from the professionals, not a fixed list", () => {
     const options = categoryOptions(featuredPros);
-    assert.equal(options[0]?.label, "All");
+    assert.equal(options[0]?.label, "All categories");
     assert.equal(options[0]?.value, "");
     const values = options.map((option) => option.value);
     assert.ok(values.includes("tech"));
@@ -106,6 +106,13 @@ describe("homepage professionals", () => {
     assert.match(page, /HOME_QUOTE/);
     assert.match(tile, /href=\{`\/pros\/\$\{pro\.slug\}`\}/);
     assert.equal(HOME_QUOTE, "Umuntu ngumuntu ngabantu.");
+    assert.equal(HOME_QUOTE_OPEN, "\u201C");
+    assert.equal(HOME_QUOTE_CLOSE, "\u201D");
+    assert.equal(`${HOME_QUOTE_OPEN}${HOME_QUOTE}${HOME_QUOTE_CLOSE}`, "\u201CUmuntu ngumuntu ngabantu.\u201D");
+    const filters = readFileSync("components/HeroSearch.tsx", "utf8");
+    assert.match(filters, /aria-label="All categories"/);
+    assert.match(filters, /aria-label="All service types"/);
+    assert.match(filters, />All service types</);
     assert.equal(HOME_QUOTE_GLOSS, "(A person is a person through other people.)");
     assert.equal(HOME_QUOTE_ATTRIBUTION, "Zulu proverb, the heart of the Ubuntu philosophy.");
     assert.match(HOME_PURPOSE, /Naath sons and daughters/);
