@@ -38,6 +38,8 @@ describe("featured professionals", () => {
     assert.deepEqual(gatbel?.credentialBadges, ["DrPH", "MPAS", "PA-C"]);
     assert.equal(gatbel?.experience?.[0]?.title, "Epidemiologist and health educator");
     assert.equal(gatbel?.titles?.[0]?.title, "Doctor of Public Health");
+    assert.match(gatbel?.titles?.[0]?.detail ?? "", /DrPH, Capella University, Minneapolis, Minnesota/);
+    assert.match(gatbel?.bio ?? "", /holds a Doctor of Public Health \(DrPH\) from Capella University in Minneapolis, Minnesota/);
     assert.match(gatbel?.titles?.map((item) => item.detail).join(" ") ?? "", /Union College in Lincoln, Nebraska/);
     assert.match(gatbel?.titles?.map((item) => item.detail).join(" ") ?? "", /Tennessee State University/);
     assert.equal(gatbel?.category, "medical");
