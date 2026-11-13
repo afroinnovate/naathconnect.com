@@ -121,7 +121,7 @@ export const featuredPros: PublicPro[] = [
     name: "Dr. Gatbel Nyak Chamjock, DrPH, MPAS, PA-C",
     category: "medical",
     categoryLabel: "Medical",
-    line: "Board-certified physician assistant in emergency medicine · Epidemiologist · Health Educator",
+    line: "Doctor · Epidemiologist · Health Educator",
     businessName: null,
     serviceTypes: ["Charity"],
     location: null,
@@ -141,20 +141,11 @@ export const featuredPros: PublicPro[] = [
     ],
     placeholder: false,
     comingSoon: false,
-    profession: "Board-certified physician assistant in emergency medicine",
+    profession: "Doctor · Epidemiologist · Health Educator",
     credentialBadges: ["DrPH", "MPAS", "PA-C"],
     experience: [
       {
-        title: "Emergency care in Waterloo, Iowa",
-        detail:
-          "Board-certified physician assistant who specializes in emergency medicine and works in emergency care in Waterloo, Iowa.",
-      },
-      {
-        title: "Patients in Iowa, Nebraska, and Colorado",
-        detail: "Has served patients in Iowa, Nebraska and Colorado.",
-      },
-      {
-        title: "Preventive health teaching",
+        title: "Epidemiologist and health educator",
         detail:
           "Teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons.",
       },
@@ -162,15 +153,20 @@ export const featuredPros: PublicPro[] = [
         title: "Gambella Medical Team Connection",
         detail: "Board member and medical team lead.",
       },
+      {
+        title: "Emergency care in Waterloo, Iowa",
+        detail:
+          "Also practices as a board-certified physician assistant (PA-C) in emergency medicine, working in emergency care in Waterloo, Iowa.",
+      },
+      {
+        title: "Patients in Iowa, Nebraska, and Colorado",
+        detail: "Has served patients in Iowa, Nebraska and Colorado.",
+      },
     ],
     titles: [
       {
-        title: "DrPH",
-        detail: "Doctor of Public Health.",
-      },
-      {
-        title: "PA-C",
-        detail: "Board-certified physician assistant.",
+        title: "Doctor of Public Health",
+        detail: "DrPH.",
       },
       {
         title: "Epidemiologist",
@@ -185,6 +181,10 @@ export const featuredPros: PublicPro[] = [
         detail: "Master of Physician Assistant Studies, Union College in Lincoln, Nebraska.",
       },
       {
+        title: "PA-C",
+        detail: "Board-certified physician assistant.",
+      },
+      {
         title: "Board member and medical team lead",
         detail: "Gambella Medical Team Connection.",
       },
@@ -194,7 +194,7 @@ export const featuredPros: PublicPro[] = [
       },
     ],
     school: null,
-    industry: "Emergency medicine",
+    industry: null,
     years: null,
     services: [
       {
@@ -222,7 +222,7 @@ export const featuredPros: PublicPro[] = [
     linkedin: null,
     remote: true,
     searchTerms: "physician assistant emergency medicine telehealth preventive health Iowa Waterloo",
-    bio: "Dr. Gatbel is a board-certified physician assistant who specializes in emergency medicine. He works in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado. He holds a bachelor's degree in biology from Tennessee State University and a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska. He is a board member and medical team lead for Gambella Medical Team Connection, and he teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons.",
+    bio: "Dr. Gatbel Nyak Chamjock is a Doctor of Public Health, an epidemiologist, and a health educator. He teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons. He is a board member and medical team lead for Gambella Medical Team Connection. He holds a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska, and a bachelor's degree in biology from Tennessee State University. He also practices as a board-certified physician assistant (PA-C) in emergency medicine, working in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado.",
     notice: "Information for general education. For emergencies call 911.",
   },
   {
