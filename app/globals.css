@@ -184,6 +184,7 @@ button[type="submit"] {
 .help-group { display: grid; gap: 0.35rem; }
 .help-group ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.65rem; }
 .org-profile { grid-column: 1 / -1; }
+.wordmark { width: min(100%, 440px); height: auto; background: #f7f4ee; border-radius: 18px; padding: 0.7rem 0.9rem; }
 .org-heading { display: flex; align-items: center; gap: 0.8rem; }
 .org-heading img { width: 72px; height: 72px; object-fit: contain; }
 .org-heading h2 { margin: 0; }

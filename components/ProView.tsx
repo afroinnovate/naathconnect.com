@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { OrganizationProfile, PublicPro, ServiceTile } from "@/lib/featured-pros";
 import { serviceOffers, servicePath, serviceSlideIcons } from "@/lib/services";
 import { ProfileLinks, profileLinks } from "./ProfileLinks";
@@ -44,19 +45,9 @@ function HelpGroups({ services }: { services: ServiceTile[] }) {
 function OrganizationSection({ organization }: { organization: OrganizationProfile }) {
   return (
     <section className="org-profile profile-section">
-      <div className="org-heading">
-        {organization.mark ? (
-          <Image
-            src={organization.mark.src}
-            alt={organization.mark.alt}
-            width={organization.mark.width}
-            height={organization.mark.height}
-          />
-        ) : null}
-        <h2>{organization.heading}</h2>
-      </div>
-      <blockquote className="mission">{organization.mission}</blockquote>
-      <p>{organization.summary}</p>
+      <h2>{organization.heading}</h2>
+      {organization.mission ? <blockquote className="mission">{organization.mission}</blockquote> : null}
+      {organization.summary ? <p>{organization.summary}</p> : null}
       {organization.groups.map((group) => (
         <div key={group.name} className="help-group">
           <h3>{group.name}</h3>
@@ -91,17 +82,32 @@ export function ProView({ pro }: { pro: PublicPro }) {
             priority
             sizes="(min-width: 900px) 42vw, 100vw"
             style={
-              pro.image.position
-                ? { objectPosition: pro.image.position, objectFit: "contain", height: "auto" }
+              pro.image.position || pro.image.fit
+                ? {
+                    objectPosition: pro.image.position,
+                    ...(pro.image.fit === "contain" || pro.image.position
+                      ? { objectFit: "contain" as const, height: "auto" }
+                      : {}),
+                  }
                 : undefined
             }
           />
         )}
       </div>
       <div className="pro-copy">
+        {pro.wordmark ? (
+          <Image
+            className="wordmark"
+            src={pro.wordmark.src}
+            alt={pro.wordmark.alt}
+            width={pro.wordmark.width}
+            height={pro.wordmark.height}
+          />
+        ) : null}
         <p className="chip">{pro.placeholder ? "Placeholder" : pro.categoryLabel}</p>
         <h1>{pro.name}</h1>
         <p className="pro-line">{pro.comingSoon ? "Coming soon." : pro.line}</p>
+        {pro.mission ? <blockquote className="mission">{pro.mission}</blockquote> : null}
         {pro.credentialBadges && pro.credentialBadges.length > 0 ? (
           <ul className="credential-row">
             {pro.credentialBadges.map((badge) => (
@@ -143,6 +149,11 @@ export function ProView({ pro }: { pro: PublicPro }) {
           </section>
         ) : null}
         {pro.bio && !groupedHelp ? <p className="hero-line">{pro.bio}</p> : null}
+        {pro.statements?.map((statement) => (
+          <p key={statement} className="hero-line">
+            {statement}
+          </p>
+        ))}
         {pro.notice ? <p className="profile-note">{pro.notice}</p> : null}
         <dl className="facts">
           {pro.profession && !pro.experience ? (
@@ -195,6 +206,20 @@ export function ProView({ pro }: { pro: PublicPro }) {
             <div>
               <dt>Remote</dt>
               <dd>Remote services available</dd>
+            </div>
+          ) : null}
+          {pro.records?.map((record) => (
+            <div key={record.label}>
+              <dt>{record.label}</dt>
+              <dd>{record.value}</dd>
+            </div>
+          ))}
+          {pro.reference ? (
+            <div>
+              <dt>{pro.reference.label}</dt>
+              <dd>
+                <Link href={pro.reference.href}>{pro.reference.text}</Link>
+              </dd>
             </div>
           ) : null}
         </dl>

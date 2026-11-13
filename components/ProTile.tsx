@@ -19,7 +19,14 @@ export function ProTile({ pro }: { pro: PublicPro }) {
               width={pro.image.width}
               height={pro.image.height}
               sizes="(min-width: 900px) 30vw, 100vw"
-              style={pro.image.position ? { objectPosition: pro.image.position } : undefined}
+              style={
+                pro.image.position || pro.image.fit
+                  ? {
+                      objectPosition: pro.image.position ?? "center",
+                      ...(pro.image.fit === "contain" ? { objectFit: "contain" as const } : {}),
+                    }
+                  : undefined
+              }
             />
           )}
         </span>

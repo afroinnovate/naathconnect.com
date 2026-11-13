@@ -40,14 +40,14 @@ describe("directory filters", () => {
     const volunteer = filterPros(featuredPros, { type: "Free/Volunteer" }).map((pro) => pro.slug);
     const business = filterPros(featuredPros, { type: "Business" }).map((pro) => pro.slug);
     const charity = filterPros(featuredPros, { type: "Charity" }).map((pro) => pro.slug);
-    assert.deepEqual(volunteer, ["tango-tew", "gatluak-thach"]);
+    assert.deepEqual(volunteer, ["tango-tew", "gatluak-thach", "nice-empower-nashville"]);
     assert.deepEqual(business, ["tango-tew", "lam-tax-service", "gatluak-thach"]);
-    assert.deepEqual(charity, ["gatbel-chamjock", "gatluak-thach"]);
+    assert.deepEqual(charity, ["gatbel-chamjock", "nice-empower-nashville"]);
 
     const unset = withName(featuredPros[2], "lam-tax-demo", "Lam Tax Service", "Lam Tax Service");
     unset.serviceTypes = [];
     const people = [...featuredPros, unset];
-    assert.deepEqual(filterPros(people, { type: "Charity" }).map((pro) => pro.slug), ["gatbel-chamjock", "gatluak-thach"]);
+    assert.deepEqual(filterPros(people, { type: "Charity" }).map((pro) => pro.slug), ["gatbel-chamjock", "nice-empower-nashville"]);
     assert.ok(filterPros(people, {}).some((pro) => pro.slug === "lam-tax-demo"));
     assert.equal(filterPros(people, { type: "Business" }).some((pro) => pro.slug === "lam-tax-demo"), false);
 
@@ -69,10 +69,10 @@ describe("directory filters", () => {
     assert.deepEqual(slugs({ category: "medical" }), ["gatbel-chamjock"]);
     assert.deepEqual(slugs({ category: "TECH" }), ["tango-tew"]);
     assert.deepEqual(slugs({ category: "Tech" }), ["tango-tew"]);
-    assert.deepEqual(slugs({ type: "Charity" }), ["gatbel-chamjock", "gatluak-thach"]);
+    assert.deepEqual(slugs({ type: "Charity" }), ["gatbel-chamjock", "nice-empower-nashville"]);
     assert.deepEqual(slugs({ type: "business" }), ["tango-tew", "lam-tax-service", "gatluak-thach"]);
     assert.deepEqual(slugs({ q: "Tang" }), ["tango-tew"]);
-    assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock", "lam-tax-service", "gatluak-thach"]);
+    assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock", "lam-tax-service", "gatluak-thach", "nice-empower-nashville"]);
 
     const renamed = featuredPros.map((pro) =>
       pro.slug === "gatbel-chamjock" ? { ...pro, category: "pa", categoryLabel: "Medical" } : pro,
@@ -150,93 +150,118 @@ describe("directory filters", () => {
     assert.match(profile, /Remote services available/);
   });
 
-  it("lists Dr. Gatluak Ter Thach and finds him by NGO, grant, and Nashville words", () => {
+  it("lists Dr. Gatluak Ter Thach apart from NICE's programs", () => {
     const gat = featuredPros.find((pro) => pro.slug === "gatluak-thach");
-    assert.equal(gat?.placeholder, false);
     assert.equal(gat?.name, "Dr. Gatluak Ter Thach, PhD");
     assert.equal(gat?.line, "NGO Leadership · Finance · Grant Writing Educator");
     assert.equal(gat?.profession, "Educator for NGO leadership and finance");
-    assert.equal(gat?.category, "ngo");
-    assert.equal(gat?.categoryLabel, "NGO / Social Empowerment");
-    assert.deepEqual(gat?.serviceTypes, ["Charity", "Free/Volunteer", "Business"]);
+    assert.deepEqual(gat?.serviceTypes, ["Business", "Free/Volunteer"]);
     assert.deepEqual(gat?.credentialBadges, ["PhD"]);
-    assert.equal(gat?.businessName, "Nashville International Center for Empowerment (NICE)");
-    assert.equal(gat?.location, "417 Welshwood Drive, Ste. 100, Nashville, TN 37211");
-    assert.equal(gat?.website, "https://www.empowernashville.org/");
+    assert.equal(gat?.businessName, null);
+    assert.equal(gat?.location, "Nashville, TN");
+    assert.equal(gat?.website, null);
     assert.equal(gat?.email, null);
-    assert.equal(gat?.whatsapp, null);
-    assert.equal(gat?.remote, false);
-    assert.equal(gat?.offersRemote, undefined);
-    assert.equal("phone" in (gat ?? {}), false);
-    assert.match(gat?.image.src ?? "", /gatluak-thach\.webp$/);
-    assert.equal(gat?.image.width, 1080);
-    assert.equal(gat?.image.height, 1080);
-    assert.equal(gat?.image.position, "center");
-    assert.equal(
-      gat?.organization?.mission,
-      "To ensure refugees and immigrants achieve their full potential now and for generations to come.",
-    );
-    assert.equal(gat?.organization?.heading, "About NICE / Empower Nashville");
-    assert.deepEqual(
-      gat?.organization?.groups.map((group) => group.name),
-      ["Social Services", "Adult Education", "Youth Education", "Employment", "Immigration", "Health", "Community"],
-    );
-    const programNames = gat?.organization?.groups.flatMap((group) => group.items.map((item) => item.name)) ?? [];
-    for (const name of [
-      "Gallatin office",
-      "Refugee Family Mentorship",
-      "Digital literacy",
-      "Bilingual banking",
-      "NICE Voices",
-    ]) {
-      assert.ok(programNames.includes(name), name);
-    }
-    assert.equal(programNames.some((name) => /driver/i.test(name)), false);
+    assert.equal(gat?.organization, undefined);
+    assert.deepEqual(gat?.reference, {
+      label: "Affiliation",
+      text: "Founder & President/CEO of NICE",
+      href: "/pros/nice-empower-nashville",
+    });
     assert.deepEqual(
       gat?.services.map((service) => service.group),
       ["Free", "Free", "Free", "Free", "Mentorship", "Paid", "Paid"],
     );
-    assert.deepEqual(profileLinks(gat!), [{ href: "https://www.empowernashville.org/", label: "Website", globe: true }]);
-    assert.deepEqual(
-      categoryOptions(featuredPros).find((option) => option.value === "ngo"),
-      { value: "ngo", label: "NGO / Social Empowerment" },
-    );
+    assert.deepEqual(profileLinks(gat!), []);
+    assert.match(gat?.image.src ?? "", /gatluak-thach\.webp$/);
     const published = JSON.stringify(gat);
-    assert.doesNotMatch(published, /harvard|adjunct|tel:|315[\s.\-]*9681|207[\s.\-]*1686|Duang|Selena|Nyakuma/i);
+    assert.doesNotMatch(published, /harvard|adjunct|tel:|315[\s.\-]*9681|207[\s.\-]*1686|Duang|Selena|Nyakuma|Gallatin office|Digital literacy/i);
     assert.match(published, /White House Champion of Change for World Refugees/);
     assert.match(published, /Tennessee State University/);
     assert.match(published, /Cumberland University/);
     assert.match(published, /Argosy University/);
-    assert.doesNotMatch(published, /founded in 2003/i);
     for (const keyword of [
-      "nonprofit",
       "grant",
       "grant writing",
       "grant proposal",
-      "leadership",
+      "NGO leadership",
       "strategic planning",
       "budgeting",
       "finance",
-      "mentorship",
-      "refugee",
-      "immigrant",
-      "Nashville",
-      "Tennessee",
-      "TN",
-      "NICE",
-      "Empower Nashville",
       "Gatluak",
       "Thach",
     ]) {
       assert.deepEqual(filterPros(featuredPros, { q: keyword }).map((pro) => pro.slug), ["gatluak-thach"], keyword);
     }
-    for (const keyword of ["NGO", "PhD"]) {
-      assert.ok(filterPros(featuredPros, { q: keyword }).some((pro) => pro.slug === "gatluak-thach"), keyword);
+    assert.deepEqual(filterPros(featuredPros, { q: "mentorship" }).map((pro) => pro.slug), [
+      "gatluak-thach",
+      "nice-empower-nashville",
+    ]);
+    assert.ok(filterPros(featuredPros, { q: "PhD" }).some((pro) => pro.slug === "gatluak-thach"));
+    assert.deepEqual(filterPros(featuredPros, { q: "Nashville" }).map((pro) => pro.slug), [
+      "gatluak-thach",
+      "nice-empower-nashville",
+    ]);
+    assert.deepEqual(filterPros(featuredPros, { q: "TN" }).map((pro) => pro.slug), [
+      "gatluak-thach",
+      "nice-empower-nashville",
+    ]);
+  });
+
+  it("lists NICE in its own words and finds the center by its search terms", () => {
+    const nice = featuredPros.find((pro) => pro.slug === "nice-empower-nashville");
+    assert.equal(nice?.name, "Nashville International Center for Empowerment (NICE)");
+    assert.equal(nice?.line, "Everyone deserves a chance to thrive.");
+    assert.equal(nice?.category, "ngo");
+    assert.equal(nice?.categoryLabel, "NGO / Social Empowerment");
+    assert.deepEqual(nice?.serviceTypes, ["Charity", "Free/Volunteer"]);
+    assert.equal(nice?.location, "417 Welshwood Drive, Ste. 100, Nashville, TN 37211");
+    assert.equal(nice?.website, "https://www.empowernashville.org/");
+    assert.equal(nice?.email, null);
+    assert.equal(nice?.remote, false);
+    assert.equal("phone" in (nice ?? {}), false);
+    assert.equal(nice?.image.fit, "contain");
+    assert.match(nice?.image.src ?? "", /nice-icon\.webp$/);
+    assert.match(nice?.wordmark?.src ?? "", /nice-wordmark\.webp$/);
+    assert.equal(
+      nice?.mission,
+      "To ensure refugees and immigrants achieve their full potential now and for generations to come.",
+    );
+    assert.deepEqual(nice?.statements, [
+      "Since 2005, NICE has helped refugees and immigrants find housing, work, and belonging in Middle Tennessee — because no one should have to build a new life alone.",
+      "Nashville International Center for Empowerment (NICE) is a 501(c)(3) nonprofit organization based in South Nashville.",
+      "NICE is an affiliate of ECDC.",
+      "Formerly known as Sudanese Community & Women's Service Center.",
+    ]);
+    assert.deepEqual(nice?.records, [{ label: "EIN", value: "02-0674431" }]);
+    assert.deepEqual(nice?.reference, {
+      label: "Point of contact",
+      text: "Dr. Gatluak Ter Thach, PhD, Founder & President/CEO",
+      href: "/pros/gatluak-thach",
+    });
+    assert.equal(nice?.organization?.heading, "Programs");
+    assert.deepEqual(
+      nice?.organization?.groups.map((group) => group.name),
+      ["Social Services", "Adult Education", "Youth Education", "Employment", "Immigration", "Health", "Community"],
+    );
+    const programNames = nice?.organization?.groups.flatMap((group) => group.items.map((item) => item.name)) ?? [];
+    for (const name of ["Gallatin office", "Refugee Family Mentorship", "Digital literacy", "Bilingual banking", "NICE Voices"]) {
+      assert.ok(programNames.includes(name), name);
     }
+    assert.equal(programNames.some((name) => /driver/i.test(name)), false);
+    assert.deepEqual(profileLinks(nice!), [{ href: "https://www.empowernashville.org/", label: "Website", globe: true }]);
+    assert.deepEqual(categoryOptions(featuredPros).find((option) => option.value === "ngo"), {
+      value: "ngo",
+      label: "NGO / Social Empowerment",
+    });
+    const published = JSON.stringify(nice);
+    assert.doesNotMatch(published, /tel:|315[\s.\-]*9681|207[\s.\-]*1686|culturally sensitive|It was established in 2005/i);
+    for (const keyword of ["NICE", "Empower Nashville", "refugee", "immigrant", "nonprofit", "Tennessee", "ESL", "employment", "immigration", "youth"]) {
+      assert.deepEqual(filterPros(featuredPros, { q: keyword }).map((pro) => pro.slug), ["nice-empower-nashville"], keyword);
+    }
+    assert.ok(filterPros(featuredPros, { q: "NGO" }).some((pro) => pro.slug === "nice-empower-nashville"));
     for (const location of ["Nashville", "Tennessee", "TN", "Gallatin", "37211"]) {
-      assert.deepEqual(
-        filterPros(featuredPros, { category: "ngo", location }).map((pro) => pro.slug),
-        ["gatluak-thach"],
+      assert.ok(
+        filterPros(featuredPros, { category: "ngo", location }).some((pro) => pro.slug === "nice-empower-nashville"),
         location,
       );
     }
@@ -270,6 +295,7 @@ describe("homepage professionals", () => {
       "/pros/gatbel-chamjock",
       "/pros/lam-tax-service",
       "/pros/gatluak-thach",
+      "/pros/nice-empower-nashville",
     ]);
     assert.equal(people.some((pro) => pro.placeholder), false);
 

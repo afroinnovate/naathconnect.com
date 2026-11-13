@@ -19,6 +19,14 @@ export type PublicImage = {
   height: number;
   /** Overrides the shared card crop when a portrait needs a different anchor. */
   position?: string;
+  /** Use contain when the whole mark should stay visible inside the tile. */
+  fit?: "cover" | "contain";
+};
+
+export type ProfileReference = {
+  label: string;
+  text: string;
+  href: string;
 };
 
 export type OrgProgram = { name: string; line: string };
@@ -75,6 +83,16 @@ export type PublicPro = {
   /** Shows "Remote services available" without matching every location. */
   offersRemote?: boolean;
   photos: PublicImage[];
+  /** Wide organization mark shown above the profile title. */
+  wordmark?: PublicImage;
+  /** Quoted mission, shown once. */
+  mission?: string;
+  /** Sentences in the organization's own words. */
+  statements?: readonly string[];
+  /** Link to a related directory listing. */
+  reference?: ProfileReference;
+  /** Short labeled facts, such as an EIN. */
+  records?: readonly { label: string; value: string }[];
   /** Organization programs shown after the person's own services. */
   organization?: OrganizationProfile | null;
   bio?: string | null;
@@ -310,9 +328,9 @@ export const featuredPros: PublicPro[] = [
     category: "ngo",
     categoryLabel: "NGO / Social Empowerment",
     line: "NGO Leadership · Finance · Grant Writing Educator",
-    businessName: "Nashville International Center for Empowerment (NICE)",
-    serviceTypes: ["Charity", "Free/Volunteer", "Business"],
-    location: "417 Welshwood Drive, Ste. 100, Nashville, TN 37211",
+    businessName: null,
+    serviceTypes: ["Business", "Free/Volunteer"],
+    location: "Nashville, TN",
     image: {
       src: "/images/gatluak/gatluak-thach.webp",
       alt: "Dr. Gatluak Ter Thach.",
@@ -327,7 +345,6 @@ export const featuredPros: PublicPro[] = [
     school: null,
     industry: null,
     years: null,
-    founder: "Founder, President and CEO (est. 2005)",
     credentialBadges: ["PhD"],
     titles: [
       {
@@ -392,7 +409,54 @@ export const featuredPros: PublicPro[] = [
         line: "Paid teaching on how to write grant proposals.",
       },
     ],
-    serviceAreas: "Middle Tennessee, including a Gallatin office",
+    serviceAreas: null,
+    email: null,
+    whatsapp: null,
+    website: null,
+    github: null,
+    linkedin: null,
+    remote: false,
+    searchTerms: "",
+    keywords: "gatluak thach grant writing proposal ngo leadership strategic planning budgeting finance mentorship phd nashville tn",
+    bio: "Dr. Gatluak Ter Thach, PhD, is an educator for NGO leadership and finance. He came to the United States in 1996 as a refugee from South Sudan and, as a Sudanese refugee leader, co-founded the Nashville International Center for Empowerment (NICE) in 2005 with other Sudanese refugee men and women. He earned a B.S. in computer science, with a minor in mathematics, from Tennessee State University in 2003, a master's degree in public service from Cumberland University, and a PhD in Organizational Leadership, with an emphasis on strategic planning, from Argosy University in 2014. In 2015 he was named a White House Champion of Change for World Refugees.",
+    reference: {
+      label: "Affiliation",
+      text: "Founder & President/CEO of NICE",
+      href: "/pros/nice-empower-nashville",
+    },
+  },
+  {
+    slug: "nice-empower-nashville",
+    name: "Nashville International Center for Empowerment (NICE)",
+    category: "ngo",
+    categoryLabel: "NGO / Social Empowerment",
+    line: "Everyone deserves a chance to thrive.",
+    businessName: null,
+    serviceTypes: ["Charity", "Free/Volunteer"],
+    location: "417 Welshwood Drive, Ste. 100, Nashville, TN 37211",
+    image: {
+      src: "/images/gatluak/nice-icon.webp",
+      alt: "Nashville International Center for Empowerment icon.",
+      width: 512,
+      height: 512,
+      position: "center",
+      fit: "contain",
+    },
+    wordmark: {
+      src: "/images/gatluak/nice-wordmark.webp",
+      alt: "Nashville International Center for Empowerment.",
+      width: 750,
+      height: 150,
+    },
+    photos: [],
+    placeholder: false,
+    comingSoon: false,
+    profession: null,
+    school: null,
+    industry: null,
+    years: null,
+    services: [],
+    serviceAreas: "Middle Tennessee",
     email: null,
     whatsapp: null,
     website: "https://www.empowernashville.org/",
@@ -400,21 +464,25 @@ export const featuredPros: PublicPro[] = [
     github: null,
     linkedin: null,
     remote: false,
-    searchTerms: "Nashville Tennessee TN Gallatin",
-    keywords:
-      "ngo nonprofit grant writing proposal leadership strategic planning budgeting finance mentorship phd refugee immigrant nashville tennessee tn nice empower",
-    bio: "Dr. Gatluak Ter Thach, PhD, is an educator for NGO leadership and finance and the founder and President/CEO of the Nashville International Center for Empowerment (NICE). He came to the United States in 1996 as a refugee from South Sudan and, as a Sudanese refugee leader, co-founded NICE in 2005 with other Sudanese refugee men and women. He earned a B.S. in computer science, with a minor in mathematics, from Tennessee State University in 2003, a master's degree in public service from Cumberland University, and a PhD in Organizational Leadership, with an emphasis on strategic planning, from Argosy University in 2014. In 2015 he was named a White House Champion of Change for World Refugees.",
+    searchTerms: "Gallatin",
+    keywords: "nice empower nashville refugee immigrant nonprofit ngo tennessee tn esl employment immigration youth",
+    mission: "To ensure refugees and immigrants achieve their full potential now and for generations to come.",
+    statements: [
+      "Since 2005, NICE has helped refugees and immigrants find housing, work, and belonging in Middle Tennessee — because no one should have to build a new life alone.",
+      "Nashville International Center for Empowerment (NICE) is a 501(c)(3) nonprofit organization based in South Nashville.",
+      "NICE is an affiliate of ECDC.",
+      "Formerly known as Sudanese Community & Women's Service Center.",
+    ],
+    records: [{ label: "EIN", value: "02-0674431" }],
+    reference: {
+      label: "Point of contact",
+      text: "Dr. Gatluak Ter Thach, PhD, Founder & President/CEO",
+      href: "/pros/gatluak-thach",
+    },
     organization: {
-      heading: "About NICE / Empower Nashville",
-      mission: "To ensure refugees and immigrants achieve their full potential now and for generations to come.",
-      summary:
-        "Nashville International Center for Empowerment (NICE) is a 501(c)(3) nonprofit based in South Nashville (EIN 02-0674431). It was established in 2005 and was formerly the Sudanese Community and Women's Service Center. Since 2010 it has been an affiliate of the Ethiopian Community Development Council. NICE serves refugees and immigrants in Middle Tennessee.",
-      mark: {
-        src: "/images/gatluak/nice-icon.webp",
-        alt: "Nashville International Center for Empowerment icon.",
-        width: 512,
-        height: 512,
-      },
+      heading: "Programs",
+      mission: "",
+      summary: "",
       groups: [
         {
           name: "Social Services",

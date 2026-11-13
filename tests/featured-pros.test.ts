@@ -62,7 +62,7 @@ describe("featured professionals", () => {
       featuredPros.filter((pro) => pro.placeholder || pro.comingSoon).every((pro) => pro.serviceTypes.length === 0),
       true,
     );
-    assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 4);
+    assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 5);
   });
 
   it("filters by category, keyword, and location", () => {
