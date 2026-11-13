@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { EventSlider } from "@/components/EventSlider";
-import { HeroSearch } from "@/components/HeroSearch";
-import { ServiceSlideshow } from "@/components/ServiceSlideshow";
+import { ProTile } from "@/components/ProTile";
 import { toEventCard } from "@/lib/event-card";
-import { serviceOffers, servicePath, serviceSlideIcons } from "@/lib/services";
+import { featuredPros, homepageProfessionals, mergeDirectory, proFromAccount } from "@/lib/featured-pros";
+import { HOME_OVERVIEW, HOME_PURPOSE, HOME_QUOTE, HOME_QUOTE_ATTRIBUTION, HOME_QUOTE_CLOSE, HOME_QUOTE_GLOSS, HOME_QUOTE_OPEN } from "@/lib/home";
 import { getSession } from "@/lib/session";
 import { getStore } from "@/lib/store";
 import type { SessionUser } from "@/lib/types";
@@ -17,28 +17,33 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const params = await searchParams;
   const session = await getSession();
   const store = await getStore();
+  const approved = (await store.listApprovedProfessionals()).map(proFromAccount);
+  const people = homepageProfessionals(mergeDirectory(featuredPros, approved));
   const listed = params.events === "empty" ? [] : await store.listApprovedEvents(session?.id ?? null);
   const cards = listed.map((event) => toEventCard(event, session));
 
   return (
     <>
       <section className="hero hero-min">
-        <h1>Find a local professional.</h1>
-        <HeroSearch />
+        <h1>{HOME_OVERVIEW}</h1>
+        <figure className="pull-quote">
+          <blockquote>
+            <p>
+              {HOME_QUOTE_OPEN}
+              {HOME_QUOTE}
+              {HOME_QUOTE_CLOSE} {HOME_QUOTE_GLOSS}
+            </p>
+          </blockquote>
+          <figcaption>{HOME_QUOTE_ATTRIBUTION}</figcaption>
+        </figure>
+        <p className="purpose">{HOME_PURPOSE}</p>
       </section>
 
-      <section className="section" id="services">
-        <h2 className="sr-only">Services</h2>
-        <div className="service-board">
-          {serviceOffers.map((service, index) => (
-            <ServiceSlideshow
-              key={service.id}
-              name={service.name}
-              tagline={service.title}
-              slides={serviceSlideIcons[service.id] ?? []}
-              order={index}
-              href={servicePath(service.id)}
-            />
+      <section className="section" id="professionals">
+        <h2 className="sr-only">Professionals</h2>
+        <div className="tiles">
+          {people.map((pro) => (
+            <ProTile key={pro.slug} pro={pro} />
           ))}
         </div>
       </section>

@@ -36,6 +36,13 @@ describe("featured professionals", () => {
     assert.match(gatbel?.image.src ?? "", /gatbel-coat\.webp$/);
     assert.doesNotMatch(`${gatbel?.name} ${gatbel?.bio} ${gatbel?.serviceAreas} ${gatbel?.notice}`, /970|tel:|\bMD\b|\bDO\b/);
     assert.equal(getFeaturedPro("tango-tew")?.image.src, "/images/tango/tango-headshot-circle.webp");
+    assert.deepEqual(tango?.serviceTypes, ["Business", "Free/Volunteer"]);
+    assert.deepEqual(gatbel?.serviceTypes, ["Charity"]);
+    assert.equal(gatbel?.businessName, null);
+    assert.equal(
+      featuredPros.filter((pro) => pro.placeholder || pro.comingSoon).every((pro) => pro.serviceTypes.length === 0),
+      true,
+    );
     assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 2);
   });
 
@@ -44,13 +51,15 @@ describe("featured professionals", () => {
       filterPros(featuredPros, { category: "tax" }).map((pro) => pro.slug),
       [],
     );
-    for (const keyword of ["AI", "cloud", "website", "software", "Tango"]) {
+    for (const keyword of ["Tang", "tango", "TANGO"]) {
       assert.deepEqual(
         filterPros(featuredPros, { q: keyword }).map((pro) => pro.slug),
         ["tango-tew"],
         keyword,
       );
     }
+    assert.deepEqual(filterPros(featuredPros, { q: "Gat" }).map((pro) => pro.slug), ["gatbel-chamjock"]);
+    assert.deepEqual(filterPros(featuredPros, { q: "cloud" }).map((pro) => pro.slug), []);
     for (const location of ["Nebraska", "Omaha", "Texas", "iowa"]) {
       assert.deepEqual(
         filterPros(featuredPros, { category: "tech", location }).map((pro) => pro.slug),
