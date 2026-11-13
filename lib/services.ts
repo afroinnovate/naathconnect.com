@@ -27,7 +27,7 @@ export function getService(id: string): ServiceOffer | undefined {
   return serviceOffers.find((service) => service.id === id);
 }
 
-/** Homepage tiles open this page. A professional card is a separate link. */
+/** Service pages stay at this path. Professional cards link to /pros/<slug>. */
 export function servicePath(id: string): string {
   return `/services/${id}`;
 }

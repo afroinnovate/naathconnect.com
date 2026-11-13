@@ -22,7 +22,14 @@ export function ProTile({ pro }: { pro: PublicPro }) {
             />
           )}
         </span>
-        <span className="chip">{pro.categoryLabel}</span>
+        <span className="chip-row">
+          <span className="chip">{pro.categoryLabel}</span>
+          {pro.serviceTypes.map((type) => (
+            <span key={type} className="chip chip-type">
+              {type}
+            </span>
+          ))}
+        </span>
         <strong>{pro.name}</strong>
         <span className="tile-line">{pro.line}</span>
         {pro.location ? <span className="tile-where">{pro.location}</span> : pro.serviceAreas ? <span className="tile-where">{pro.serviceAreas}</span> : null}

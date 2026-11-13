@@ -47,6 +47,7 @@ describe("consultation sections", () => {
       contactNote: null,
       gallery: [],
       featuredConsultation: true,
+      serviceTypes: [],
     } satisfies Profile);
     const groups = groupConsultations(mergeConsultations(houseConsultations(), [directory]));
     assert.equal(groups.at(-1)?.category, "workshops");

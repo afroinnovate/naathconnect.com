@@ -97,8 +97,13 @@ html[data-theme="light"] .brand img {
 .hero { padding: 2.5rem 0 1rem; display: grid; gap: 1.2rem; }
 .hero h1 { max-width: 12ch; }
 .hero-min { padding-top: 1.2rem; }
-.hero-min h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); }
+.hero-min h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); max-width: 20ch; }
 .hero-line { margin-top: 1rem; max-width: 36rem; font-size: 1.15rem; color: var(--muted); }
+.pull-quote { margin: 0.2rem 0 0; padding: 0.15rem 0 0.15rem 1rem; border-left: 3px solid var(--green); max-width: 40rem; }
+.pull-quote blockquote { margin: 0; }
+.pull-quote p { font-size: clamp(1.35rem, 2.4vw, 1.85rem); letter-spacing: -0.03em; line-height: 1.25; }
+.pull-quote figcaption { margin-top: 0.55rem; color: var(--muted); font-size: 0.95rem; }
+.purpose { max-width: 42rem; font-size: 1.12rem; line-height: 1.5; }
 .search {
   margin-top: 1.6rem; display: grid; gap: 0.6rem;
 }
@@ -164,7 +169,9 @@ button[type="submit"] {
 .icon-btn svg { width: 1.15rem; height: 1.15rem; }
 .tile-media { border-radius: 18px; overflow: hidden; background: #10241c; aspect-ratio: 4 / 3; }
 .tile-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; display: block; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .chip { justify-self: start; border-radius: 999px; background: var(--chip); color: var(--green); padding: 0.2rem 0.55rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
+.chip-type { text-transform: none; letter-spacing: 0.01em; }
 .tile strong { font-size: 1.45rem; letter-spacing: -0.04em; }
 .tile-line, .tile-where, .quiet { color: var(--muted); }
 .join-tile { align-content: end; min-height: 280px; }
@@ -272,7 +279,7 @@ textarea { width: 100%; min-height: 7rem; border-radius: 16px; border: 1px solid
 }
 
 @media (min-width: 800px) {
-  .search { grid-template-columns: 0.8fr 1.2fr 1fr auto; align-items: center; }
+  .search { grid-template-columns: 1fr 1fr; align-items: center; }
   .search button { width: auto; padding-inline: 1.4rem; }
   .hero { grid-template-columns: 1.05fr 0.95fr; align-items: end; }
   .hero-min { grid-template-columns: 1fr; }
@@ -283,6 +290,7 @@ textarea { width: 100%; min-height: 7rem; border-radius: 16px; border: 1px solid
   .directory-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (min-width: 1100px) {
+  .search { grid-template-columns: 1fr 1.15fr 1.15fr 1fr auto; }
   .service-board { grid-template-columns: repeat(4, 1fr); }
   .pro-copy .service-board { grid-template-columns: 1fr 1fr; }
 }

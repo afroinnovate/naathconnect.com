@@ -2,6 +2,7 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { requireSupabaseEnv } from "./config";
 import { cookies } from "next/headers";
 import { profileToConsultation } from "./consultations";
+import { parseServiceTypes } from "./service-types";
 import { utcDay } from "./time";
 import { viewProof } from "./view-proof";
 import type { Store } from "./sqlite-store";
@@ -71,6 +72,7 @@ function mapProfile(row: Row): Profile {
     contactNote: asNullable(row.contact_note),
     gallery: asGallery(row.gallery_json),
     featuredConsultation: row.featured_consultation === true,
+    serviceTypes: parseServiceTypes(row.service_types),
   };
 }
 

@@ -1,7 +1,6 @@
 import { getService, serviceOffers } from "./services";
+import { SERVICE_TYPES, type ServiceType } from "./service-types";
 import { RESUME_URL, SITE_EMAIL, SITE_WHATSAPP, TANGO_GITHUB, TANGO_LINKEDIN } from "./site";
-
-export type ProCategory = "tech" | "medical" | "software" | "tax" | "auto" | "finance" | "education";
 
 export type ServiceTile = {
   name: string;
@@ -12,9 +11,13 @@ export type ServiceTile = {
 export type PublicPro = {
   slug: string;
   name: string;
-  category: ProCategory;
+  category: string;
   categoryLabel: string;
   line: string;
+  /** Set only when the professional has a business name. */
+  businessName: string | null;
+  /** Empty means no type is known. A professional can have more than one. */
+  serviceTypes: ServiceType[];
   location: string | null;
   image: { src: string; alt: string; width: number; height: number };
   placeholder: boolean;
@@ -54,6 +57,8 @@ export const featuredPros: PublicPro[] = [
     category: "tech",
     categoryLabel: "Tech",
     line: "Technology consulting.",
+    businessName: null,
+    serviceTypes: ["Business", "Free/Volunteer"],
     location: null,
     image: {
       src: "/images/tango/tango-headshot-circle.webp",
@@ -104,6 +109,8 @@ export const featuredPros: PublicPro[] = [
     category: "medical",
     categoryLabel: "Medical",
     line: "Certified Physician Assistant, Emergency Medicine",
+    businessName: null,
+    serviceTypes: ["Charity"],
     location: null,
     image: {
       src: "/images/gatbel/gatbel-coat.webp",
@@ -160,6 +167,8 @@ export const featuredPros: PublicPro[] = [
     category: "tax",
     categoryLabel: "Tax",
     line: "Coming soon.",
+    businessName: null,
+    serviceTypes: [],
     location: "Placeholder location",
     image: {
       src: "/images/placeholders/tax.svg",
@@ -190,6 +199,8 @@ export const featuredPros: PublicPro[] = [
     category: "finance",
     categoryLabel: "Finance",
     line: "Coming soon.",
+    businessName: null,
+    serviceTypes: [],
     location: "Placeholder location",
     image: {
       src: "/images/placeholders/finance.svg",
@@ -220,6 +231,8 @@ export const featuredPros: PublicPro[] = [
     category: "auto",
     categoryLabel: "Auto",
     line: "Coming soon.",
+    businessName: null,
+    serviceTypes: [],
     location: "Placeholder location",
     image: {
       src: "/images/placeholders/auto.svg",
@@ -246,8 +259,6 @@ export const featuredPros: PublicPro[] = [
   },
 ];
 
-export const homeTiles = featuredPros;
-
 export function getFeaturedPro(slug: string): PublicPro | undefined {
   return featuredPros.find((pro) => pro.slug === slug);
 }
@@ -270,6 +281,7 @@ export function proFromAccount(person: {
   bio: string;
   website: string | null;
   email: string;
+  serviceTypes?: ServiceType[];
 }): PublicPro {
   const placeholder = person.bio.includes("PLACEHOLDER");
   return {
@@ -278,6 +290,8 @@ export function proFromAccount(person: {
     category: "tech",
     categoryLabel: person.profession || "Professional",
     line: placeholder ? "Placeholder." : person.businessName,
+    businessName: person.businessName.trim() || null,
+    serviceTypes: person.serviceTypes ?? [],
     location: person.serviceArea || null,
     image: {
       src: "/images/placeholders/finance.svg",
@@ -323,37 +337,50 @@ export function mergeDirectory(curated: PublicPro[], approved: PublicPro[]): Pub
   return [...curated, ...extra];
 }
 
+export type CategoryOption = { value: string; label: string };
+
+/** Options come from the professionals in hand. A new category shows up on its own. */
+export function categoryOptions(pros: PublicPro[]): CategoryOption[] {
+  const labels = new Map<string, { label: string; real: boolean }>();
+  for (const pro of pros) {
+    const value = pro.category.trim();
+    if (!value) continue;
+    const real = !pro.placeholder && !pro.comingSoon;
+    const current = labels.get(value);
+    if (!current || (!current.real && real)) {
+      labels.set(value, { label: pro.categoryLabel.trim() || value, real });
+    }
+  }
+  const options = [...labels.entries()]
+    .map(([value, item]) => ({ value, label: item.label }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+  return [{ value: "", label: "All" }, ...options];
+}
+
+/** Professionals the directory lists when no filter is set. The homepage uses the same set. */
+export function homepageProfessionals(pros: PublicPro[]): PublicPro[] {
+  return filterPros(pros, {});
+}
+
 export function filterPros(
   pros: PublicPro[],
-  query: { q?: string; category?: string; location?: string },
+  query: { q?: string; category?: string; location?: string; type?: string },
 ): PublicPro[] {
   const keyword = (query.q ?? "").trim().toLowerCase();
   const category = (query.category ?? "").trim().toLowerCase();
   const location = (query.location ?? "").trim().toLowerCase();
+  const type = SERVICE_TYPES.find((item) => item.toLowerCase() === (query.type ?? "").trim().toLowerCase());
   return pros.filter((pro) => {
     if (pro.placeholder || pro.comingSoon) return false;
     if (category && pro.category !== category) return false;
+    if (type && !pro.serviceTypes.includes(type)) return false;
     if (location && !pro.remote) {
       const where = `${pro.location ?? ""} ${pro.serviceAreas ?? ""}`.toLowerCase();
       if (!where.includes(location)) return false;
     }
     if (!keyword) return true;
-    const haystack = [
-      pro.name,
-      pro.line,
-      pro.profession,
-      pro.industry,
-      pro.category,
-      pro.categoryLabel,
-      pro.school,
-      pro.serviceAreas,
-      pro.searchTerms,
-      pro.bio,
-      ...pro.services.map((service) => `${service.name} ${service.line}`),
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-    return haystack.includes(keyword);
+    const name = pro.name.toLowerCase();
+    const business = (pro.businessName ?? "").trim().toLowerCase();
+    return name.includes(keyword) || (business.length > 0 && business.includes(keyword));
   });
 }

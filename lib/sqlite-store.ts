@@ -4,6 +4,7 @@ import path from "path";
 import { profileToConsultation } from "./consultations";
 import { demoAdminEmail, demoAdminPassword, demoProfessionalPassword } from "./config";
 import { sanitizeGallery } from "./gallery";
+import { parseServiceTypes } from "./service-types";
 import { hashPassword, verifyPassword } from "./passwords";
 import { zonedLocalToUtc } from "./time";
 import { utcDay } from "./time";
@@ -117,6 +118,7 @@ function mapProfile(row: SqlRow): Profile {
     contactNote: nullable(row, "contact_note"),
     gallery: parseGallery(nullable(row, "gallery_json")),
     featuredConsultation: integer(row, "featured_consultation") === 1,
+    serviceTypes: parseServiceTypes(row.service_types),
   };
 }
 
