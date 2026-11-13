@@ -21,11 +21,30 @@ describe("featured professionals", () => {
     const gatbel = getFeaturedPro("gatbel-chamjock");
     assert.equal(gatbel?.placeholder, false);
     assert.equal(gatbel?.comingSoon, false);
-    assert.equal(gatbel?.name, "Dr. Gatbel Nyak Chamjock, MPAS, PA-C");
-    assert.equal(gatbel?.line, "Certified Physician Assistant, Emergency Medicine");
+    assert.equal(gatbel?.name, "Dr. Gatbel Nyak Chamjock, DrPH, MPAS, PA-C");
+    assert.equal(gatbel?.line, "Doctor · Epidemiologist · Health Educator");
+    assert.deepEqual(
+      gatbel?.titles?.map((item) => item.title),
+      [
+        "Doctor of Public Health",
+        "Epidemiologist",
+        "Health Educator",
+        "MPAS",
+        "PA-C",
+        "Board member and medical team lead",
+        "Bachelor's degree in biology",
+      ],
+    );
+    assert.deepEqual(gatbel?.credentialBadges, ["DrPH", "MPAS", "PA-C"]);
+    assert.equal(gatbel?.experience?.[0]?.title, "Epidemiologist and health educator");
+    assert.equal(gatbel?.titles?.[0]?.title, "Doctor of Public Health");
+    assert.match(gatbel?.titles?.[0]?.detail ?? "", /DrPH, Capella University, Minneapolis, Minnesota/);
+    assert.match(gatbel?.bio ?? "", /holds a Doctor of Public Health \(DrPH\) from Capella University in Minneapolis, Minnesota/);
+    assert.match(gatbel?.titles?.map((item) => item.detail).join(" ") ?? "", /Union College in Lincoln, Nebraska/);
+    assert.match(gatbel?.titles?.map((item) => item.detail).join(" ") ?? "", /Tennessee State University/);
     assert.equal(gatbel?.category, "medical");
-    assert.match(gatbel?.bio ?? "", /^Dr\. Gatbel is a board-certified physician assistant/);
-    assert.match(gatbel?.bio ?? "", /including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons\.$/);
+    assert.match(gatbel?.bio ?? "", /^Dr\. Gatbel Nyak Chamjock is a Doctor of Public Health, an epidemiologist, and a health educator\./);
+    assert.match(gatbel?.bio ?? "", /including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons/);
     assert.equal(gatbel?.serviceAreas, "Iowa (in person) · Remote telehealth anywhere");
     assert.equal(gatbel?.remote, true);
     assert.equal(gatbel?.email, "gchamjock@gmail.com");

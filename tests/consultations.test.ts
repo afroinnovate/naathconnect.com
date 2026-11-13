@@ -9,8 +9,8 @@ describe("consultation sections", () => {
     const gatbel = house.find((profile) => profile.slug === "gatbel-chamjock");
     const tango = house.find((profile) => profile.slug === "tango-tew");
     assert.equal(gatbel?.placeholder, false);
-    assert.equal(gatbel?.name, "Dr. Gatbel Nyak Chamjock, MPAS, PA-C");
-    assert.match(gatbel?.summary ?? "", /^Dr\. Gatbel is a board-certified/);
+    assert.equal(gatbel?.name, "Dr. Gatbel Nyak Chamjock, DrPH, MPAS, PA-C");
+    assert.match(gatbel?.summary ?? "", /^Dr\. Gatbel Nyak Chamjock is a Doctor of Public Health/);
     assert.match(gatbel?.portrait?.src ?? "", /gatbel-coat\.webp$/);
     assert.doesNotMatch(gatbel?.name ?? "", /ChamJock|\bMD\b|\bDO\b/);
     assert.equal(gatbel?.specialty, "Emergency medicine");

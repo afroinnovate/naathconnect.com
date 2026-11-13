@@ -172,6 +172,17 @@ button[type="submit"] {
 .chip-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .chip { justify-self: start; border-radius: 999px; background: var(--chip); color: var(--green); padding: 0.2rem 0.55rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
 .chip-type { text-transform: none; letter-spacing: 0.01em; }
+.credential-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.credential {
+  border-radius: 999px; border: 1px solid var(--line); background: color-mix(in srgb, var(--green) 12%, transparent);
+  color: var(--green); padding: 0.28rem 0.7rem; font-weight: 700; letter-spacing: 0.03em;
+}
+.profile-section { display: grid; gap: 0.55rem; }
+.profile-section h2 { font-size: clamp(1.45rem, 2vw, 1.8rem); }
+.profile-section ol { margin: 0; padding-left: 1.15rem; display: grid; gap: 0.75rem; }
+.profile-section li { display: grid; gap: 0.15rem; }
+.profile-section strong { letter-spacing: -0.03em; }
+.profile-section span { color: var(--muted); }
 .tile strong { font-size: 1.45rem; letter-spacing: -0.04em; }
 .tile-line, .tile-where, .quiet { color: var(--muted); }
 .join-tile { align-content: end; min-height: 280px; }

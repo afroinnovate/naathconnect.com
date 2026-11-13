@@ -8,6 +8,11 @@ export type ServiceTile = {
   slides?: readonly string[];
 };
 
+export type ProfilePoint = {
+  title: string;
+  detail: string;
+};
+
 export type PublicPro = {
   slug: string;
   name: string;
@@ -43,6 +48,12 @@ export type PublicPro = {
   photos: { src: string; alt: string; width: number; height: number }[];
   bio?: string | null;
   notice?: string | null;
+  /** Short credentials shown as badges, such as DrPH. */
+  credentialBadges?: readonly string[];
+  /** Professional experience, already ordered by impact. */
+  experience?: readonly ProfilePoint[];
+  /** Titles and credentials, already ordered by impact. */
+  titles?: readonly ProfilePoint[];
 };
 
 const tangoServices: ServiceTile[] = serviceOffers.map((service) => ({
@@ -105,10 +116,10 @@ export const featuredPros: PublicPro[] = [
   },
   {
     slug: "gatbel-chamjock",
-    name: "Dr. Gatbel Nyak Chamjock, MPAS, PA-C",
+    name: "Dr. Gatbel Nyak Chamjock, DrPH, MPAS, PA-C",
     category: "medical",
     categoryLabel: "Medical",
-    line: "Certified Physician Assistant, Emergency Medicine",
+    line: "Doctor · Epidemiologist · Health Educator",
     businessName: null,
     serviceTypes: ["Charity"],
     location: null,
@@ -128,9 +139,60 @@ export const featuredPros: PublicPro[] = [
     ],
     placeholder: false,
     comingSoon: false,
-    profession: "Certified Physician Assistant, Emergency Medicine",
+    profession: "Doctor · Epidemiologist · Health Educator",
+    credentialBadges: ["DrPH", "MPAS", "PA-C"],
+    experience: [
+      {
+        title: "Epidemiologist and health educator",
+        detail:
+          "Teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons.",
+      },
+      {
+        title: "Gambella Medical Team Connection",
+        detail: "Board member and medical team lead.",
+      },
+      {
+        title: "Emergency care in Waterloo, Iowa",
+        detail:
+          "Also practices as a board-certified physician assistant (PA-C) in emergency medicine, working in emergency care in Waterloo, Iowa.",
+      },
+      {
+        title: "Patients in Iowa, Nebraska, and Colorado",
+        detail: "Has served patients in Iowa, Nebraska and Colorado.",
+      },
+    ],
+    titles: [
+      {
+        title: "Doctor of Public Health",
+        detail: "DrPH, Capella University, Minneapolis, Minnesota.",
+      },
+      {
+        title: "Epidemiologist",
+        detail: "Epidemiologist.",
+      },
+      {
+        title: "Health Educator",
+        detail: "Health Educator.",
+      },
+      {
+        title: "MPAS",
+        detail: "Master of Physician Assistant Studies, Union College in Lincoln, Nebraska.",
+      },
+      {
+        title: "PA-C",
+        detail: "Board-certified physician assistant.",
+      },
+      {
+        title: "Board member and medical team lead",
+        detail: "Gambella Medical Team Connection.",
+      },
+      {
+        title: "Bachelor's degree in biology",
+        detail: "Tennessee State University.",
+      },
+    ],
     school: null,
-    industry: "Emergency medicine",
+    industry: null,
     years: null,
     services: [
       {
@@ -158,7 +220,7 @@ export const featuredPros: PublicPro[] = [
     linkedin: null,
     remote: true,
     searchTerms: "physician assistant emergency medicine telehealth preventive health Iowa Waterloo",
-    bio: "Dr. Gatbel is a board-certified physician assistant who specializes in emergency medicine. He works in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado. He holds a bachelor's degree in biology from Tennessee State University and a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska. He is a board member and medical team lead for Gambella Medical Team Connection, and he teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons.",
+    bio: "Dr. Gatbel Nyak Chamjock is a Doctor of Public Health, an epidemiologist, and a health educator. He holds a Doctor of Public Health (DrPH) from Capella University in Minneapolis, Minnesota. He teaches preventive health to the community, including on social media such as Facebook, in person around Iowa, and remotely through telehealth and online lessons. He is a board member and medical team lead for Gambella Medical Team Connection. He holds a Master of Physician Assistant Studies from Union College in Lincoln, Nebraska, and a bachelor's degree in biology from Tennessee State University. He also practices as a board-certified physician assistant (PA-C) in emergency medicine, working in emergency care in Waterloo, Iowa, and has served patients in Iowa, Nebraska and Colorado.",
     notice: "Information for general education. For emergencies call 911.",
   },
   {
