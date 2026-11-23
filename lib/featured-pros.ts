@@ -376,11 +376,11 @@ export const featuredPros: PublicPro[] = [
   {
     slug: "gatluak-thach",
     name: "Dr. Gatluak Ter Thach, PhD",
-    category: "ngo",
-    categoryLabel: "NGO / Social Empowerment",
+    category: "community-services",
+    categoryLabel: "Community Services / Nonprofit",
     line: "Prof, Tennessee State University · President/CEO, N.I.C.E",
     businessName: null,
-    serviceTypes: ["Business", "Free/Volunteer"],
+    serviceTypes: ["Business", "Free/Volunteer", "Charity"],
     location: "Nashville, TN",
     image: {
       src: "/images/gatluak/gatluak-thach.webp",
@@ -456,15 +456,15 @@ export const featuredPros: PublicPro[] = [
     whatsapp: "https://wa.me/16154772767",
     website: null,
     github: null,
-    linkedin: null,
+    linkedin: "https://www.linkedin.com/in/dr-gatluak-thach-b3abba28",
     remote: false,
     searchTerms: "",
     keywords: "gatluak thach grant writing proposal ngo leadership strategic planning budgeting finance mentorship phd nashville tn",
-    bio: "Adjunct Professor of Strategic Leadership and Organizational Development at Tennessee State University, and founder and President/CEO of NICE, which he has led for more than 20 years. He is a refugee and immigrant rights activist.",
+    bio: "Founder, President & CEO of Nashville International Center for Empowerment (NICE), a 501(c)(3) in Nashville, TN. Adjunct Professor of Strategic Leadership and Organizational Development at Tennessee State University. He has led NICE for more than 20 years and is a refugee and immigrant rights activist.",
     statements: [
       "Boards and councils: Sudanese Human Rights Organization; Advisory Council of the Tennessee Department of Children's Services; Mayor's New American Council; Tennessee for All of Us; Nashville Area Habitat for Humanity; Sudanese Presbyterian Church; Alliance for South Sudanese in Diaspora; South Sudan Relief Rehabilitation Agency – USA; Volar Collegiate Academy.",
       "Author of My New American Dream and Life of the Leader. Upcoming: The 12 Leadership Principles, Successful Integration, and Why My People Continue to Suffer in South Sudan.",
-      "Awards include the White House Champion of Change from President Obama, CEO of the Year, Distinguished Service Award, Human Right Rising Advocate Award, Power of Inclusion Award, Community Empowering Award, New Immigrant Leadership Award, and Peace Ambassadors USA Award.",
+      "Awards include the White House Champion of Change (2015) from President Obama, CEO of the Year, Distinguished Service Award, Human Right Rising Advocate Award, Power of Inclusion Award, Community Empowering Award, New Immigrant Leadership Award, and Peace Ambassadors USA Award.",
     ],
     reference: {
       label: "Affiliation",
