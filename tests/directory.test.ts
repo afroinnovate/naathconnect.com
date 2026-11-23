@@ -42,12 +42,12 @@ describe("directory filters", () => {
     const charity = filterPros(featuredPros, { type: "Charity" }).map((pro) => pro.slug);
     assert.deepEqual(volunteer, ["tango-tew", "gatluak-thach", "nice-empower-nashville"]);
     assert.deepEqual(business, ["tango-tew", "lam-tax-service", "gatluak-thach"]);
-    assert.deepEqual(charity, ["gatbel-chamjock", "nice-empower-nashville"]);
+    assert.deepEqual(charity, ["gatbel-chamjock", "gatluak-thach", "nice-empower-nashville"]);
 
     const unset = withName(featuredPros[2], "lam-tax-demo", "Lam Tax Service", "Lam Tax Service");
     unset.serviceTypes = [];
     const people = [...featuredPros, unset];
-    assert.deepEqual(filterPros(people, { type: "Charity" }).map((pro) => pro.slug), ["gatbel-chamjock", "nice-empower-nashville"]);
+    assert.deepEqual(filterPros(people, { type: "Charity" }).map((pro) => pro.slug), ["gatbel-chamjock", "gatluak-thach", "nice-empower-nashville"]);
     assert.ok(filterPros(people, {}).some((pro) => pro.slug === "lam-tax-demo"));
     assert.equal(filterPros(people, { type: "Business" }).some((pro) => pro.slug === "lam-tax-demo"), false);
 
@@ -69,7 +69,7 @@ describe("directory filters", () => {
     assert.deepEqual(slugs({ category: "medical" }), ["gatbel-chamjock"]);
     assert.deepEqual(slugs({ category: "TECH" }), ["tango-tew"]);
     assert.deepEqual(slugs({ category: "Tech" }), ["tango-tew"]);
-    assert.deepEqual(slugs({ type: "Charity" }), ["gatbel-chamjock", "nice-empower-nashville"]);
+    assert.deepEqual(slugs({ type: "Charity" }), ["gatbel-chamjock", "gatluak-thach", "nice-empower-nashville"]);
     assert.deepEqual(slugs({ type: "business" }), ["tango-tew", "lam-tax-service", "gatluak-thach"]);
     assert.deepEqual(slugs({ q: "Tang" }), ["tango-tew"]);
     assert.deepEqual(slugs({}), ["tango-tew", "gatbel-chamjock", "lam-tax-service", "gatluak-thach", "nice-empower-nashville"]);
@@ -155,7 +155,10 @@ describe("directory filters", () => {
     assert.equal(gat?.name, "Dr. Gatluak Ter Thach, PhD");
     assert.equal(gat?.line, "Prof, Tennessee State University · President/CEO, N.I.C.E");
     assert.match(gat?.profession ?? "", /Adjunct Professor of Strategic Leadership and Organizational Development/);
-    assert.deepEqual(gat?.serviceTypes, ["Business", "Free/Volunteer"]);
+    assert.deepEqual(gat?.serviceTypes, ["Business", "Free/Volunteer", "Charity"]);
+    assert.equal(gat?.category, "community-services");
+    assert.equal(gat?.categoryLabel, "Community Services / Nonprofit");
+    assert.equal(gat?.linkedin, "https://www.linkedin.com/in/dr-gatluak-thach-b3abba28");
     assert.ok(gat?.credentialBadges?.includes("Grant writing"));
     assert.ok(gat?.credentialBadges?.includes("Strategic advocacy"));
     assert.equal(gat?.businessName, null);
@@ -180,13 +183,32 @@ describe("directory filters", () => {
       ],
     );
     assert.equal(gat?.services.every((service) => (service.slides?.length ?? 0) >= 2), true);
-    assert.deepEqual(profileLinks(gat!), []);
+    assert.deepEqual(profileLinks(gat!), [
+      { href: "https://www.linkedin.com/in/dr-gatluak-thach-b3abba28", label: "LinkedIn" },
+    ]);
     assert.match(gat?.image.src ?? "", /gatluak-thach\.webp$/);
     const published = JSON.stringify(gat);
     assert.doesNotMatch(published, /tel:|315[\s.\-]*9681|207[\s.\-]*1686|Duang|Selena|Nyakuma|Gallatin office|Digital literacy/i);
     assert.match(published, /Adjunct Professor of Strategic Leadership/);
     assert.match(published, /Harvard Kennedy School/);
-    assert.match(published, /White House Champion of Change/);
+    assert.match(published, /White House Champion of Change \(2015\)/);
+    assert.match(published, /My New American Dream/);
+    assert.match(published, /501\(c\)\(3\)/);
+    for (const keyword of ["Gat", "Gatluak", "Thach"]) {
+      assert.ok(
+        filterPros(featuredPros, { q: keyword }).some((pro) => pro.slug === "gatluak-thach"),
+        keyword,
+      );
+    }
+    assert.deepEqual(filterPros(featuredPros, { q: "Gatluak" }).map((pro) => pro.slug), ["gatluak-thach"]);
+    assert.deepEqual(filterPros(featuredPros, { q: "Thach" }).map((pro) => pro.slug), ["gatluak-thach"]);
+    for (const type of ["Business", "Free/Volunteer", "Charity"]) {
+      assert.ok(filterPros(featuredPros, { type }).some((pro) => pro.slug === "gatluak-thach"), type);
+    }
+    assert.deepEqual(
+      filterPros(featuredPros, { category: "Community Services / Nonprofit" }).map((pro) => pro.slug),
+      ["gatluak-thach"],
+    );
     assert.match(published, /Life of the Leader/);
     assert.match(published, /Tennessee State University/);
     assert.match(published, /Cumberland University/);
@@ -275,6 +297,10 @@ describe("directory filters", () => {
       value: "ngo",
       label: "NGO / Social Empowerment",
     });
+    assert.deepEqual(categoryOptions(featuredPros).find((option) => option.value === "community-services"), {
+      value: "community-services",
+      label: "Community Services / Nonprofit",
+    });
     const published = JSON.stringify(nice);
     assert.doesNotMatch(published, /tel:|315[\s.\-]*9681|207[\s.\-]*1686|culturally sensitive|It was established in 2005/i);
     for (const keyword of ["NICE", "Empower Nashville", "refugee", "immigrant", "nonprofit", "Tennessee", "ESL", "employment", "immigration", "youth"]) {
@@ -302,6 +328,16 @@ describe("directory filters", () => {
     if (listed instanceof Promise) return;
     assert.ok(listed.length > 0);
     assert.equal(listed.every((person) => person.serviceTypes.length === 0), true);
+  });
+});
+
+describe("bare pros path", () => {
+  it("redirects /pros to the directory and leaves profile slugs alone", () => {
+    const config = readFileSync("next.config.ts", "utf8");
+    assert.match(config, /source:\s*"\/pros"/);
+    assert.match(config, /destination:\s*"\/directory"/);
+    assert.match(config, /permanent:\s*true/);
+    assert.doesNotMatch(config, /source:\s*"\/pros\/:slug"/);
   });
 });
 

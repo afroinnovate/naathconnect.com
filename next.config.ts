@@ -4,6 +4,9 @@ import { robotsTag } from "./lib/config";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  async redirects() {
+    return [{ source: "/pros", destination: "/directory", permanent: true }];
+  },
   async headers() {
     const headers = [
       { key: "X-Frame-Options", value: "DENY" },
