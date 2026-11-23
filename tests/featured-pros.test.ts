@@ -62,7 +62,7 @@ describe("featured professionals", () => {
       featuredPros.filter((pro) => pro.placeholder || pro.comingSoon).every((pro) => pro.serviceTypes.length === 0),
       true,
     );
-    assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 3);
+    assert.equal(featuredPros.filter((pro) => !pro.placeholder).length, 5);
   });
 
   it("filters by category, keyword, and location", () => {
@@ -77,7 +77,7 @@ describe("featured professionals", () => {
         keyword,
       );
     }
-    assert.deepEqual(filterPros(featuredPros, { q: "Gat" }).map((pro) => pro.slug), ["gatbel-chamjock"]);
+    assert.deepEqual(filterPros(featuredPros, { q: "Gat" }).map((pro) => pro.slug), ["gatbel-chamjock", "gatluak-thach"]);
     assert.deepEqual(filterPros(featuredPros, { q: "cloud" }).map((pro) => pro.slug), []);
     for (const location of ["Nebraska", "Omaha", "Texas", "iowa"]) {
       assert.deepEqual(
