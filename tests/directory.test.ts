@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { categoryOptions, featuredPros, filterPros, homepageProfessionals, type PublicPro } from "../lib/featured-pros";
+import { firstSentence, profileOverview } from "../lib/profile-overview";
 import { profileLinks } from "../components/ProfileLinks";
 import { HOME_PURPOSE, HOME_QUOTE, HOME_QUOTE_ATTRIBUTION, HOME_QUOTE_CLOSE, HOME_QUOTE_GLOSS, HOME_QUOTE_OPEN } from "../lib/home";
 import { openSqliteStore } from "../lib/sqlite-store";
@@ -363,6 +364,66 @@ describe("directory filters", () => {
     if (listed instanceof Promise) return;
     assert.ok(listed.length > 0);
     assert.equal(listed.every((person) => person.serviceTypes.length === 0), true);
+  });
+});
+
+describe("collapsible profile bio", () => {
+  it("uses a short overview already in the data and keeps the rest for the full bio", () => {
+    const lam = featuredPros.find((pro) => pro.slug === "lam-tax-service");
+    const lamLead = profileOverview(lam!);
+    assert.equal(lamLead.overview, lam?.statements?.[0]);
+    assert.equal(lamLead.restBio, null);
+    assert.match(lamLead.restStatements.join(" "), /Founded in 2016/);
+
+    const gatbel = featuredPros.find((pro) => pro.slug === "gatbel-chamjock");
+    const gatbelLead = profileOverview(gatbel!);
+    assert.equal(
+      gatbelLead.overview,
+      "Dr. Gatbel Nyak Chamjock is a Doctor of Public Health, an epidemiologist, and a health educator.",
+    );
+    assert.match(gatbelLead.restBio ?? "", /Capella University/);
+
+    const thach = featuredPros.find((pro) => pro.slug === "gatluak-thach");
+    const thachLead = profileOverview(thach!);
+    assert.equal(
+      thachLead.overview,
+      "Founder, President & CEO of Nashville International Center for Empowerment (NICE), a 501(c)(3) in Nashville, TN.",
+    );
+    assert.match(thachLead.restBio ?? "", /Adjunct Professor/);
+    assert.ok(thachLead.restStatements.some((line) => line.includes("2015")));
+
+    const nice = featuredPros.find((pro) => pro.slug === "nice-empower-nashville");
+    const niceLead = profileOverview(nice!);
+    assert.equal(niceLead.overview, nice?.statements?.[0]);
+    assert.ok(niceLead.restStatements.some((line) => line.includes("501(c)(3)")));
+
+    const tango = featuredPros.find((pro) => pro.slug === "tango-tew");
+    const tangoLead = profileOverview(tango!);
+    assert.equal(tangoLead.overview, "Technology consultant");
+    assert.equal(tangoLead.restBio, null);
+    assert.deepEqual([...tangoLead.restStatements], []);
+
+    assert.equal(firstSentence("Dr. Example stays whole. Next sentence.").lead, "Dr. Example stays whole.");
+    assert.equal(firstSentence("Dr. Example stays whole. Next sentence.").rest, "Next sentence.");
+  });
+
+  it("shows services before a collapsed full bio toggle", () => {
+    const profile = readFileSync("components/ProView.tsx", "utf8");
+    const contact = profile.indexOf('className="contact-row"');
+    const overview = profile.indexOf('className="hero-line profile-overview"');
+    const services = profile.indexOf("<Services");
+    const details = profile.indexOf("<details");
+    const summary = profile.indexOf("<summary");
+    assert.ok(contact > 0);
+    assert.ok(overview > contact);
+    assert.ok(services > overview);
+    assert.ok(details > services);
+    assert.ok(summary > details);
+    assert.match(profile, /Read full bio/);
+    assert.match(profile, /Show less/);
+    assert.match(profile, /aria-controls=\{panelId\}/);
+    assert.doesNotMatch(profile, /<details[^>]*\sopen/);
+    assert.doesNotMatch(profile, /tel:/);
   });
 });
 
