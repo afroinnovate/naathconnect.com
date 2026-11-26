@@ -100,34 +100,70 @@ describe("directory filters", () => {
     assert.deepEqual(filterPros(people, { q: "nomatch" }), []);
   });
 
-  it("lists Lam Tax Service in St. Cloud and finds the firm by place or service", () => {
+  it("lists Lam Pal Chuol and Lam Tax Services in St. Cloud", () => {
     const lam = featuredPros.find((pro) => pro.slug === "lam-tax-service");
     assert.equal(lam?.placeholder, false);
-    assert.equal(lam?.name, "Lam Tax Service, LLC");
-    assert.equal(lam?.line, "Tax preparation, bookkeeping and payroll in St. Cloud, MN");
-    assert.equal(lam?.founder, "Lam Chuol, founder (est. 2016)");
-    assert.equal(lam?.location, "22 Wilson Ave NE, Suite 201, St. Cloud, MN 56304");
-    assert.equal(lam?.serviceAreas, "St. Cloud, Minnesota (in person)");
+    assert.equal(lam?.name, "Lam Pal Chuol");
+    assert.equal(lam?.line, "Entrepreneur, Real Estate Investor & Founder of Lam Tax Services, LLC");
+    assert.equal(lam?.businessName, "Lam Tax Services, LLC");
+    assert.equal(lam?.location, "St. Cloud, Minnesota");
     assert.equal(lam?.website, "https://lamtaxservice.com");
     assert.equal(lam?.email, "info@lamtaxservice.com");
     assert.equal(lam?.whatsapp, null);
     assert.deepEqual(lam?.serviceTypes, ["Business"]);
-    assert.match(lam?.bio ?? "", /founded in 2016 by Lam Chuol/);
+    assert.equal(lam?.category, "tax");
+    assert.deepEqual(lam?.statements, [
+      "Individual and Business Tax Preparation, Bookkeeping, Payroll & Accounting Services in St. Cloud, Minnesota",
+      "Founded in 2016 by Lam Pal Chuol, Lam Tax Services, LLC is a locally established tax and accounting firm dedicated to helping individuals, families, and small businesses achieve financial success.",
+      "With 15 years of professional experience in accounting, mortgage servicing, and banking, Lam brings a strong foundation of financial knowledge and business expertise to the firm.",
+      "A graduate of Ohio Valley University with a Bachelor of Science in Accounting, Lam combines his professional experience with an entrepreneurial commitment to providing accurate, reliable, and affordable tax and accounting services.",
+      "In 2023, Lam Tax Services, LLC was honored with the Initiative Foundation’s New Business of the Year Award, recognizing its growth and contribution to the local business community.",
+      "The firm’s mission is to help individuals and small businesses manage their finances with confidence, meet their tax obligations, and build a strong foundation for long-term success.",
+    ]);
+    assert.deepEqual(lam?.records, [
+      { label: "Founder", value: "Lam Pal Chuol" },
+      { label: "Established", value: "2016" },
+      { label: "Location", value: "St. Cloud, Minnesota" },
+      { label: "In-Person Services", value: "Available" },
+      { label: "Remote Services", value: "Available" },
+    ]);
+    assert.deepEqual(
+      lam?.services.map((service) => service.name),
+      [
+        "Individual tax preparation",
+        "Small business tax preparation",
+        "Minnesota property tax and renter’s refunds",
+        "Bookkeeping and monthly financial statements",
+        "Payroll services",
+        "Sales tax reporting",
+        "Accounts payable and accounts receivable",
+        "QuickBooks setup and training",
+        "Business entity selection and guidance",
+      ],
+    );
     assert.match(lam?.image.src ?? "", /lam-portrait\.webp$/);
-    assert.equal(lam?.image.width, 523);
-    assert.equal(lam?.image.height, 630);
     assert.equal(lam?.remote, false);
     assert.equal(lam?.offersRemote, true);
     assert.equal("phone" in (lam ?? {}), false);
     assert.equal(featuredPros.some((pro) => pro.placeholder && pro.category === "tax"), false);
-    for (const location of ["St. Cloud", "Saint Cloud", "MN", "Minnesota", "56304"]) {
+    for (const location of ["St. Cloud", "Saint Cloud", "MN", "Minnesota"]) {
       assert.deepEqual(
         filterPros(featuredPros, { category: "tax", location }).map((pro) => pro.slug),
         ["lam-tax-service"],
         location,
       );
     }
-    for (const keyword of ["bookkeeping", "payroll", "QuickBooks"]) {
+    for (const keyword of [
+      "bookkeeping",
+      "payroll",
+      "QuickBooks",
+      "accounting",
+      "Lam Pal Chuol",
+      "St. Cloud",
+      "renter's refund",
+      "property tax",
+      "sales tax",
+    ]) {
       assert.deepEqual(
         filterPros(featuredPros, { q: keyword }).map((pro) => pro.slug),
         ["lam-tax-service"],
@@ -142,8 +178,7 @@ describe("directory filters", () => {
         keyword,
       );
     }
-    assert.equal(filterPros(featuredPros, { q: "cloud" }).some((pro) => pro.slug === "lam-tax-service"), false);
-    assert.doesNotMatch(`${lam?.bio} ${lam?.location} ${lam?.line} ${lam?.keywords}`, /tel:/);
+    assert.doesNotMatch(JSON.stringify(lam), /tel:/);
     const tile = readFileSync("components/ProTile.tsx", "utf8");
     const profile = readFileSync("components/ProView.tsx", "utf8");
     assert.match(tile, /Remote services available/);
