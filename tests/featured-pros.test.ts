@@ -78,7 +78,7 @@ describe("featured professionals", () => {
       );
     }
     assert.deepEqual(filterPros(featuredPros, { q: "Gat" }).map((pro) => pro.slug), ["gatbel-chamjock", "gatluak-thach"]);
-    assert.deepEqual(filterPros(featuredPros, { q: "cloud" }).map((pro) => pro.slug), []);
+    assert.deepEqual(filterPros(featuredPros, { q: "cloud" }).map((pro) => pro.slug), ["lam-tax-service"]);
     for (const location of ["Nebraska", "Omaha", "Texas", "iowa"]) {
       assert.deepEqual(
         filterPros(featuredPros, { category: "tech", location }).map((pro) => pro.slug),

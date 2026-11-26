@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { OrganizationProfile, PublicPro, ServiceTile } from "@/lib/featured-pros";
+import { profileOverview } from "@/lib/profile-overview";
 import { serviceOffers, servicePath, serviceSlideIcons } from "@/lib/services";
 import { ProfileLinks, profileLinks } from "./ProfileLinks";
 import { ServiceIcon } from "./ServiceIcon";
@@ -42,6 +43,139 @@ function HelpGroups({ services }: { services: ServiceTile[] }) {
   );
 }
 
+function Services({ pro, groupedHelp }: { pro: PublicPro; groupedHelp: boolean }) {
+  if (groupedHelp) return <HelpGroups services={pro.services} />;
+  if (pro.services.some((service) => service.icon)) {
+    return (
+      <section className="profile-section">
+        <h2>Services</h2>
+        <ul className="shop-services">
+          {pro.services.map((service) => (
+            <li key={service.name}>
+              <span className="shop-icon">
+                <ServiceIcon name={service.icon ?? ""} />
+              </span>
+              <strong>{service.name}</strong>
+              <span>{service.line}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  }
+  if (pro.services.length === 0) return null;
+  return (
+    <div className="service-board">
+      {pro.services.map((service, index) => {
+        const offer = serviceOffers.find((item) => item.name === service.name);
+        return (
+          <ServiceSlideshow
+            key={service.name}
+            name={service.name}
+            tagline={service.line}
+            slides={service.slides ?? serviceSlideIcons[offer?.id ?? ""] ?? ["layers", "code", "check"]}
+            order={index}
+            href={offer ? servicePath(offer.id) : undefined}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+function hasFacts(pro: PublicPro, hideProfession: boolean): boolean {
+  const showProfession = Boolean(pro.profession) && !pro.experience && !hideProfession;
+  const showAddress = Boolean(pro.location) && !pro.placeholder;
+  return Boolean(
+    showProfession ||
+      pro.school ||
+      pro.industry ||
+      pro.years ||
+      pro.founder ||
+      showAddress ||
+      pro.serviceAreas ||
+      pro.offersRemote ||
+      pro.records?.length ||
+      pro.reference,
+  );
+}
+
+function Facts({ pro, hideProfession }: { pro: PublicPro; hideProfession: boolean }) {
+  const showProfession = Boolean(pro.profession) && !pro.experience && !hideProfession;
+  const showAddress = Boolean(pro.location) && !pro.placeholder;
+  if (!hasFacts(pro, hideProfession)) return null;
+  return (
+    <dl className="facts">
+      {showProfession ? (
+        <div>
+          <dt>Profession</dt>
+          <dd>{pro.profession}</dd>
+        </div>
+      ) : null}
+      {pro.school ? (
+        <div>
+          <dt>Education</dt>
+          <dd>{pro.school}</dd>
+        </div>
+      ) : null}
+      {pro.industry ? (
+        <div>
+          <dt>Industry</dt>
+          <dd>{pro.industry}</dd>
+        </div>
+      ) : null}
+      {pro.years ? (
+        <div>
+          <dt>Experience</dt>
+          <dd>{pro.years}</dd>
+        </div>
+      ) : null}
+      {pro.founder ? (
+        <div>
+          <dt>Founder</dt>
+          <dd>{pro.founder}</dd>
+        </div>
+      ) : null}
+      {showAddress ? (
+        <div>
+          <dt>Address</dt>
+          <dd>
+            <a href={mapsSearchUrl(pro.location!)} target="_blank" rel="noreferrer">
+              {pro.location}
+            </a>
+          </dd>
+        </div>
+      ) : null}
+      {pro.serviceAreas ? (
+        <div>
+          <dt>Where</dt>
+          <dd>{pro.serviceAreas}</dd>
+        </div>
+      ) : null}
+      {pro.offersRemote ? (
+        <div>
+          <dt>Remote</dt>
+          <dd>Remote services available</dd>
+        </div>
+      ) : null}
+      {pro.records?.map((record) => (
+        <div key={record.label}>
+          <dt>{record.label}</dt>
+          <dd>{record.value}</dd>
+        </div>
+      ))}
+      {pro.reference ? (
+        <div>
+          <dt>{pro.reference.label}</dt>
+          <dd>
+            <Link href={pro.reference.href}>{pro.reference.text}</Link>
+          </dd>
+        </div>
+      ) : null}
+    </dl>
+  );
+}
+
 function OrganizationSection({ organization }: { organization: OrganizationProfile }) {
   return (
     <section className="org-profile profile-section">
@@ -68,6 +202,12 @@ function OrganizationSection({ organization }: { organization: OrganizationProfi
 export function ProView({ pro }: { pro: PublicPro }) {
   const svg = pro.image.src.endsWith(".svg");
   const groupedHelp = pro.services.length > 0 && pro.services.every((service) => Boolean(service.group) && !service.icon);
+  const { overview, restBio, restStatements } = profileOverview(pro);
+  const hideProfession = overview === pro.profession;
+  const panelId = `full-bio-${pro.slug}`;
+  const hasFullBio = Boolean(
+    restBio || restStatements.length || pro.experience?.length || pro.titles?.length || hasFacts(pro, hideProfession),
+  );
   return (
     <article className="pro">
       <div className="pro-media">
@@ -117,144 +257,10 @@ export function ProView({ pro }: { pro: PublicPro }) {
             ))}
           </ul>
         ) : null}
-        {groupedHelp && pro.bio ? <p className="hero-line">{pro.bio}</p> : null}
-        {groupedHelp ? <HelpGroups services={pro.services} /> : null}
         {pro.placeholder ? (
           <p className="placeholder-note">Placeholder. Biography, credentials, and contact are not published.</p>
         ) : null}
-        {pro.experience && pro.experience.length > 0 ? (
-          <section className="profile-section">
-            <h2>Experience</h2>
-            <ol>
-              {pro.experience.map((item) => (
-                <li key={item.title}>
-                  <strong>{item.title}</strong>
-                  <span>{item.detail}</span>
-                </li>
-              ))}
-            </ol>
-          </section>
-        ) : null}
-        {pro.titles && pro.titles.length > 0 ? (
-          <section className="profile-section">
-            <h2>Titles and Credentials</h2>
-            <ol>
-              {pro.titles.map((item) => (
-                <li key={item.title}>
-                  <strong>{item.title}</strong>
-                  <span>{item.detail}</span>
-                </li>
-              ))}
-            </ol>
-          </section>
-        ) : null}
-        {pro.bio && !groupedHelp ? <p className="hero-line">{pro.bio}</p> : null}
-        {pro.statements?.map((statement) => (
-          <p key={statement} className="hero-line">
-            {statement}
-          </p>
-        ))}
         {pro.notice ? <p className="profile-note">{pro.notice}</p> : null}
-        <dl className="facts">
-          {pro.profession && !pro.experience ? (
-            <div>
-              <dt>Profession</dt>
-              <dd>{pro.profession}</dd>
-            </div>
-          ) : null}
-          {pro.school ? (
-            <div>
-              <dt>Education</dt>
-              <dd>{pro.school}</dd>
-            </div>
-          ) : null}
-          {pro.industry ? (
-            <div>
-              <dt>Industry</dt>
-              <dd>{pro.industry}</dd>
-            </div>
-          ) : null}
-          {pro.years ? (
-            <div>
-              <dt>Experience</dt>
-              <dd>{pro.years}</dd>
-            </div>
-          ) : null}
-          {pro.founder ? (
-            <div>
-              <dt>Founder</dt>
-              <dd>{pro.founder}</dd>
-            </div>
-          ) : null}
-          {pro.location && !pro.placeholder ? (
-            <div>
-              <dt>Address</dt>
-              <dd>
-                <a href={mapsSearchUrl(pro.location)} target="_blank" rel="noreferrer">
-                  {pro.location}
-                </a>
-              </dd>
-            </div>
-          ) : null}
-          {pro.serviceAreas ? (
-            <div>
-              <dt>Where</dt>
-              <dd>{pro.serviceAreas}</dd>
-            </div>
-          ) : null}
-          {pro.offersRemote ? (
-            <div>
-              <dt>Remote</dt>
-              <dd>Remote services available</dd>
-            </div>
-          ) : null}
-          {pro.records?.map((record) => (
-            <div key={record.label}>
-              <dt>{record.label}</dt>
-              <dd>{record.value}</dd>
-            </div>
-          ))}
-          {pro.reference ? (
-            <div>
-              <dt>{pro.reference.label}</dt>
-              <dd>
-                <Link href={pro.reference.href}>{pro.reference.text}</Link>
-              </dd>
-            </div>
-          ) : null}
-        </dl>
-        {groupedHelp ? null : pro.services.some((service) => service.icon) ? (
-          <section className="profile-section">
-            <h2>Services</h2>
-            <ul className="shop-services">
-              {pro.services.map((service) => (
-                <li key={service.name}>
-                  <span className="shop-icon">
-                    <ServiceIcon name={service.icon ?? ""} />
-                  </span>
-                  <strong>{service.name}</strong>
-                  <span>{service.line}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : pro.services.length > 0 ? (
-          <div className="service-board">
-            {pro.services.map((service, index) => {
-              const offer = serviceOffers.find((item) => item.name === service.name);
-              return (
-                <ServiceSlideshow
-                  key={service.name}
-                  name={service.name}
-                  tagline={service.line}
-                  slides={service.slides ?? serviceSlideIcons[offer?.id ?? ""] ?? ["layers", "code", "check"]}
-                  order={index}
-                  href={offer ? servicePath(offer.id) : undefined}
-                />
-              );
-            })}
-          </div>
-        ) : null}
         <div className="contact-row">
           <ProfileLinks links={profileLinks(pro)} />
           {pro.phone ? (
@@ -273,6 +279,53 @@ export function ProView({ pro }: { pro: PublicPro }) {
             </a>
           ) : null}
         </div>
+        {overview ? <p className="hero-line profile-overview">{overview}</p> : null}
+        <Services pro={pro} groupedHelp={groupedHelp} />
+        {hasFullBio ? (
+          <details className="full-bio">
+            <summary className="contact-btn bio-toggle" aria-controls={panelId}>
+              <span className="bio-label">
+                <span className="bio-more">Read full bio</span>
+                <span className="bio-less">Show less</span>
+              </span>
+            </summary>
+            <div className="full-bio-panel" id={panelId}>
+              {restBio ? <p className="hero-line">{restBio}</p> : null}
+              {restStatements.map((statement) => (
+                <p key={statement} className="hero-line">
+                  {statement}
+                </p>
+              ))}
+              {pro.experience && pro.experience.length > 0 ? (
+                <section className="profile-section">
+                  <h2>Experience</h2>
+                  <ol>
+                    {pro.experience.map((item) => (
+                      <li key={item.title}>
+                        <strong>{item.title}</strong>
+                        <span>{item.detail}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              ) : null}
+              {pro.titles && pro.titles.length > 0 ? (
+                <section className="profile-section">
+                  <h2>Titles and Credentials</h2>
+                  <ol>
+                    {pro.titles.map((item) => (
+                      <li key={item.title}>
+                        <strong>{item.title}</strong>
+                        <span>{item.detail}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              ) : null}
+              <Facts pro={pro} hideProfession={hideProfession} />
+            </div>
+          </details>
+        ) : null}
       </div>
       {pro.organization ? <OrganizationSection organization={pro.organization} /> : null}
     </article>
