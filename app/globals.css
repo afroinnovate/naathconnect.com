@@ -251,6 +251,17 @@ button[type="submit"] {
 .testimonial-form { display: grid; gap: 0.55rem; max-width: 36rem; margin-top: 0.8rem; }
 .contact-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .contact-btn { width: auto; padding-inline: 1rem; gap: 0.4rem; }
+.profile-overview { margin: 0; max-width: 42rem; }
+.full-bio { margin: 0; }
+.full-bio > summary { list-style: none; width: auto; }
+.full-bio > summary::-webkit-details-marker { display: none; }
+.full-bio > summary::marker { content: ""; }
+.bio-label { display: grid; }
+.bio-label > span { grid-area: 1 / 1; }
+.full-bio .bio-less { visibility: hidden; }
+.full-bio[open] .bio-more { visibility: hidden; }
+.full-bio[open] .bio-less { visibility: visible; }
+.full-bio-panel { display: grid; gap: 0.9rem; padding-top: 0.9rem; }
 .contact-btn .btn-globe { width: 1.05rem; height: 1.05rem; flex: none; }
 
 .event-card, .person-card, .queue-card, .panel {
